@@ -16,7 +16,7 @@
   "dependencies": {
     "@braintree/sanitize-url": "^7.1.1",
     "classnames": "^2.5.1",
-    "next": "15.5.2",
+    "next": "15.5.4",
     "react": "^19.2.0",
     "react-aria": "^3.43.1",
     "react-aria-components": "^1.12.1",
