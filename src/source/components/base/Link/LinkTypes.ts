@@ -1,6 +1,5 @@
 import React from "react";
 import {LinkProps as NextLinkProps} from "next/link";
-import {HoverEvent} from "react-aria";
 import {LinkProps as RacLinkProps} from "react-aria-components";
 import {BaseProps} from "@/source/types";
 

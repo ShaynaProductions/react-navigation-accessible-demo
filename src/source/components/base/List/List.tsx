@@ -1,6 +1,5 @@
 import {createElement, JSX} from "react";
 
-import {returnTrueElementOrUndefined} from "@/source/utilities";
 import {ListProps} from "./ListTypes";
 
 export default function List({

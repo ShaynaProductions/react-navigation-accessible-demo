@@ -2,7 +2,7 @@
 import {JSX, RefObject, useEffect, useRef} from "react";
 import {Link as RacLink} from "react-aria-components";
 
-import {mergeRefs, returnTrueElementOrUndefined} from "@/source/utilities";
+import {mergeRefs} from "@/source/utilities";
 
 import {ExternalLinkProps} from "../LinkTypes";
 import {getNewTab} from "../linkUI";
