@@ -1,0 +1,36 @@
+@layer system {
+
+    :root {
+
+        --raw-red-1: 84.849% 0.07913 18.844;
+        --raw-red-2: 76.296% 0.13474 20.691;
+        --raw-red-3:71.057% 0.17076 21.99;
+        --raw-red-4: 64.83% 0.2173 25.427;
+        --raw-red-5: 61.454% 0.22616 26.908;
+        --raw-red-6: 56.099% 0.19892 26.244;
+        --raw-red-7: 52.162% 0.17778 25.594;
+
+        --red-1: oklch(var(--raw-red-1));
+        --red-2: oklch(var(--raw-red-2));
+        --red-3: oklch(var(--raw-red-3));
+        --red-4: oklch(var(--raw-red-4));
+        --red-5: oklch(var(--raw-red-5));
+        --red-6: oklch(var(--raw-red-6));
+        --red-7: oklch(var(--raw-red-7));
+    }
+
+    @media (prefers-color-scheme: dark) {
+        :root {
+            /*Light Desaturated - Background */
+            --raw-red-7: 84.849% 0.07913 18.844;
+            --raw-red-6: 76.296% 0.13474 20.691;
+            --raw-red-5:71.057% 0.17076 21.99;
+            --raw-red-4: 64.83% 0.2173 25.427;
+            --raw-red-3: 61.454% 0.22616 26.908;
+            --raw-red-2: 56.099% 0.19892 26.244;
+            --raw-red-1: 52.162% 0.17778 25.594;
+        }
+
+    }
+
+}

@@ -1,0 +1,45 @@
+@layer base {
+    :root {
+        --paragraph-margin:calc(var(--sp-px) * 8) 0;
+    }
+    h1, h2, h3, h4, h5, h6 {
+
+    }
+    h1, .h1 {
+        font-size: calc(var(--sp-px) * 24);
+        line-height: 1.2;
+        margin: calc(var(--sp-px) * 8) 0;
+    }
+
+    h2, .h2 {
+        font-size: calc(var(--sp-px) * 22);
+        line-height: 1.4;
+        margin: calc(var(--sp-px) * 8) 0;
+    }
+
+    h3, .h3 {
+        font-size: calc(var(--sp-px) * 18);
+        line-height: 1.4;
+        margin: calc(var(--sp-px) * 8) 0;
+    }
+
+    h4, .h4 {
+        font-size: calc(var(--sp-px) * 16);
+        line-height: 1.4;
+        margin: calc(var(--sp-px) * 8) 0;
+    }
+
+    h5, h6, .h5, .h6 {
+        font-size: calc(var(--sp-px) * 14);
+        line-height: 1.4;
+        margin: calc(var(--sp-px) * 8) 0;
+    }
+
+    p {
+
+        margin: var(--paragraph-margin) 0;
+    }
+
+
+
+}

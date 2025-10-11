@@ -1,0 +1,23 @@
+@layer theme {
+    body {
+        height: 100vh;
+    }
+
+    header {
+        min-height: calc(var(--sp-px) * 80);
+        border-bottom-width: calc(var(--sp-px) * 1);
+        border-bottom-style: solid;
+    }
+
+    main {
+        margin: calc(var(--sp-px) * 24) 0;
+    }
+
+    footer {
+        height: calc(var(--sp-px) * 80);
+        background-color: transparent;
+        border-top-width: calc(var(--sp-px) * 1);
+        border-top-style: solid;
+        text-align: center;
+    }
+}

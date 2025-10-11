@@ -1,0 +1,12 @@
+@layer base-component {
+    .svg-icon {
+        --common-dimension: calc(var(--sp-px) * calc(var(--component-item-size)));
+
+        height: var(--common-dimension);
+        width: var(--common-dimension);
+
+        color: var(--svg-color);
+        fill: var(--svg-fill);
+        stroke: var(--svg-fill);
+    }
+}

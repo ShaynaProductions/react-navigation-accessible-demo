@@ -1,0 +1,29 @@
+@layer base-theme {
+    :root {
+
+
+       --default-background: var(--gray-1);
+        --default-background-focused: var(--gray-1);
+        --default-background-hovered: var(--gray-2);
+        --default-background-pressed: var(--gray-2);
+
+        --default-border-color: var(--gray-7);
+
+        --default-color: var(--gray-9);
+        --default-color-disabled: var(--gray-7);
+        --default-color-focused: var(--default-color);
+        --default-color-hovered: var(--gray-11);
+        --default-color-invalid: var(--red-5);
+        --default-color-pressed: var(--gray-11);
+        --default-color-required: var(--default-color);
+        --default-color-selected: var(--gray-11);
+
+
+        --default-text-color: var(--gray-11);
+        --default-text-color-disabled: var(--gray-8);
+        --default-text-color-focused: var(--gray-11);
+        --default-text-color-hovered: var(--gray-9);
+        --default-text-color-pressed: var(--gray-10);
+
+    }
+}

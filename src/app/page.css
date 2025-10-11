@@ -1,0 +1,7 @@
+@layer main {
+    header > *,
+    main > *,
+    footer > *{
+              margin-bottom: calc(var(--sp-px) * 8)
+    }
+}

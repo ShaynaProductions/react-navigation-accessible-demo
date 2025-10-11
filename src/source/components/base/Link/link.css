@@ -1,0 +1,63 @@
+@layer base-component {
+    a[href] {
+        /*Layout*/
+        padding: inherit calc(var(--sp-px) * 1);
+
+        /* Text */
+        font-family: inherit;
+        font-size: inherit;
+        font-weight: inherit;
+        line-height: inherit;
+        text-decoration: underline;
+        text-underline-offset: calc(var(--sp-px) * 2);
+
+        /* Appearance */
+        cursor: pointer;
+        transition: all var(--default-ease) ease-in-out;
+
+        /* Colors */
+        background-color: var(--component-link-background);
+        color: var(--component-link-color);
+        text-decoration-color: var(--component-link-color);
+
+        /* States */
+
+        &[aria-disabled="true"] {
+            --component-link-color: var(--component-link-color-disabled);
+            --component-link-fill: var(--component-link-color-disabled);
+
+            cursor: default;
+        }
+
+        &:hover {
+            --component-link-background: var(--component-link-background-hovered);
+            --component-link-color: var(--component-link-color-hovered);
+            --component-link-fill: var(--component-link-color-hovered);
+        }
+
+        &:focus-visible {
+            --component-link-background: var(--component-link-background-focused);
+            --component-link-color: var(--component-link-color-focused);
+            --component-link-fill: var(--component-link-color-focused);
+
+            border-radius: var(--component-border-radius);
+            outline: var(--component-link-focus-outline) solid var(--focus-outline-color);
+            outline-offset: var(--component-link-outline-offset);
+        }
+
+        /* Children */
+
+        & svg {
+            --svg-fill: var(--component-link-fill);
+            --side-padding: calc(var(--sp-px) * 4);
+
+            padding-bottom: calc(var(--sp-px) * 2);
+            padding-left: var(--side-padding);
+            padding-right: var(--side-padding);
+            vertical-align: middle;
+            width: calc(var(--sp-px) * (var(--component-item-size) + 4));
+
+        }
+
+    }
+}

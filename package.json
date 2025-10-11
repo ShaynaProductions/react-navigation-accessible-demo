@@ -3,7 +3,6 @@
   "description": "A fully functioning navigation component built to accompany a series of articles found at https://dev.to/shaynaproductions",
   "packageManager": "yarn@4.9.2",
   "version": "0.1.0",
-  "private": "false",
   "scripts": {
     "dev": "rimraf .next && next dev",
     "build": "rimraf .next && next build",

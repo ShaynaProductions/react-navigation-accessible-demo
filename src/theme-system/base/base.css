@@ -1,0 +1,7 @@
+@layer system {
+    :root {
+        --sizing-base: 1rem;
+        --sp-px: calc(var(--sizing-base) * 0.0625);
+        --shadow-opacity: 0.3;
+        --overlay-opacity: 0.2;
+    }}

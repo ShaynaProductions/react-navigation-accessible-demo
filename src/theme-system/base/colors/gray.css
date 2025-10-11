@@ -1,0 +1,54 @@
+@layer system {
+    /* hsl(213, 0%, 5%)*/
+    :root {
+        --raw-gray-1: 213, 0%, 98%;
+        --raw-gray-2: 213, 0%, 90%;
+        --raw-gray-3: 213, 0%, 80%;
+        --raw-gray-4: 213, 0%, 75%;
+        --raw-gray-5: 213, 0%, 65%;
+        --raw-gray-6: 213, 0%, 50%;
+        --raw-gray-7: 213, 0%, 43%;
+        --raw-gray-8: 213, 0%, 37%;
+        --raw-gray-9: 213, 0%, 32%;
+        --raw-gray-10: 213, 0%, 20%;
+        --raw-gray-11: 213, 0%, 14%;
+        --raw-gray-12: 213, 0%, 5%;
+
+
+        --gray-1: hsl(var(--raw-gray-1));
+        --gray-2: hsl(var(--raw-gray-2));
+        --gray-3: hsl(var(--raw-gray-3));
+        --gray-4: hsl(var(--raw-gray-4));
+        --gray-5: hsl(var(--raw-gray-5));
+        --gray-6: hsl(var(--raw-gray-6));
+        --gray-7: hsl(var(--raw-gray-7));
+        --gray-8: hsl(var(--raw-gray-8));
+        --gray-9: hsl(var(--raw-gray-9));
+        --gray-10: hsl(var(--raw-gray-10));
+        --gray-11: hsl(var(--raw-gray-11));
+        --gray-12: hsl(var(--raw-gray-12));
+        --gray-shadow: hsla(var(--raw-gray-12), var(--shadow-opacity));
+        --gray-overlay: hsla(var(--raw-gray-5), var(--overlay-opacity));
+
+    }
+
+    @media (prefers-color-scheme: dark) {
+        :root {
+            --gray-12: hsl(var(--raw-gray-1));
+            --gray-11: hsl(var(--raw-gray-2));
+            --gray-10: hsl(var(--raw-gray-3));
+            --gray-9: hsl(var(--raw-gray-4));
+            --gray-8: hsl(var(--raw-gray-5));
+            --gray-7: hsl(var(--raw-gray-6));
+            --gray-6: hsl(var(--raw-gray-7));
+            --gray-5: hsl(var(--raw-gray-8));
+            --gray-4: hsl(var(--raw-gray-9));
+            --gray-3: hsl(var(--raw-gray-10));
+            --gray-2: hsl(var(--raw-gray-11));
+            --gray-1: hsl(var(--raw-gray-12));
+            --gray-shadow: hsla(var(--raw-gray-1), var(--shadow-opacity));
+            --gray-overlay: hsla(var(--raw-gray-8), var(--overlay-opacity));
+        }
+
+    }
+}

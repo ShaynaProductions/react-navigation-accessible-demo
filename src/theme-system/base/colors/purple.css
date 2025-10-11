@@ -1,0 +1,70 @@
+@layer system {
+    /*Based off hue 151 */
+    :root {
+
+        /*Light Desaturated - Background */
+        --raw-purple-1: 96.73% 0.00508 325.62;
+        --raw-purple-2: 90.813% 0.02278 321.35;
+        --raw-purple-3: 84.919% 0.03759 320.35;
+
+        /* Light Saturated */
+        --raw-purple-4: 79.126% 0.0733 320.93;
+        --raw-purple-5: 73.236% 0.0934 321.48;
+        --raw-purple-6: 67.281% 0.10972 321.13;
+
+        /* Medium */
+        --raw-purple-7: 62.241% 0.10499 321.38;
+
+        --raw-purple-8: 55.082% 0.09248 321.86;
+        --raw-purple-9: 48.822% 0.08156 321.03;
+
+        /* Dark */
+        --raw-purple-10: 42.402% 0.07362 322.08;
+        --raw-purple-11: 36.178% 0.06256 322.17;
+        --raw-purple-12: 29.673% 0.05099 322.32;
+
+
+        --purple-1: oklch(var(--raw-purple-1));
+        --purple-2: oklch(var(--raw-purple-2));
+        --purple-3: oklch(var(--raw-purple-3));
+        --purple-4: oklch(var(--raw-purple-4));
+        --purple-5: oklch(var(--raw-purple-5));
+        --purple-6: oklch(var(--raw-purple-6));
+        --purple-7: oklch(var(--raw-purple-7));
+        --purple-8: oklch(var(--raw-purple-8));
+        --purple-9: oklch(var(--raw-purple-9));
+        --purple-10: oklch(var(--raw-purple-10));
+        --purple-11: oklch(var(--raw-purple-11));
+        --purple-12: oklch(var(--raw-purple-12));
+        --purple-shadow: oklch(var(--raw-purple-12), var(--shadow-opacity));
+        --purple-overlay: oklch(var(--raw-purple-5), var(--overlay-opacity));
+    }
+
+    @media (prefers-color-scheme: dark) {
+        :root {
+            /*Light Desaturated - Background */
+            --raw-purple-12: 96.73% 0.00508 325.62;
+            --raw-purple-11: 90.813% 0.02278 321.35;
+            --raw-purple-10: 84.919% 0.03759 320.35;
+
+            /* Light Saturated */
+            --raw-purple-9: 79.126% 0.0733 320.93;
+            --raw-purple-8: 73.236% 0.0934 321.48;
+            --raw-purple-7: 67.281% 0.10972 321.13;
+            /* Medium */
+            --raw-purple-6: 62.241% 0.10499 321.38;
+
+            --raw-purple-5: 55.082% 0.09248 321.86;
+            --raw-purple-4: 48.822% 0.08156 321.03;
+
+            /* Dark */
+            --raw-purple-3: 42.402% 0.07362 322.08;
+            --raw-purple-2: 36.178% 0.06256 322.17;
+            --raw-purple-1: 29.673% 0.05099 322.32;
+
+
+        }
+
+    }
+
+}

@@ -1,0 +1,37 @@
+@layer system {
+    :root {
+        --raw-vibrant-blue-1: 85.817% 0.0679 270.22;
+        --raw-vibrant-blue-2: 80.445% 0.09478 271.57;
+        --raw-vibrant-blue-3: 72.153% 0.14058 264.74;
+        --raw-vibrant-blue-4: 62.764% 0.19661 257.97;
+        --raw-vibrant-blue-5: 57.627% 0.21881 259.85;
+        --raw-vibrant-blue-6: 53.106% 0.22156 261.61;
+        --raw-vibrant-blue-7: 42.537% 0.18839 262.6;
+
+
+        --vibrant-blue-1: oklch(var(--raw-vibrant-blue-1));
+        --vibrant-blue-2: oklch(var(--raw-vibrant-blue-2));
+        --vibrant-blue-3: oklch(var(--raw-vibrant-blue-3));
+        --vibrant-blue-4: oklch(var(--raw-vibrant-blue-4));
+        --vibrant-blue-5: oklch(var(--raw-vibrant-blue-5));
+        --vibrant-blue-6: oklch(var(--raw-vibrant-blue-6));
+        --vibrant-blue-7: oklch(var(--raw-vibrant-blue-7));
+        --vibrant-blue-shadow: oklch(var(--raw-vibrant-blue-7), var(--shadow-opacity));
+        --vibrant-blue-overlay: oklch(var(--raw-vibrant-blue-1), var(--overlay-opacity));
+    }
+
+    @media (prefers-color-scheme: dark) {
+        :root {
+
+            --raw-vibrant-blue-7: 85.817% 0.0679 270.22;
+            --raw-vibrant-blue-6: 80.445% 0.09478 271.57;
+            --raw-vibrant-blue-5: 72.153% 0.14058 264.74;
+            --raw-vibrant-blue-4: 62.764% 0.19661 257.97;
+            --raw-vibrant-blue-3: 57.627% 0.21881 259.85;
+            --raw-vibrant-blue-2: 53.106% 0.22156 261.61;
+            --raw-vibrant-blue-1: 42.537% 0.18839 262.6;
+        }
+
+    }
+
+}

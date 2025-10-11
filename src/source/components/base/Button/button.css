@@ -1,0 +1,77 @@
+@layer base-component {
+    button {
+        /* Layout */
+        align-content: center;
+        align-items: center;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin: 0;
+        padding: var(--button-padding);
+        width: fit-content;
+
+        /* Text */
+        font-size: var(--button-font-size);
+        font-weight: var(--button-font-weight);
+        letter-spacing: var(--button-letter-spacing);
+        line-height: var(--button-line-height);
+        text-decoration: none;
+
+        /* Appearance */
+        border-radius: var(--button-border-radius);
+        border-style: solid;
+        border-width: var(--button-border-width);
+        cursor: pointer;
+
+        /* Colors */
+        --svg-color: var(--button-color);
+        --svg-fill: var(--button-fill);
+
+        background-color: var(--button-background);
+        border-color: var(--button-border-color);
+        color: var(--button-color);
+
+
+        /* States - */
+        &[aria-disabled="true"] {
+            --button-background: var(--button-background-disabled);
+            --button-border-color: var(--button-border-color-disabled);
+            --button-color: var(--button-color-disabled);
+            --svg-color: var(--button-color-disabled);
+            --svg-fill: var(--button-fill-disabled);
+
+            cursor: default;
+        }
+
+        /* [data-focus] supports design */
+
+        &:focus-visible {
+            outline: var(--focus-outline) var(--focus-outline-color);
+            outline-offset: var(--focus-outline-offset);
+        }
+
+        &:focus-visible {
+            --button-background: var(--button-background-focused);
+            --button-border-color: var(--button-border-color-focused);
+            --button-color: var(--button-color-focused);
+            --svg-color: var(--button-color-focused);
+            --svg-fill: var(--button-fill-focused);
+        }
+
+        &:hover {
+            --button-background: var(--button-background-hovered);
+            --button-border-color: var(--button-border-color-hovered);
+            --button-color: var(--button-color-hovered);
+            --svg-color: var(--button-color-hovered);
+            --svg-fill: var(--button-fill-hovered);
+
+            &:focus-visible {
+                --button-background: var(--button-background-focused);
+                --button-border-color: var(--button-border-color-focused);
+                --button-color: var(--button-color-focused);
+                --svg-color: var(--button-color-focused);
+                --svg-fill: var(--button-fill-focused);
+            }
+        }
+    }
+}

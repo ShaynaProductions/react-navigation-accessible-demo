@@ -1,0 +1,22 @@
+@layer base-component {
+    ul, ol {
+        padding: 0;
+        margin: 0;
+        display: flex;
+        list-style: none;
+        color: var(--component-text-color);
+
+        &[data-orientation="horizontal"] {
+            flex-direction: row;
+            column-gap: calc(var(--sp-px) * 16);
+            row-gap: calc(var(--sp-px) * 8);
+            width: 100%;
+        }
+
+        &[data-orientation="vertical"] {
+            flex-direction: column;
+            gap: calc(var(--sp-px) * 4);
+        }
+    }
+
+}

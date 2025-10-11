@@ -1,0 +1,76 @@
+@layer default-theme {
+    :root {
+
+        --component-border-width: var(--default-border-width);
+        --component-border-radius: var(--default-border-radius);
+        --component-ease:var(--default-ease);
+        --component-text-size: var(--default-text-size);
+        --component-item-size: var(--component-text-size);
+
+        /* Links */
+        --component-link-border-radius: calc(var(--sp-px) * 4);
+        --component-link-focus-outline: calc(var(--sp-px) * 0);
+        --component-link-outline-offset: calc(var(--sp-px) * 4);
+        --component-link-background: transparent;
+        --component-link-background-focused: var(--default-background-focused);
+        --component-link-background-hovered: var(--default-background-pressed);
+        --component-link-color: var(--default-text-color);
+        --component-link-color-disabled: var(--default-text-color-disabled);
+        --component-link-color-focused: var(--default-text-color-focused);
+        --component-link-color-hovered: var(--default-text-color-hovered);
+        --component-link-color-pressed: var(--default-text-color-pressed);
+        --component-link-fill: var(--component-link-color);
+
+        --component-text-color: var(--default-text-color);
+
+        /*--svg-button-min-width: calc(var(--sp-px) * 24);*/
+        --svg-color: var(--default-color);
+        --svg-fill: var(--default-color);
+        --svg-stroke: var(--default-color);
+
+        /* Button*/
+        /* Common widths and spacing */
+        --button-padding: calc(var(--sp-px) * 4) calc(var(--sp-px) * 12);
+
+        --button-border-radius: calc(var(--sp-px) * 8);
+        --button-border-width: calc(var(--sp-px) * 2);
+        --button-font-size: inherit;
+        --button-font-weight: 500;
+        --button-line-height: 1.4;
+        --button-letter-spacing: normal;
+
+        /* Default - Solid */
+        --button-background: var(--purple-9);
+        --button-background-disabled: var(--gray-3);
+        --button-background-focused: var(--purple-3);
+        --button-background-hovered: var(--gray-5);
+        --button-background-pressed: var(--gray-5);
+
+        --button-border-color: var(--gray-5);
+        --button-border-color-disabled: var(--gray-3);
+        --button-border-color-focused: var(--gray-9);
+        --button-border-color-hovered: var(--button-border-color);
+        --button-border-color-pressed: var(--button-border-color);
+
+        --button-color: var(--gray-1);
+        --button-color-disabled: var(--gray-10);
+        --button-color-focused: var(--purple-11);
+        --button-color-hovered: var(--gray-10);
+        --button-color-pressed: var(--gray-11);
+
+        --button-fill: var(--button-color);
+        --button-fill-disabled: var(--button-color-disabled);
+        --button-fill-focused: var( --button-color-focused);
+        --button-fill-hovered: var(--button-color-hovered);
+        --button-fill-pressed: var(--button-color-pressed);
+
+      
+        /* Ghost  */
+        --button-ghost-background: transparent;
+        --button-ghost-border: transparent;
+        --button-ghost-color: var(--gray-12);
+        --button-ghost-fill: var(--gray-12);
+
+    }
+
+}

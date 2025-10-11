@@ -19,4 +19,7 @@ You will now have a fully working example site located at localhost:3000/
 
 ---
 ## DEV Articles in the Accessible React Navigation Component Series
-Each published article is linked and will refer to the appropriate Github tag to download and follow along. 
+Each published article is linked and will refer to the appropriate Github tag to download and follow along.
+
+- Introduction: [Creating an Accessible Nav Compoent](https://dev.to/shaynaproductions/creating-an-accessible-nav-component-an-introduction-3j9m)
+- Story One -  [Base Components are key to accessibility](https://dev.to/shaynaproductions/base-components-are-key-to-accessibility-2bd8)
