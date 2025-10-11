@@ -2,7 +2,7 @@
 import {JSX, RefObject, useEffect, useRef} from "react";
 import {Link as RacLink} from "react-aria-components";
 
-import {mergeRefs} from "@/source/utilities";
+import {useCombinedRef} from "@/source/hooks";
 
 import {ExternalLinkProps} from "../LinkTypes";
 import {getNewTab} from "../linkUI";
@@ -22,10 +22,10 @@ export function ExternalLink({
  }: ExternalLinkProps): JSX.Element {
     const {getLinkTarget, getIsTargetSpecific, getSafeHref} = useLink();
     const linkRef = useRef<HTMLAnchorElement>(null);
-    const combinedRef = mergeRefs(
+    const combinedRef =useCombinedRef(
         linkRef as RefObject<HTMLAnchorElement>,
         ref,
-    ) as RefObject<HTMLAnchorElement>;
+    );
 
     const safeHref = getSafeHref(!!isDisabled, href);
 
