@@ -3519,7 +3519,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-dom@npm:^19.1.9":
+"@types/react-dom@npm:^19.2.1":
   version: 19.2.1
   resolution: "@types/react-dom@npm:19.2.1"
   peerDependencies:
@@ -3528,7 +3528,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:^19.1.12":
+"@types/react@npm:^19.2.2":
   version: 19.2.2
   resolution: "@types/react@npm:19.2.2"
   dependencies:
@@ -8166,8 +8166,8 @@ __metadata:
     "@types/jest": "npm:30.0.0"
     "@types/jest-axe": "npm:^3.5.9"
     "@types/node": "npm:^24.7.2"
-    "@types/react": "npm:^19.1.12"
-    "@types/react-dom": "npm:^19.1.9"
+    "@types/react": "npm:^19.2.2"
+    "@types/react-dom": "npm:^19.2.1"
     classnames: "npm:^2.5.1"
     eslint: "npm:^9.37.0"
     eslint-config-next: "npm:^15.5.4"
@@ -8183,10 +8183,10 @@ __metadata:
     jest-sonar: "npm:0.2.16"
     next: "npm:15.5.2"
     prettier: "npm:^3.6.2"
-    react: "npm:^19.1.1"
+    react: "npm:^19.2.0"
     react-aria: "npm:^3.43.1"
     react-aria-components: "npm:^1.12.1"
-    react-dom: "npm:^19.1.1"
+    react-dom: "npm:^19.2.0"
     react-icons: "npm:^5.5.0"
     rimraf: "npm:6.0.1"
     ts-jest: "npm:29.4.5"
@@ -8289,7 +8289,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-dom@npm:^19.1.1":
+"react-dom@npm:^19.2.0":
   version: 19.2.0
   resolution: "react-dom@npm:19.2.0"
   dependencies:
@@ -8377,7 +8377,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react@npm:^19.1.1":
+"react@npm:^19.2.0":
   version: 19.2.0
   resolution: "react@npm:19.2.0"
   checksum: 10c0/1b6d64eacb9324725bfe1e7860cb7a6b8a34bc89a482920765ebff5c10578eb487e6b46b2f0df263bd27a25edbdae2c45e5ea5d81ae61404301c1a7192c38330
