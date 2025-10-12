@@ -11,20 +11,20 @@ export default function Box({
     ...rest
 }: BoxProps): JSX.Element {
 
-     const componentProps = {
+    const componentProps = {
         ...rest,
         className: classNames({srOnly: isHidden}, cx),
         "data-testid": testId,
     }
 
 
-    return (
-        inline
-            ? (
-               <><span{...componentProps}>{children}</span></>
-            )
-            : (
-                <><div {...componentProps}>{children}</div></>
-            )
+    return inline ? (
+        <>
+            <span {...componentProps}>{children}</span>
+        </>
+    ) : (
+        <>
+            <div {...componentProps}>{children}</div>
+        </>
     );
 }

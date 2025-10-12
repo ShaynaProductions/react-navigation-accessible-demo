@@ -1,13 +1,11 @@
 "use client";
 import {JSX, useEffect, useRef} from "react";
+import {useMergedRef} from "@mantine/hooks";
 import {Link as RacLink} from "react-aria-components";
-
-
 
 import {ExternalLinkProps} from "../LinkTypes";
 import {getNewTab} from "../linkUI";
 import useLink from "../useLink";
-import {useMergedRef} from "@mantine/hooks";
 
 export function ExternalLink({
     children,

@@ -21,10 +21,9 @@ export default function List({
         role: role || "list",
     };
 
-    return (
-        ordered
-            ?
-            (<ul {...listProps}>{children}</ul>)
-            : (<ol {...listProps}>{children}</ol>)
-    )
+    return ordered ? (
+        <ul {...listProps}>{children}</ul>
+    ) : (
+        <ol {...listProps}>{children}</ol>
+    );
 }
