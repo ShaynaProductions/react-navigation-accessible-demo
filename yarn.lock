@@ -8184,8 +8184,8 @@ __metadata:
     next: "npm:15.5.4"
     prettier: "npm:^3.6.2"
     react: "npm:^19.2.0"
-    react-aria: "npm:^3.43.1"
-    react-aria-components: "npm:^1.12.1"
+    react-aria: "npm:^3.44.0"
+    react-aria-components: "npm:^1.13.0"
     react-dom: "npm:^19.2.0"
     react-icons: "npm:^5.5.0"
     rimraf: "npm:6.0.1"
@@ -8196,7 +8196,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"react-aria-components@npm:^1.12.1":
+"react-aria-components@npm:^1.13.0":
   version: 1.13.0
   resolution: "react-aria-components@npm:1.13.0"
   dependencies:
@@ -8236,7 +8236,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-aria@npm:^3.43.1, react-aria@npm:^3.44.0":
+"react-aria@npm:^3.44.0":
   version: 3.44.0
   resolution: "react-aria@npm:3.44.0"
   dependencies:
