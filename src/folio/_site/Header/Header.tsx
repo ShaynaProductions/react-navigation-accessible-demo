@@ -11,7 +11,7 @@ export const Header = (): JSX.Element => {
             </Text>
             <List orientation="horizontal">
                 <ListItem>
-                    <Link href="/public">Home</Link>
+                    <Link href="/">Home</Link>
                 </ListItem>
             </List>
         </header>

@@ -11,7 +11,7 @@ export const Footer = (): JSX.Element => {
                 <abbr title="copyright">&#169;</abbr> {today.getFullYear()}{" "}
                 <ExternalLink
                     href="https://www.shaynaproductions.com/"
-                    openInNewTab={true}
+                    openInNewTab={false}
                 >
                     Shayna Productions
                 </ExternalLink>

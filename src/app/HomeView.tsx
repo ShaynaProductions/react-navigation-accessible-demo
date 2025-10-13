@@ -1,6 +1,6 @@
 "use client";
 
-import {Heading, Link, List, ListItem, Text,} from "@/source/components";
+import {ExternalLink, Heading, Link, List, ListItem, Text,} from "@/source/components";
 
 export default function HomeView() {
 
@@ -12,7 +12,9 @@ export default function HomeView() {
             <Heading headingLevel={2}>Examples</Heading>
             <List>
                 <ListItem>
-                    Story 1 - <Link href="/examples/story-1">Accessible Base Components </Link>
+                    <Text>Story 1 - <Link href="/examples/story-1">Accessible Base Components </Link></Text>
+                    <Text>Discusses the creation and enhancement of specific base components to be used in navigation.</Text>
+                    <Text>Associated with the article: <ExternalLink href="https://dev.to/shaynaproductions/base-components-are-key-to-accessibility-2bd8" openInNewTab={true}>Base Components are key to accessibility</ExternalLink></Text>
                 </ListItem>
             </List>
         </>
