@@ -1,31 +1,28 @@
 "use client";
-import {JSX, RefObject, useEffect, useRef} from "react";
+import {JSX, useEffect, useRef} from "react";
+import {useMergedRef} from "@mantine/hooks";
 import {Link as RacLink} from "react-aria-components";
-
-import {mergeRefs, returnTrueElementOrUndefined} from "@/source/utilities";
 
 import {ExternalLinkProps} from "../LinkTypes";
 import {getNewTab} from "../linkUI";
 import useLink from "../useLink";
 
 export function ExternalLink({
-     children,
-     cx,
-     href,
-     isDisabled,
-     openInNewTab,
-     ref,
-     suppressNewIcon,
-     target,
-     testId,
-     ...rest
- }: ExternalLinkProps): JSX.Element {
+    children,
+    cx,
+    href,
+    isDisabled,
+    openInNewTab,
+    ref,
+    suppressNewIcon,
+    target,
+    testId,
+    ...rest
+}: ExternalLinkProps): JSX.Element {
     const {getLinkTarget, getIsTargetSpecific, getSafeHref} = useLink();
     const linkRef = useRef<HTMLAnchorElement>(null);
-    const combinedRef = mergeRefs(
-        linkRef as RefObject<HTMLAnchorElement>,
-        ref,
-    ) as RefObject<HTMLAnchorElement>;
+    const combinedRef = useMergedRef(linkRef, ref)
+
 
     const safeHref = getSafeHref(!!isDisabled, href);
 
@@ -44,7 +41,6 @@ export function ExternalLink({
             linkEl?.removeAttribute("aria-disabled");
         }
     }, [linkRef, isDisabled]);
-
 
 
     const racProps = {

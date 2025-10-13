@@ -25,7 +25,7 @@ export interface ListProps extends BaseProps {
   /**
    *  Ref<HTMLUListElement|HTMLOListElement | null>
    */
-  ref?: React.Ref<HTMLUListElement | HTMLOListElement | null>;
+  ref?: never;
 
   /**
    *     "list" (default) | "menu" | "tree"

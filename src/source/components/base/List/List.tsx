@@ -1,19 +1,18 @@
-import {createElement, JSX} from "react";
+import {JSX} from "react";
 
-import {returnTrueElementOrUndefined} from "@/source/utilities";
 import {ListProps} from "./ListTypes";
 
-export default function List({
-         children,
-         cx,
-         ordered = false,
-         orientation = "vertical",
-         role,
-         testId,
-         ...rest
-}: ListProps): JSX.Element {
-    const listComponent = ordered ? "ol" : "ul";
 
+export default function List({
+    children,
+    cx,
+    ordered = false,
+    orientation = "vertical",
+    role,
+    testId,
+    ...rest
+}: ListProps): JSX.Element {
+    
     const listProps = {
         ...rest,
         "data-orientation": orientation,
@@ -21,8 +20,10 @@ export default function List({
         className: cx,
         role: role || "list",
     };
-    const Component = ({...listProps}) =>
-        createElement(listComponent, listProps, children);
 
-    return <Component {...listProps} />;
+    return !ordered ? (
+        <ul {...listProps}>{children}</ul>
+    ) : (
+        <ol {...listProps}>{children}</ol>
+    );
 }

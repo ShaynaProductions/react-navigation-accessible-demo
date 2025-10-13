@@ -1,5 +1,5 @@
 import React, { act } from "react";
-import { axe, fireEvent, render } from "@/test";
+import { axe, render } from "@/test";
 import { InternalLinkProps } from "../LinkTypes";
 import { InternalLink } from "./InternalLink";
 
