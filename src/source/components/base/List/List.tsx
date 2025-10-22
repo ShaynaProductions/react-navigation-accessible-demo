@@ -6,7 +6,7 @@ import {ListProps} from "./ListTypes";
 export default function List({
     children,
     cx,
-    ordered = false,
+    isOrdered = false,
     orientation = "vertical",
     role,
     testId,
@@ -21,7 +21,7 @@ export default function List({
         role: role || "list",
     };
 
-    return !ordered ? (
+    return !isOrdered ? (
         <ul {...listProps}>{children}</ul>
     ) : (
         <ol {...listProps}>{children}</ol>
