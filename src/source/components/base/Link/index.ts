@@ -1,3 +1,2 @@
-export { ExternalLink } from "./ExternalLink/ExternalLink";
-export { InternalLink as Link } from "./InternalLink/InternalLink";
+export {InternalLink as Link} from "./Link";
 export * from "./LinkTypes";

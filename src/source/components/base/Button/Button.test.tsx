@@ -40,7 +40,7 @@ describe("<Button />", () => {
         expect(results).toHaveNoViolations();
     });
 
-    it("handles a press event", async () => {
+    it("2.3.2 handles a press event via pointer and keyboard", async () => {
         const handlePress = jest.fn();
         const optProps = {onPress: handlePress};
         const {getByRole} = renderButton(optProps);
@@ -49,10 +49,18 @@ describe("<Button />", () => {
         expect(button).toBeInTheDocument();
 
         await userEvent.click(button);
-       expect(handlePress).toHaveBeenCalled();
+        expect(handlePress).toHaveBeenCalled();
+        await userEvent.keyboard("{Enter}");
+        expect(handlePress).toHaveBeenCalledTimes(2);
+        await userEvent.click(button);
+        expect(button).toHaveFocus();
+        await userEvent.keyboard(" ");
+        expect(handlePress).toHaveBeenCalledTimes(4);
     });
 
-    it("does not handle a press event when disabled", async () => {
+
+
+    it("2.3.3 does not handle a press event when disabled", async () => {
         const handlePress = jest.fn();
         const optProps = {onPress: handlePress, isDisabled: true};
         const {getByRole} = renderButton(optProps);
@@ -64,11 +72,11 @@ describe("<Button />", () => {
 
         expect(handlePress).not.toHaveBeenCalled();
     });
-    it("when disabled, an aria-disabled attribute should be in the button", () => {
-        const optProps = { isDisabled: true };
-        const { getByRole } = renderButton(optProps);
+    it("2.3.3 when disabled, an aria-disabled attribute should be in the button", () => {
+        const optProps = {isDisabled: true};
+        const {getByRole} = renderButton(optProps);
 
-        expect(getByRole("button", { name: buttonLabel })).toHaveAttribute(
+        expect(getByRole("button", {name: buttonLabel})).toHaveAttribute(
             "aria-disabled",
             "true",
         );

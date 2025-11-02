@@ -1,41 +1,43 @@
 import React, { act } from "react";
 import { axe, render } from "@/test";
-import { ExternalLink } from "./ExternalLink";
-import { ExternalLinkProps } from "../LinkTypes";
+import { LinkProps } from "./LinkTypes";
+import { InternalLink as Link } from "./Link";
 
-const label = "Outside Link";
+const TEST_ID = "LinkFacade";
+const label = "Internal Link";
 
-const renderExternalLink = (props: Partial<ExternalLinkProps>) => {
+const renderLink = (props: Partial<LinkProps>) => {
     return render(
-        <ExternalLink href="#" {...props}>
+        <Link href="#" testId={TEST_ID} {...props}>
             {label}
-        </ExternalLink>,
+        </Link>,
     );
 };
 
-describe("<ExternalLink />", () => {
-    it("should be WCAG compliant", async () => {
-        const optProps = { testId: undefined, target: undefined };
-        const { container } = await act(() => renderExternalLink(optProps));
+describe("<Link />", () => {
+    it("1.6.1 should be WCAG compliant", async () => {
+        const optProps = { testId: undefined };
+        const { container } = await act(() => renderLink(optProps));
 
-        const results = await axe(container);
+        const results = await act(() => axe(container));
+
         expect(results).toHaveNoViolations();
     });
 
-    it("should not have an href when disabled", () => {
+    it("2.4.2 should not have an href when disabled", () => {
         const optProps = { isDisabled: true };
-        const { getByRole } = renderExternalLink(optProps);
+        const { getByTestId } = renderLink(optProps);
 
-        const link = getByRole("link");
+        const link = getByTestId(TEST_ID);
         expect(link).toBeInTheDocument();
 
         expect(link).toHaveAttribute("aria-disabled", "true");
-        expect(link).not.toHaveAttribute("href");
+        expect(link).toHaveAttribute("href", "");
     });
 
-    it("should have an href when enabled", () => {
+    it("2.4.2 should have an href when enabled", () => {
         const optProps = {};
-        const { getByRole } = renderExternalLink(optProps);
+        const { getByRole } = renderLink(optProps);
 
         const link = getByRole("link");
         expect(link).toBeInTheDocument();
@@ -43,20 +45,21 @@ describe("<ExternalLink />", () => {
         expect(link).not.toHaveAttribute("aria-disabled", "true");
         expect(link).toHaveAttribute("href");
     });
-    it("should announce it opens in a new window when target is set", () => {
+
+    it("1.6.4 should announce it opens in a new window when a target is set", () => {
         const optProps = { target: "glossary" };
-        const { getByRole } = renderExternalLink(optProps);
+        const { getByRole } = renderLink(optProps);
 
         const link = getByRole("link");
         expect(link).toBeInTheDocument();
         expect(link).toHaveTextContent("opens in a new tab");
     });
-
-    it("should announce it opens in a new window when openInNewTab is true", () => {
+   
+    it("1.6.4 should announce it opens in a new window when openInNewTab is true", () => {
         const optProps = { openInNewTab: true };
-        const { getByLabelText, getByRole } = renderExternalLink(optProps);
+        const { getByLabelText, getByRole, getByTestId } = renderLink(optProps);
 
-        const link = getByRole("link");
+        const link = getByTestId(`${TEST_ID}`);
         expect(link).toBeInTheDocument();
 
         const svg = getByRole("img");
@@ -67,15 +70,14 @@ describe("<ExternalLink />", () => {
         expect(icon).toBeInTheDocument();
     });
 
-    it("should announce it opens in a new tab when openInNewTab is true, even if the icon is not available", () => {
+    it("1.6.4 should announce it opens in a new tab when openInNewTab is true, even if the icon is not available", () => {
         const optProps = {
             openInNewTab: true,
             suppressNewIcon: true,
         };
-        const { queryAllByRole, getByRole, getByText } =
-            renderExternalLink(optProps);
+        const { queryAllByRole, getByText, getByTestId } = renderLink(optProps);
 
-        const link = getByRole("link");
+        const link = getByTestId(`${TEST_ID}`);
         expect(link).toBeInTheDocument();
 
         expect(link).toHaveAttribute("target", "_blank");

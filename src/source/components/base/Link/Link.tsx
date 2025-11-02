@@ -4,9 +4,8 @@ import Link from "next/link";
 
 import {returnTrueElementOrUndefined} from "@/source/utilities";
 
-import {InternalLinkProps,} from "../LinkTypes";
-import {getNewTab} from "../linkUI";
-import useLink from "../useLink";
+import {LinkProps} from "./LinkTypes";
+import useLink from "./useLink";
 
 export function InternalLink({
     children,
@@ -19,8 +18,8 @@ export function InternalLink({
     target,
     testId,
     ...rest
-}: InternalLinkProps): JSX.Element {
-    const {getLinkTarget, getIsTargetSpecific, getSafeHref} = useLink();
+}: LinkProps): JSX.Element {
+    const {getLinkTarget, getIsTargetSpecific, getNewTab, getSafeHref} = useLink();
 
     const safeHref = getSafeHref(!!isDisabled, href);
 
@@ -34,7 +33,7 @@ export function InternalLink({
         ...rest,
         "aria-disabled": returnTrueElementOrUndefined(!!isDisabled),
         className: cx,
-        "data-testid": returnTrueElementOrUndefined(!!testId, `${testId}`),
+        "data-testid": testId,
         href: safeHref || "",
         ref: ref,
         target: linkTarget,
@@ -46,4 +45,4 @@ export function InternalLink({
             {willOpenInNewTab && newTab}
         </Link>
     );
-}
+}   
