@@ -16,7 +16,7 @@ export default function Text({
         ...rest,
         className: classNames({srOnly: isHidden}, cx),
         "data-testid": testId,
-        elementType: !!isInline ? "span" : "p",
+        elementType: isInline ? "span" : "p",
     };
 
     return <RacText {...textProps}>{children}</RacText>;

@@ -1,9 +1,10 @@
-import { axe, render } from "@/test";
+import {axe, render} from "@/test";
 
 import List from "./List";
-import { ListItem } from "./ListItem";
-import { ListProps, ListRoles } from "./ListTypes";
-import { Heading } from "@/source/components";
+import {ListItem} from "./ListItem";
+import {ListProps, ListRoles} from "./ListTypes";
+import {Heading} from "@/source/components";
+import {Orientation} from "@/source/types";
 
 const TEST_ID = "List";
 
@@ -48,7 +49,7 @@ const renderNonCompliantList = (optProps: ListProps) => {
 };
 
 describe("<List />", () => {
-    it("should be WCAG compliant", async () => {
+    it("1.2.1 - should be WCAG compliant", async () => {
         const optProps = {};
         const { container } = renderList(optProps);
 
@@ -57,7 +58,7 @@ describe("<List />", () => {
         expect(results).toHaveNoViolations();
     });
 
-    it("should render as non WCAG compliant", async () => {
+    it("1.2.1 should render as non WCAG compliant", async () => {
         const optProps = {};
         const { container } = renderNonCompliantList(optProps);
 
@@ -66,19 +67,23 @@ describe("<List />", () => {
         expect(results).not.toHaveNoViolations();
     });
 
-    it("should render as an ordered list", () => {
-        const optProps = { ordered: true };
+    it("1.2.1 should render as a vertical ordered list", () => {
+        const optProps = { isOrdered: true };
         const { getByTestId, getAllByRole } = renderList(optProps);
 
-        expect(getByTestId(TEST_ID)).toBeInTheDocument();
+        const orderedList =  getByTestId(TEST_ID);
+        expect(orderedList).toBeInTheDocument();
         expect(getAllByRole("listitem")).toHaveLength(2);
+        expect(orderedList).toHaveAttribute("data-orientation","vertical");
     });
 
-    it("should render as a menu", () => {
-        const optProps = { role: "menu" as ListRoles };
+    it("1.2.2 should render as a horizontal menu", () => {
+        const optProps = { role: "menu" as ListRoles, orientation: "horizontal" as Orientation };
         const { getByTestId, getAllByRole } = renderMenu(optProps);
-
-        expect(getByTestId(TEST_ID)).toBeInTheDocument();
+        const menu = getByTestId(TEST_ID);
+        expect(menu).toBeInTheDocument();
         expect(getAllByRole("menu")).toHaveLength(1);
+        expect(menu).toHaveAttribute("data-orientation", "horizontal");
+
     });
 });

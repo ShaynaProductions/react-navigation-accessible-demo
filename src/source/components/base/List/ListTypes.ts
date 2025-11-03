@@ -16,7 +16,7 @@ export interface ListProps extends BaseProps {
   /**
    * default (false) when true, produces an <ol> instead of a <ul>
    */
-  ordered?: boolean;
+  isOrdered?: boolean;
 
   /**
    * horizontal | vertical

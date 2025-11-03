@@ -1,14 +1,17 @@
-import React from "react";
+import React, {JSX} from "react";
 import {LinkProps as NextLinkProps} from "next/link";
-import {LinkProps as RacLinkProps} from "react-aria-components";
 import {BaseProps} from "@/source/types";
 
 export type LinkTargets = "_self" | "_blank" | "_parent" | "_top";
 
-export type LinkFocusHandler = React.FocusEventHandler<HTMLAnchorElement>;
-export type LinkMouseHandler = React.MouseEventHandler<HTMLAnchorElement>;
+export interface UseLinkProps {
+    GetIsTargetSpecificTypes: (linkTarget: string) => boolean;
+    GetLinkTargetTypes: (openInNewTab?: boolean, target?: string) => string;
+    GetNewTabTypes: (suppressNewIcon?: boolean, label?: string) => JSX.Element;
+    GetSafeHrefTypes:(isDisabled: boolean, url: string) => string | void;
+}
 
-interface CommonLinkProps {
+interface LinkBaseProps extends BaseProps {
     /**
      *  URL for link.  May be (native) HTML or router (client)
      */
@@ -50,22 +53,12 @@ interface CommonLinkProps {
     target?: string | LinkTargets;
 }
 
-export interface InternalLinkProps
-    extends BaseProps,
-        CommonLinkProps,
+export interface LinkProps
+    extends LinkBaseProps,
         Omit<NextLinkProps, "href"> {
     /**
      * The children of the component.
      */
     children: React.ReactNode;
-    
-
 }
 
-export interface ExternalLinkProps
-    extends BaseProps,
-        CommonLinkProps,
-        Omit<RacLinkProps, "href" | "onFocus" | "style" | "target"> {
-    children: React.ReactNode;
-
-}

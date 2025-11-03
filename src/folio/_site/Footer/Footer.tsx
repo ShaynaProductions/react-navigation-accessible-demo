@@ -1,6 +1,6 @@
 "use client";
 import { JSX } from "react";
-import { ExternalLink, Text } from "@/source/components";
+import { Link, Text } from "@/source/components";
 
 export const Footer = (): JSX.Element => {
     const today = new Date();
@@ -9,12 +9,12 @@ export const Footer = (): JSX.Element => {
         <footer>
             <Text>
                 <abbr title="copyright">&#169;</abbr> {today.getFullYear()}{" "}
-                <ExternalLink
+                <Link
                     href="https://www.shaynaproductions.com/"
                     openInNewTab={false}
                 >
                     Shayna Productions
-                </ExternalLink>
+                </Link>
             </Text>
         </footer>
     );
