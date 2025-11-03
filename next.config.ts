@@ -1,7 +1,7 @@
-
+          import path from "path";
 const nextConfig = {
     turbopack: {
-        root: "/src/app",
+        root: "/",
     },
 };
 
