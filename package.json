@@ -4,7 +4,7 @@
   "packageManager": "yarn@4.9.2",
   "version": "0.1.0",
   "scripts": {
-    "dev": "rimraf .next && next dev ",
+    "dev": "rimraf .next && next dev",
     "build": "rimraf .next && next build",
     "start": "next start",
     "lint": "eslint .",
