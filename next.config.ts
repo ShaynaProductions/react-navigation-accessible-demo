@@ -1,5 +1,4 @@
 
-
 const nextConfig = {
     turbopack: {
         root: "/src/app",
