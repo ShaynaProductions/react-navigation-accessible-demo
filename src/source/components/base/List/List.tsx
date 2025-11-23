@@ -12,13 +12,14 @@ export default function List({
     testId,
     ...rest
 }: ListProps): JSX.Element {
-    
+
     const listProps = {
         ...rest,
         "data-orientation": orientation,
         "data-testid": testId,
         className: cx,
         role: role || "list",
+
     };
 
     return !isOrdered ? (

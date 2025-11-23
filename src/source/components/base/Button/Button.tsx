@@ -16,10 +16,10 @@ export default function Button({
 
     const buttonProps = {
         ...rest,
-        "aria-disabled": isDisabled,
+        "aria-disabled": returnTrueElementOrUndefined(!!isDisabled),
         className: cx,
         "data-testid": testId,
-        onPress: returnTrueElementOrUndefined(!isDisabled, onPress),
+        onPress: isDisabled ? undefined : onPress,
     };
 
     return <RacButton {...buttonProps}>{children}</RacButton>;
