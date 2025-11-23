@@ -4244,6 +4244,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"baseline-browser-mapping@npm:latest":
+  version: 2.8.31
+  resolution: "baseline-browser-mapping@npm:2.8.31"
+  bin:
+    baseline-browser-mapping: dist/cli.js
+  checksum: 10c0/e0b2fcb41bf36c5e27e122a4d4cc9e5f6b9747d31cd0bd1f771aee9c490eb1e01cd11a31db32286bd4b9221139ee332b5ab7e3893c18a4dbd0ce8915a9e180ed
+  languageName: node
+  linkType: hard
+
 "brace-expansion@npm:^1.1.7":
   version: 1.1.12
   resolution: "brace-expansion@npm:1.1.12"
@@ -8061,6 +8070,7 @@ __metadata:
     "@types/node": "npm:^24.10.0"
     "@types/react": "npm:^19.2.2"
     "@types/react-dom": "npm:^19.2.2"
+    baseline-browser-mapping: "npm:latest"
     classnames: "npm:^2.5.1"
     eslint: "npm:^9.39.0"
     eslint-config-next: "npm:^15.5.6"
