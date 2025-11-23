@@ -2,7 +2,7 @@
 import {JSX} from "react";
 import Link from "next/link";
 
-import {returnTrueElementOrUndefined} from "@/source/utilities";
+import {returnTrueElementOrUndefined} from "@/ui/utilities";
 
 import {LinkProps} from "./LinkTypes";
 import useLink from "./useLink";

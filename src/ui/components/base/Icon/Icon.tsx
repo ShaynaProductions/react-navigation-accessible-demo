@@ -1,4 +1,4 @@
-import { returnTrueElementOrUndefined } from "@/source/utilities";
+import { returnTrueElementOrUndefined } from "@/ui/utilities";
 import { IconProps } from "./IconTypes";
 
 export default function Icon({

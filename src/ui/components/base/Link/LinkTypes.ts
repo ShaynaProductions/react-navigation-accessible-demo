@@ -1,6 +1,6 @@
 import React, {JSX} from "react";
 import {LinkProps as NextLinkProps} from "next/link";
-import {BaseProps} from "@/source/types";
+import {BaseProps} from "@/ui/types";
 
 export type LinkTargets = "_self" | "_blank" | "_parent" | "_top";
 

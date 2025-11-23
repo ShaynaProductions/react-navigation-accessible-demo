@@ -1,5 +1,5 @@
 "use client";
-import {Button, Link, Heading, List, ListItem, Text,} from "@/source/components";
+import {Button, Link, Heading, List, ListItem, Text,} from "@/ui/components";
 import "./storyOneView.css";
 import {useState} from "react";
 

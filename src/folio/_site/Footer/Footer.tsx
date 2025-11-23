@@ -1,6 +1,6 @@
 "use client";
 import { JSX } from "react";
-import { Link, Text } from "@/source/components";
+import { Link, Text } from "@/ui/components";
 
 export const Footer = (): JSX.Element => {
     const today = new Date();

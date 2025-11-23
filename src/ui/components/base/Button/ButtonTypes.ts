@@ -1,6 +1,6 @@
 import React from "react";
 import {ButtonProps as RacButtonProps} from "react-aria-components";
-import {BaseProps} from "@/source/types";
+import {BaseProps} from "@/ui/types";
 
 export interface ButtonProps extends BaseProps, Omit<RacButtonProps, "style"> {
     isPressed?: boolean;

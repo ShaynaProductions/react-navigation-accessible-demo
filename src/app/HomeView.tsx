@@ -1,6 +1,6 @@
 "use client";
 
-import { Heading, Link, List, ListItem, Text,} from "@/source/components";
+import { Heading, Link, List, ListItem, Text,} from "@/ui/components";
 
 export default function HomeView() {
 

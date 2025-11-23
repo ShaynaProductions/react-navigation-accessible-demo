@@ -1,6 +1,6 @@
 import { render, axe } from "@/test";
 import Text from "./Text";
-import { TextProps } from "@/source/components/base";
+import { TextProps } from "@/ui/components/base";
 
 const TEST_ID = "Text";
 

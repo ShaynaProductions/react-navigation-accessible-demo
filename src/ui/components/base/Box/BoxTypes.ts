@@ -1,5 +1,5 @@
 import React from "react";
-import {BaseProps} from "@/source/types";
+import {BaseProps} from "@/ui/types";
 
 export interface BoxProps extends BaseProps {
     /**

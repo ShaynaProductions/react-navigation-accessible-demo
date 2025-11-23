@@ -1,5 +1,5 @@
 import {TextProps as RacTextProps} from "react-aria-components";
-import {BaseProps} from "@/source/types";
+import {BaseProps} from "@/ui/types";
 
 export interface TextProps extends BaseProps, RacTextProps {
     /**

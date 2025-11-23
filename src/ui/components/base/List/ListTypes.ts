@@ -1,5 +1,5 @@
 import React from "react";
-import { BaseProps, Orientation } from "@/source/types";
+import { BaseProps, Orientation } from "@/ui/types";
 
 export type ListItemRoles = "listitem" | "menuitem" | "treeitem";
 export type ListRoles = "list" | "menu" | "tree";

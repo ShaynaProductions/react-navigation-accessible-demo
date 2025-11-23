@@ -1,4 +1,4 @@
-import { BaseProps } from "@/source/types";
+import { BaseProps } from "@/ui/types";
 import { IconType } from "react-icons";
 
 export interface IconProps extends BaseProps {

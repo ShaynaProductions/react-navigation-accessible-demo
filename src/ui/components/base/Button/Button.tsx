@@ -2,7 +2,7 @@
 import {JSX} from "react";
 import {Button as RacButton} from "react-aria-components";
 
-import {returnTrueElementOrUndefined} from "@/source/utilities";
+import {returnTrueElementOrUndefined} from "@/ui/utilities";
 import {ButtonProps} from "./ButtonTypes";
 
 export default function Button({

@@ -1,7 +1,7 @@
 import { sanitizeUrl } from "@braintree/sanitize-url";
-import {NewWindowIcon} from "@/source/svg";
-import {Icon, Text} from "@/source/components";
-import  {UseLinkProps} from "@/source/components/base/Link";
+import {NewWindowIcon} from "@/ui/svg";
+import {Icon, Text} from "@/ui/components";
+import  {UseLinkProps} from "@/ui/components/base/Link";
 
 export default function useLink() {
     const getIsTargetSpecific: UseLinkProps["GetIsTargetSpecificTypes"] = (linkTarget) => {

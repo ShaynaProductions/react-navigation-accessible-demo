@@ -3,8 +3,8 @@ import {axe, render} from "@/test";
 import List from "./List";
 import {ListItem} from "./ListItem";
 import {ListProps, ListRoles} from "./ListTypes";
-import {Heading} from "@/source/components";
-import {Orientation} from "@/source/types";
+import {Heading} from "@/ui/components";
+import {Orientation} from "@/ui/types";
 
 const TEST_ID = "List";
 

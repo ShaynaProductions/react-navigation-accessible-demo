@@ -1,4 +1,4 @@
-import { NewWindowIcon } from "@/source/svg";
+import { NewWindowIcon } from "@/ui/svg";
 import { render, axe } from "@/test";
 import { IconProps } from "./IconTypes";
 import Icon from "./Icon";
