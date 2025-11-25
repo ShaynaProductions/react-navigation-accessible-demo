@@ -28,7 +28,7 @@ describe("<Heading />", () => {
         expect(component).toBeInTheDocument();
     });
 
-    it("should return an h6 if heading isn't h1-h6", () => {
+    it("6.1.1 should return an h6 if heading isn't h1-h6", () => {
         const optProps = {
             headingLevel: 7,
         };

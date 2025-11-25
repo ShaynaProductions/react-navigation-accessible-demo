@@ -40,7 +40,7 @@ describe("<Button />", () => {
         expect(results).toHaveNoViolations();
     });
 
-    it("2.3.2 handles a press event via pointer and keyboard", async () => {
+    it("5.2.1 handles a press event via pointer and keyboard", async () => {
         const handlePress = jest.fn();
         const optProps = {onPress: handlePress};
         const {getByRole} = renderButton(optProps);
@@ -60,7 +60,7 @@ describe("<Button />", () => {
 
 
 
-    it("2.3.3 does not handle a press event when disabled", async () => {
+    it("5.2.2 does not handle a press event when disabled", async () => {
         const handlePress = jest.fn();
         const optProps = {onPress: handlePress, isDisabled: true};
         const {getByRole} = renderButton(optProps);
@@ -72,7 +72,7 @@ describe("<Button />", () => {
 
         expect(handlePress).not.toHaveBeenCalled();
     });
-    it("2.3.3 when disabled, an aria-disabled attribute should be in the button", () => {
+    it("5.2.2 when disabled, an aria-disabled attribute should be in the button", () => {
         const optProps = {isDisabled: true};
         const {getByRole} = renderButton(optProps);
 

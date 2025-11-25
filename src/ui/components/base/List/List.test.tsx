@@ -49,7 +49,7 @@ const renderNonCompliantList = (optProps: ListProps) => {
 };
 
 describe("<List />", () => {
-    it("1.2.1 - should be WCAG compliant", async () => {
+    it("2.1.1 - should be WCAG compliant", async () => {
         const optProps = {};
         const { container } = renderList(optProps);
 
@@ -58,7 +58,7 @@ describe("<List />", () => {
         expect(results).toHaveNoViolations();
     });
 
-    it("1.2.1 should render as non WCAG compliant", async () => {
+    it("2.1.1 should render as non WCAG compliant", async () => {
         const optProps = {};
         const { container } = renderNonCompliantList(optProps);
 
@@ -67,7 +67,7 @@ describe("<List />", () => {
         expect(results).not.toHaveNoViolations();
     });
 
-    it("1.2.1 should render as a vertical ordered list", () => {
+    it("2.1.2 should render as a vertical ordered list", () => {
         const optProps = { isOrdered: true };
         const { getByTestId, getAllByRole } = renderList(optProps);
 
@@ -77,7 +77,7 @@ describe("<List />", () => {
         expect(orderedList).toHaveAttribute("data-orientation","vertical");
     });
 
-    it("1.2.2 should render as a horizontal menu", () => {
+    it("2.1.2 should render as a horizontal menu", () => {
         const optProps = { role: "menu" as ListRoles, orientation: "horizontal" as Orientation };
         const { getByTestId, getAllByRole } = renderMenu(optProps);
         const menu = getByTestId(TEST_ID);
