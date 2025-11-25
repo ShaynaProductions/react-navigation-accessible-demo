@@ -1,6 +1,6 @@
-import { ReactNode } from "react";
-import type { Metadata } from "next";
-import {Footer, Header } from "@/folio/_site/";
+import {ReactNode} from "react";
+import type {Metadata} from "next";
+import {Footer, Header} from "@/folio/_site/";
 import "./globals.css";
 import "./layout.css";
 
@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({
-   children,
+    children,
 }: Readonly<{
     children: ReactNode;
 }>) {
@@ -19,10 +19,10 @@ export default function RootLayout({
         <head>
             <title>{metadata.title as string}</title>
         </head>
-        <body className="">
-        <Header />
-        <main id="main">{children}</main>
-        <Footer />
+        <body>
+            <Header/>
+            <main id="main">{children}</main>
+            <Footer/>
         </body>
         </html>
     );

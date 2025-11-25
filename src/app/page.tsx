@@ -1,7 +1,6 @@
 import { Metadata } from "next";
 
-import HomeView from "@/app/HomeView";
-import "./page.css";
+import {HomeView} from "@/folio/Home/";
 
 
 export const metadata: Metadata = {

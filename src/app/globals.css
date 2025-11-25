@@ -1,5 +1,5 @@
 @import url("../theme-system/index.css");
-@import url("../source/source.css");
+@import url("../ui/ui.css");
 
 @layer default-theme {
     body header, body footer  body main{

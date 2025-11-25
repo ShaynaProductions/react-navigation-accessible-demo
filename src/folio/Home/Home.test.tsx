@@ -1,16 +1,17 @@
 import React, { act } from "react";
-import { axe, render } from "@/test";
-import {Header} from "./";
+import { axe, render} from "@/test";
+import {HomeView} from "@/folio/Home/HomeView";
 
 
-const renderHeaderComponent = () => {
-    return render(<Header />);
+const renderHomeComponent = () => {
+    return render(<HomeView />);
 }
 
 describe("<HomeView Page />", () => {
 
+
     it("passes auto-wcag", async () => {
-        const {container} = renderHeaderComponent();
+        const {container} = renderHomeComponent();
         const results = await act(() => axe(container));
         expect(results).toHaveNoViolations();
     });
