@@ -15,7 +15,7 @@ const renderLink = (props: Partial<LinkProps>) => {
 };
 
 describe("<Link />", () => {
-    it("1.6.1 should be WCAG compliant", async () => {
+    it("6.1.1 should be WCAG compliant", async () => {
         const optProps = { testId: undefined };
         const { container } = await act(() => renderLink(optProps));
 
@@ -24,7 +24,7 @@ describe("<Link />", () => {
         expect(results).toHaveNoViolations();
     });
 
-    it("2.4.2 should not have an href when disabled", () => {
+    it("6.2.2 should not have an href when disabled", () => {
         const optProps = { isDisabled: true };
         const { getByTestId } = renderLink(optProps);
 
@@ -35,7 +35,7 @@ describe("<Link />", () => {
         expect(link).toHaveAttribute("href", "");
     });
 
-    it("2.4.2 should have an href when enabled", () => {
+    it("6.1.1 should have an href when enabled", () => {
         const optProps = {};
         const { getByRole } = renderLink(optProps);
 
@@ -46,7 +46,7 @@ describe("<Link />", () => {
         expect(link).toHaveAttribute("href");
     });
 
-    it("1.6.4 should announce it opens in a new window when a target is set", () => {
+    it("6.1.4 should announce it opens in a new window when a target is set", () => {
         const optProps = { target: "glossary" };
         const { getByRole } = renderLink(optProps);
 
@@ -55,7 +55,7 @@ describe("<Link />", () => {
         expect(link).toHaveTextContent("opens in a new tab");
     });
    
-    it("1.6.4 should announce it opens in a new window when openInNewTab is true", () => {
+    it("6.1.4 should announce it opens in a new window when openInNewTab is true", () => {
         const optProps = { openInNewTab: true };
         const { getByLabelText, getByRole, getByTestId } = renderLink(optProps);
 
@@ -70,7 +70,7 @@ describe("<Link />", () => {
         expect(icon).toBeInTheDocument();
     });
 
-    it("1.6.4 should announce it opens in a new tab when openInNewTab is true, even if the icon is not available", () => {
+    it("6.1.4 should announce it opens in a new tab when openInNewTab is true, even if the icon is not available", () => {
         const optProps = {
             openInNewTab: true,
             suppressNewIcon: true,

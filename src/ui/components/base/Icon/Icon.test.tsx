@@ -8,7 +8,7 @@ const renderIcon = (optProps: Omit<IconProps, "IconComponent">) => {
 };
 
 describe("Icon", () => {
-    it("should be WCAG compliant", async () => {
+    it("4.1.1 should be WCAG compliant", async () => {
         const {container, getByRole} = renderIcon({label: "New Window"});
         expect(getByRole("img")).toBeInTheDocument();
 
@@ -17,7 +17,7 @@ describe("Icon", () => {
         expect(results).toHaveNoViolations();
     });
 
-    it("1.4.1 should not render when label is not passed in", () => {
+    it("4.1.3 should not render when label is not passed in", () => {
         const logSpy = jest.spyOn(console, "error");
         const {queryByRole} = renderIcon({});
         const svgImage = queryByRole("img");
@@ -26,7 +26,7 @@ describe("Icon", () => {
             "Dev Error - WCAG 1.1.1: Label must be provided when isSilent is not set.",
         );
     });
-    it("1.4.3 should not render when both isSilent and label are passed in", () => {
+    it("4.1.3 should not render when both isSilent and label are passed in", () => {
         const logSpy = jest.spyOn(console, "error");
         const {queryByRole} = renderIcon({isSilent: true, label: "Silent"});
         const svgImage = queryByRole("img");
@@ -36,7 +36,7 @@ describe("Icon", () => {
         );
     });
 
-    it("1.4.2 should render with aria-hidden when isSilent is true", () => {
+    it("4.1.2 should render with aria-hidden when isSilent is true", () => {
         const {getByRole} = renderIcon({isSilent: true});
         const svgImage = getByRole("img", {hidden: true});
         expect(svgImage).toBeInTheDocument();

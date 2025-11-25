@@ -9,7 +9,7 @@ const renderText = (optProps: TextProps) => {
 };
 
 describe("<Text />", () => {
-    it("2.1.1 should be WCAG compliant as a Phrase control", async () => {
+    it("1.1.2 should be WCAG compliant as a Phrase control", async () => {
         const optProps = { isInline: true, testId: TEST_ID };
         const { container } = renderText(optProps);
 
@@ -18,7 +18,7 @@ describe("<Text />", () => {
         expect(results).toHaveNoViolations();
     });
 
-    it("2.1.1 should be WCAG compliant as a Flow control", async () => {
+    it("1.1.2 should be WCAG compliant as a Flow control", async () => {
         const optProps = {};
         const { container } = renderText(optProps);
 
@@ -27,14 +27,14 @@ describe("<Text />", () => {
         expect(results).toHaveNoViolations();
     });
 
-    it("2.1.1 should load as inline", () => {
+    it("1.1.2 should load as inline", () => {
         const optProps = { isInline: true, testId: TEST_ID };
         const { getByTestId } = renderText(optProps);
 
         expect(getByTestId(TEST_ID)).toBeInTheDocument();
     });
 
-    it("1.1.1 should be visually hidden when hidden is true", () => {
+    it("1.1.1 should be visually hidden when isHidden is true", () => {
         const optProps = { isHidden: true, testId: TEST_ID };
         const { container } = renderText(optProps);
 
