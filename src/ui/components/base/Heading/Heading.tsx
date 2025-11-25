@@ -1,6 +1,6 @@
 import React, { JSX } from "react";
 import classNames from "classnames";
-import { Heading as RacHeading } from "react-aria-components";
+import { Heading as RACHeading } from "react-aria-components";
 import { HeadingProps } from "./HeadingTypes";
 
 export default function Heading({
@@ -23,5 +23,5 @@ export default function Heading({
         level: currentHeadingLevel,
     };
 
-    return <RacHeading {...headingProps}>{children}</RacHeading>;
+    return <RACHeading {...headingProps}>{children}</RACHeading>;
 }

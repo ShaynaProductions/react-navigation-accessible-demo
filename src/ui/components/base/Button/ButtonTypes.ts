@@ -1,8 +1,10 @@
 import React from "react";
-import {ButtonProps as RacButtonProps} from "react-aria-components";
+import {ButtonProps as RACButtonProps, PressEvent as RACPressEvent} from "react-aria-components";
 import {BaseProps} from "@/ui/types";
 
-export interface ButtonProps extends BaseProps, Omit<RacButtonProps, "style"> {
+export type PressEvent =  ((e: RACPressEvent) => void) | undefined;
+
+export interface ButtonProps extends BaseProps, Omit<RACButtonProps, "style"> {
     isPressed?: boolean;
     ref?: React.RefObject<HTMLButtonElement | null>;
 }

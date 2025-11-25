@@ -1,3 +1,4 @@
+"use client";
 import { sanitizeUrl } from "@braintree/sanitize-url";
 import {NewWindowIcon} from "@/ui/svg";
 import {Icon, Text} from "@/ui/components";

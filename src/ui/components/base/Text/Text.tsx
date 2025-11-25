@@ -1,6 +1,6 @@
 import React, {JSX} from "react";
 import classNames from "classnames";
-import {Text as RacText} from "react-aria-components";
+import {Text as RACText} from "react-aria-components";
 
 import {TextProps} from "./TextTypes";
 
@@ -19,5 +19,5 @@ export default function Text({
         elementType: isInline ? "span" : "p",
     };
 
-    return <RacText {...textProps}>{children}</RacText>;
+    return <RACText {...textProps}>{children}</RACText>;
 }

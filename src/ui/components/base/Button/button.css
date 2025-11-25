@@ -43,7 +43,6 @@
             cursor: default;
         }
 
-        /* [data-focus] supports design */
 
         &:focus-visible {
             outline: var(--focus-outline) var(--focus-outline-color);

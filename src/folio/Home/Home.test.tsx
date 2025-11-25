@@ -1,6 +1,6 @@
 import React, { act } from "react";
 import { axe, render} from "@/test";
-import HomeView from "@/app/HomeView";
+import {HomeView} from "@/folio/Home/HomeView";
 
 
 const renderHomeComponent = () => {

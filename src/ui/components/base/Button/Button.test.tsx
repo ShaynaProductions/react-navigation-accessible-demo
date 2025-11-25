@@ -9,7 +9,7 @@ const buttonLabel = "Press Me";
 const renderButton = (optProps: Partial<ButtonProps>) => {
     return render(
         <Button {...optProps}>
-            Press Me
+            {buttonLabel}
         </Button>,
     );
 };

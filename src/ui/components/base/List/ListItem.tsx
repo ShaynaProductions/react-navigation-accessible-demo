@@ -5,7 +5,6 @@ import { ListItemProps } from "./ListTypes";
 export function ListItem({
   children,
   cx,
-  role,
   testId,
   ...rest
 }: ListItemProps): JSX.Element {
@@ -14,7 +13,6 @@ export function ListItem({
         ...rest,
         className: cx,
         "data-testid": testId,
-        role: role || "listitem",
     };
     return (
         <>

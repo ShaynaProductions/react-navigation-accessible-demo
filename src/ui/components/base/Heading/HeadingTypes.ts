@@ -1,10 +1,10 @@
-import {HeadingProps as RacHeadingProps} from "react-aria-components";
+import {HeadingProps as RACHeadingProps} from "react-aria-components";
 import {BaseProps} from "@/ui/types";
 import React from "react";
 
 export type HeadingVariant = "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
 
-export interface HeadingProps extends BaseProps, RacHeadingProps {
+export interface HeadingProps extends BaseProps, RACHeadingProps {
     /**
      * Children of the heading
      */

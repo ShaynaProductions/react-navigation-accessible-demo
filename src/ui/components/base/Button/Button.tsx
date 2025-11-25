@@ -1,6 +1,6 @@
 "use client";
 import {JSX} from "react";
-import {Button as RacButton} from "react-aria-components";
+import {Button as RACButton} from "react-aria-components";
 
 import {returnTrueElementOrUndefined} from "@/ui/utilities";
 import {ButtonProps} from "./ButtonTypes";
@@ -15,12 +15,12 @@ export default function Button({
 }: ButtonProps): JSX.Element {
 
     const buttonProps = {
-        ...rest,
         "aria-disabled": returnTrueElementOrUndefined(!!isDisabled),
         className: cx,
         "data-testid": testId,
         onPress: isDisabled ? undefined : onPress,
+        ...rest,
     };
 
-    return <RacButton {...buttonProps}>{children}</RacButton>;
+    return <RACButton {...buttonProps}>{children}</RACButton>;
 }

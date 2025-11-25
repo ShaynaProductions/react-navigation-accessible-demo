@@ -1,6 +1,6 @@
 import React, { act } from "react";
 import { axe, render } from "@/test";
-import {Header} from "@/folio/_site/Header/Header";
+import {Header} from "./";
 
 
 const renderHeaderComponent = () => {

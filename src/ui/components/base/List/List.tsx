@@ -8,7 +8,6 @@ export default function List({
     cx,
     isOrdered = false,
     orientation = "vertical",
-    role,
     testId,
     ...rest
 }: ListProps): JSX.Element {
@@ -18,7 +17,6 @@ export default function List({
         "data-orientation": orientation,
         "data-testid": testId,
         className: cx,
-        role: role || "list",
 
     };
 

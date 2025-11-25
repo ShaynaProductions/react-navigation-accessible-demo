@@ -25,20 +25,3 @@ export interface BaseProps {
      */
     testId?: string;
 }
-
-export interface SvgProps
-    extends Omit<BaseProps, "cx">,
-        React.SVGAttributes<SVGElement> {
-    /**
-     * classes to pass
-     */
-    cx?: string;
-    /**
-     * non-visual label describing the image.
-     */
-    label?: string;
-    /**
-     * size of Icon if needed.
-     */
-    size?: number;
-}
