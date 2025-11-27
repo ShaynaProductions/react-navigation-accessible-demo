@@ -63,10 +63,13 @@
         &.text {
             background-color: var(--purple-1);
         }
+    
     }
     p.counter {
         color: var(--vibrant-blue-5);
         height: calc(var(--sp-px) * 24);
         padding-left: calc(var(--sp-px) * 24);
     }
+
+    
 }

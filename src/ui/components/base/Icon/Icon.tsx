@@ -13,7 +13,7 @@ export default function Icon({
   if (
       /* istanbul ignore next */
     process.env.NODE_ENV === "test" ||
-    process.env.NEXT_PUBLIC_ENV === "local"
+    process.env.NODE_ENV === "development"
   ) {
     if (!isSilent && !label) {
       console.error("Dev Error - WCAG 1.1.1: Label must be provided when isSilent is not set.");

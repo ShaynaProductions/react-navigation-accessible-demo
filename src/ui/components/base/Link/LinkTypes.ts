@@ -8,19 +8,19 @@ export interface UseLinkProps {
     GetIsTargetSpecificTypes: (linkTarget: string) => boolean;
     GetLinkTargetTypes: (openInNewTab?: boolean, target?: string) => string;
     GetNewTabTypes: (suppressNewIcon?: boolean, label?: string) => JSX.Element;
-    GetSafeHrefTypes:(isDisabled: boolean, url: string) => string | void;
+    GetSafeHrefTypes: (url?: string) => string | void;
 }
 
-interface LinkBaseProps extends BaseProps {
+    export interface LinkProps extends BaseProps, Omit<NextLinkProps, "href"> {
+    /**
+     * The children of the component.
+     */
+    children: React.ReactNode;
     /**
      *  URL for link.  May be (native) HTML or router (client)
      */
-    href: string;
+    href?: string;
 
-    /**
-     * default (false). When true sets aria- and data-disabled
-     */
-    isDisabled?: boolean;
 
     /**
      * default (undefined). When true sets data-focused
@@ -53,12 +53,4 @@ interface LinkBaseProps extends BaseProps {
     target?: string | LinkTargets;
 }
 
-export interface LinkProps
-    extends LinkBaseProps,
-        Omit<NextLinkProps, "href"> {
-    /**
-     * The children of the component.
-     */
-    children: React.ReactNode;
-}
 

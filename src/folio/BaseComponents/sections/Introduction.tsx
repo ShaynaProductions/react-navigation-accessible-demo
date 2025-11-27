@@ -8,7 +8,7 @@ export function Introduction(): JSX.Element {
         <Text><abbr title="Garbage In, Garbage Out">GIGO</abbr>:
             Since a React application is built by a series of parent/child components, it stands to reason that the only
             way to create an accessible application is to make sure your base components, those that wrap around structural and semantically valid HTML elements,
-            are as accessible as they can be. </Text>
+            are as accessible as they can be. All components created have been used in the creation of this page.</Text>
         <Text>This release holds the code for the article: <Link
             href="https://dev.to/shaynaproductions/base-components-are-key-to-accessibility-2bd8"
             openInNewTab={true}>Base Components are key to accessibility</Link></Text>

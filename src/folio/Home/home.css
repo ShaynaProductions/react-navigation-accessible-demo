@@ -1,7 +1,9 @@
 @layer main {
-    li p:not(:first-child) {
+    li {
+        & p:not(:first-child) {
+        }
         padding-left:calc(var(--sp-px) * 64);
-    }
+    }     
 
 
 }

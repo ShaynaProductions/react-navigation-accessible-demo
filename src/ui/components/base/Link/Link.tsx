@@ -1,17 +1,14 @@
 "use client";
 import {JSX} from "react";
-import Link from "next/link";
-
-import {returnTrueElementOrUndefined} from "@/ui/utilities";
+import {default as NextLink} from "next/link";
 
 import {LinkProps} from "./LinkTypes";
 import useLink from "./useLink";
 
-export function InternalLink({
+export function Link({
     children,
     cx,
     href,
-    isDisabled,
     openInNewTab,
     ref,
     suppressNewIcon,
@@ -21,7 +18,7 @@ export function InternalLink({
 }: LinkProps): JSX.Element {
     const {getLinkTarget, getIsTargetSpecific, getNewTab, getSafeHref} = useLink();
 
-    const safeHref = getSafeHref(!!isDisabled, href);
+    const safeHref = getSafeHref(href);
 
     const linkTarget = getLinkTarget(openInNewTab, target);
     const isTargetSpecific = getIsTargetSpecific(linkTarget);
@@ -31,7 +28,6 @@ export function InternalLink({
 
     const linkProps = {
         ...rest,
-        "aria-disabled": returnTrueElementOrUndefined(!!isDisabled),
         className: cx,
         "data-testid": testId,
         href: safeHref || "",
@@ -40,9 +36,9 @@ export function InternalLink({
     };
 
     return (
-        <Link {...linkProps}>
+        <NextLink {...linkProps}>
             {children}
             {willOpenInNewTab && newTab}
-        </Link>
+        </NextLink>
     );
 }   

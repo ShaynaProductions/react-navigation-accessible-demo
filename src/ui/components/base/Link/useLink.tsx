@@ -1,8 +1,8 @@
 "use client";
-import { sanitizeUrl } from "@braintree/sanitize-url";
+import {sanitizeUrl} from "@braintree/sanitize-url";
 import {NewWindowIcon} from "@/ui/svg";
 import {Icon, Text} from "@/ui/components";
-import  {UseLinkProps} from "@/ui/components/base/Link";
+import {UseLinkProps} from "@/ui/components/base/Link";
 
 export default function useLink() {
     const getIsTargetSpecific: UseLinkProps["GetIsTargetSpecificTypes"] = (linkTarget) => {
@@ -36,13 +36,12 @@ export default function useLink() {
         }
     };
 
-    const getSafeHref: UseLinkProps["GetSafeHrefTypes"] = (isDisabled, url) => {
-        if (isDisabled) {
-            return;
+    const getSafeHref = (url) => {
+        if (url.length > 1) {
+            return sanitizeUrl(url);
         }
-        return sanitizeUrl(url);
+        return;
     };
-
 
 
     return {

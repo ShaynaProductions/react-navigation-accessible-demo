@@ -44,12 +44,12 @@
         }
 
 
-        &:focus-visible {
+        &:focus-visible, &[data-focused="true"] {
             outline: var(--focus-outline) var(--focus-outline-color);
             outline-offset: var(--focus-outline-offset);
         }
 
-        &:focus-visible {
+        &:focus-visible, &[data-focused="true"] {
             --button-background: var(--button-background-focused);
             --button-border-color: var(--button-border-color-focused);
             --button-color: var(--button-color-focused);
@@ -64,7 +64,7 @@
             --svg-color: var(--button-color-hovered);
             --svg-fill: var(--button-fill-hovered);
 
-            &:focus-visible {
+            &:focus-visible, &[data-focused="true"] {
                 --button-background: var(--button-background-focused);
                 --button-border-color: var(--button-border-color-focused);
                 --button-color: var(--button-color-focused);
