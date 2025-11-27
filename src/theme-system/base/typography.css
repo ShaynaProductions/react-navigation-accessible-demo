@@ -36,7 +36,7 @@
     }
 
     p {
-
+         font-size: calc(var(--sp-px) * 16);
         margin: var(--paragraph-margin) 0;
     }
 

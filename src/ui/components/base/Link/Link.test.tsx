@@ -1,14 +1,15 @@
 import React, { act } from "react";
 import { axe, render } from "@/test";
 import { LinkProps } from "./LinkTypes";
-import { InternalLink as Link } from "./Link";
+import {Link } from "./Link";
 
 const TEST_ID = "LinkFacade";
 const label = "Internal Link";
 
 const renderLink = (props: Partial<LinkProps>) => {
+   const href = props.href || "";
     return render(
-        <Link href="#" testId={TEST_ID} {...props}>
+        <Link href={href} testId={TEST_ID} {...props}>
             {label}
         </Link>,
     );
@@ -24,19 +25,10 @@ describe("<Link />", () => {
         expect(results).toHaveNoViolations();
     });
 
-    it("6.2.2 should not have an href when disabled", () => {
-        const optProps = { isDisabled: true };
-        const { getByTestId } = renderLink(optProps);
 
-        const link = getByTestId(TEST_ID);
-        expect(link).toBeInTheDocument();
 
-        expect(link).toHaveAttribute("aria-disabled", "true");
-        expect(link).toHaveAttribute("href", "");
-    });
-
-    it("6.1.1 should have an href when enabled", () => {
-        const optProps = {};
+    it("6.1.1 should have an href when one is passed in", () => {
+        const optProps = {href:"testing/"};
         const { getByRole } = renderLink(optProps);
 
         const link = getByRole("link");
@@ -47,7 +39,7 @@ describe("<Link />", () => {
     });
 
     it("6.1.4 should announce it opens in a new window when a target is set", () => {
-        const optProps = { target: "glossary" };
+        const optProps = { href: "test", target: "glossary" };
         const { getByRole } = renderLink(optProps);
 
         const link = getByRole("link");

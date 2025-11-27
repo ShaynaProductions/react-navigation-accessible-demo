@@ -18,8 +18,10 @@ export function Components({cx, headingLevel, pressEvent}: ComponentsProps): JSX
                 readers adds to the tags basic functionality.</Text></ListItem>
 
             <ListItem cx="heading"><Heading headingLevel={headingLevel}>Heading Component</Heading><Text>
-                A Heading component allows for display of &lt;H1 /&gt - &lt;H6 /&; tags in a uniform manner. As with the
-                Text component, additional modifications are added to hide headings from the screen while still exposing them to screen readers.
+                A Heading component allows for display of &lt;H1 /&gt; - &lt;H6 /&gt; tags in a uniform manner. As with
+                the
+                Text component, additional modifications are added to hide headings from the screen while still exposing
+                them to screen readers.
             </Text></ListItem>
 
 
@@ -51,10 +53,12 @@ export function Components({cx, headingLevel, pressEvent}: ComponentsProps): JSX
                     href="https://react-spectrum.adobe.com/react-aria/Button.html">React Aria Component
                     Library</Link>, an unstyled component library offered by Adobe.
                 </Text>
+
+                <Button onPress={pressEvent}>I am a button with a press event</Button>
+                <Button isDisabled={true} onPress={pressEvent}>I am a focusable disabled button with a Press Event passed in.</Button>
+
                 <Text>A synopsis of button requirements to achieve accessibility is detailed in this accompanying
                     article.</Text>
-                <Button onPress={pressEvent}>I am a button with a press event</Button>
-
                 <List>
                     <ListItem>
                         <Text><Link

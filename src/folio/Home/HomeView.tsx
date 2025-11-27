@@ -10,10 +10,10 @@ export function HomeView() {
         <>
             <Text>
                 This repository is provided as an example of an accessible React navigation component accompanying a set
-                of articles featured in a series of articles through
+                of articles featured in a series of articles through{" "}
                 <Link href="https://dev.to/shaynaproductions/" openInNewTab={true}>Base Components</Link>
             </Text>
-            <Heading headingLevel={2}>Examples</Heading>
+            <Heading headingLevel={2}>Article Examples</Heading>
             <List>
                 <ListItem><ExampleOne/></ListItem>
             </List>

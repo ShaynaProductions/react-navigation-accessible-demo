@@ -19,7 +19,7 @@ describe("<HomeView Page />", () => {
 
     it("increases the counter when button is pressed", async () => {
         const {container, getByRole} = renderBaseComponentsView({});
-        const button = getByRole("button");
+        const button = getByRole("button", {name: "I am a button with a press event"});
         expect(container).not.toHaveTextContent("Button has been pressed");
         await userEvent.click(button);
         expect(container).toHaveTextContent("Button has been pressed 1 times");
