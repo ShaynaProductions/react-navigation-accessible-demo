@@ -1,0 +1,51 @@
+ [
+    {
+      "label": "About",
+      "id": "about",
+      "href": "/#about"
+    },
+    {
+      "label": "Read",
+      "href": "/#read",
+      "id": "read-menu",
+      "menu": [
+        {
+          "label": "Stories",
+          "id": "stories",
+          "href": "/#stories"
+        },
+        {
+          "label": "Commentary",
+          "id": "commentary",
+          "href": "/#commentary"
+        },
+        {
+          "label": "Reference",
+          "id": "reference-menu",
+          "href": "/#reference-menu",
+          "menu": [
+            {
+              "label": "Characters",
+              "id": "characters",
+              "href": "/#characters"
+            },
+            {
+              "label": "Glossary",
+              "id": "glossary",
+              "href": "/#glossary"
+            },
+            {
+              "label": "Appendices",
+              "id": "appendices",
+              "href": "/#appendices"
+            }
+          ]}]
+    },
+
+    {
+      "label": "Musings",
+      "id": "musings",
+      "href": "/#blog"
+    }
+  ]
+

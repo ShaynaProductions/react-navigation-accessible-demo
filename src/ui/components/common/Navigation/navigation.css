@@ -1,0 +1,12 @@
+@layer common-components {
+    nav {
+        & svg {
+            left: calc(var(--sp-px) * 8);
+            position: relative;
+        }
+
+        & button[aria-expanded="true"] svg {
+            rotate: 90deg;
+        }
+    }
+}

@@ -6,7 +6,7 @@ This codebase is a demonstration of an accessible navigation component for React
 This repository has been built with Typescript on React 19 and Next.JS 15 and will remain so. Where used, some of the base components are composed from [Adobe React Aria Components](https://react-spectrum.adobe.com/react-aria/index.html)
 
 ## Running the Examples
-You will need [the latest version of Yarn](https://yarnpkg.com/getting-started/install) (at least 4.9.2) 
+You will need [the latest version of Yarn](https://yarnpkg.com/getting-started/install) (currently set at 4.12) 
 
 Once you've downloaded the repository run the following in a terminal in the project root.
 yarn
@@ -22,4 +22,5 @@ You will now have a fully working example site located at localhost:3000/
 Each published article is linked and will refer to the appropriate Github tag to download and follow along.
 
 - Introduction/Story One: [Creating an Accessible Nav Component](https://dev.to/shaynaproductions/creating-an-accessible-nav-component-an-introduction-3j9m)
-- Story Two -  [Base Components are key to accessibility](https://dev.to/shaynaproductions/base-components-are-key-to-accessibility-2bd8)
+- Story Two:  [Base Components are key to accessibility](https://dev.to/shaynaproductions/base-components-are-key-to-accessibility-2bd8)
+- Story Three: [Implementing a Base Structure](https://dev.to/shaynaproductions/first-layer-implementing-a-base-structure-492o)
