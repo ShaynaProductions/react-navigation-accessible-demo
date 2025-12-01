@@ -1,6 +1,7 @@
-import React, {JSX} from "react";
+import React, {HTMLAttributes, JSX} from "react";
 import {LinkProps as NextLinkProps} from "next/link";
 import {BaseProps} from "@/ui/types";
+import {Url} from "next/dist/shared/lib/router/router";
 
 export type LinkTargets = "_self" | "_blank" | "_parent" | "_top";
 
@@ -11,7 +12,7 @@ export interface UseLinkProps {
     GetSafeHrefTypes: (url?: string) => string | void;
 }
 
-    export interface LinkProps extends BaseProps, Omit<NextLinkProps, "href"> {
+    export interface LinkProps extends BaseProps, NextLinkProps, Omit<HTMLAttributes<HTMLAnchorElement>,"href"> {
     /**
      * The children of the component.
      */
@@ -19,7 +20,7 @@ export interface UseLinkProps {
     /**
      *  URL for link.  May be (native) HTML or router (client)
      */
-    href?: string;
+    href: Url;
 
 
     /**

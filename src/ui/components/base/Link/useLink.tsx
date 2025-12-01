@@ -21,7 +21,6 @@ export default function useLink() {
         const newTabText = label || "opens in a new tab";
 
         const iconProps = {
-            cx: "new-window",
             IconComponent: NewWindowIcon,
             label: newTabText,
         }
@@ -37,7 +36,7 @@ export default function useLink() {
     };
 
     const getSafeHref = (url) => {
-        if (url.length > 1) {
+        if (url.length > 0) {
             return sanitizeUrl(url);
         }
         return;

@@ -1,7 +1,7 @@
 "use client";
 
 import {Heading, Link, List, ListItem, Text,} from "@/ui/components";
-import {ExampleOne} from "./sections";
+import {ExampleOne, ExampleTwo} from "./sections";
 import "./home.css";
 
 export function HomeView() {
@@ -16,6 +16,7 @@ export function HomeView() {
             <Heading headingLevel={2}>Article Examples</Heading>
             <List>
                 <ListItem><ExampleOne/></ListItem>
+                <ListItem><ExampleTwo/></ListItem>
             </List>
         </>
     );
