@@ -1,14 +1,13 @@
 "use client";
 
-import {KeyboardEvent, use, useCallback, useEffect, useRef, useState} from "react";
+import {KeyboardEvent, useCallback, useEffect, useRef, useState} from "react";
 import {Button, ButtonProps, Icon, IconProps, ListItem} from "@/ui/components";
 import {usePrevious} from "@/ui/hooks";
 import {ChevronRightIcon} from "@/ui/svg";
-import {Keys, returnTrueElementOrUndefined} from "@/ui/utilities";
+import {Keys} from "@/ui/utilities";
 
 import {FocusableElementType, NavigationListProps, ParentElementType, SubNavigationProps} from "../NavigationTypes";
 import {useNavigationList} from "../hooks";
-import {NavigationListContext} from "../providers";
 import NavigationList from "./NavigationList";
 
 export function SubNavigation({
@@ -18,10 +17,7 @@ export function SubNavigation({
     label,
     testId,
 }: SubNavigationProps) {
-    const navigationListContextObject = use(NavigationListContext);
-
-    const {registerListItem} = returnTrueElementOrUndefined(!!navigationListContextObject, navigationListContextObject);
-    const {setFirstFocus, setLastFocus, setNextFocus, setPreviousFocus} = useNavigationList();
+    const {registerListItem, setFirstFocus, setLastFocus, setNextFocus, setPreviousFocus} = useNavigationList();
 
     const buttonRef = useRef<ParentElementType>(null);
     const prevButtonRef = usePrevious(buttonRef);

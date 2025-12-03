@@ -8,10 +8,13 @@ import {UseNavigationListInternal, UseNavigationListReturnProps} from "./useNavi
 
 export function useNavigationList(): UseNavigationListReturnProps {
     const navigationListContextObj = use(NavigationListContext);
-    const {_getCurrentListItems} =
+    const {_getCurrentListItems, _registerListItem} =
         returnTrueElementOrUndefined(!!navigationListContextObj, navigationListContextObj);
 
     const currentListItems = _getCurrentListItems();
+    const registerListItem = (focusableEl: FocusableElementType) => {
+        _registerListItem(focusableEl);
+    }
 
     const getCurrentIndex: UseNavigationListInternal["getCurrentIndex"] = useCallback(
         (
@@ -56,6 +59,6 @@ export function useNavigationList(): UseNavigationListReturnProps {
             setSpecificFocus(currentListItems[newIndex]);
         }
     }, [getCurrentIndex, currentListItems, setLastFocus, setSpecificFocus])
-    return {setFirstFocus, setLastFocus, setNextFocus, setPreviousFocus, setSpecificFocus};
+    return {registerListItem, setFirstFocus, setLastFocus, setNextFocus, setPreviousFocus, setSpecificFocus};
 
 }

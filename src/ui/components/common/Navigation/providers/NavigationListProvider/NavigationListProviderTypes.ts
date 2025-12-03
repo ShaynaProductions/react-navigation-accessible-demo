@@ -16,7 +16,7 @@ export interface NavigationListContextReturnValueProps {
     _getCurrentListItems: () => FocusableElementType[];
     isListOpen?: boolean;
     parentRef?: React.RefObject<ParentElementType>;
-    registerListItem: (focusableEl: FocusableElementType) => void;
+    _registerListItem: (focusableEl: FocusableElementType) => void;
    
 }
 

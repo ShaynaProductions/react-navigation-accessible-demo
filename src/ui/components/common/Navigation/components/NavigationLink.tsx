@@ -1,13 +1,12 @@
 "use client";
 
-import React, {use, useCallback, useEffect, useRef} from "react";
+import React, {useCallback, useEffect, useRef} from "react";
 import {LinkProps} from "next/link";
 import {Link, ListItem, ListItemProps} from "@/ui/components";
 import {usePathname, usePrevious} from "@/ui/hooks";
 import {Keys, returnTrueElementOrUndefined} from "@/ui/utilities";
 import {FocusableElementType, NavigationLinkProps} from '../NavigationTypes';
 import {useNavigationList} from "../hooks";
-import {NavigationListContext} from "../providers";
 
 
 export function NavigationLink({
@@ -17,10 +16,7 @@ export function NavigationLink({
     label,
     ...rest
 }: NavigationLinkProps) {
-    const navigationListContextObject = use(NavigationListContext);
-
-    const {registerListItem} = returnTrueElementOrUndefined(!!navigationListContextObject, navigationListContextObject);
-    const {setFirstFocus, setLastFocus, setNextFocus, setPreviousFocus} = useNavigationList();
+    const {registerListItem, setFirstFocus, setLastFocus, setNextFocus, setPreviousFocus} = useNavigationList();
     const currentPath = usePathname();
 
     const linkRef = useRef<FocusableElementType | null>(null);

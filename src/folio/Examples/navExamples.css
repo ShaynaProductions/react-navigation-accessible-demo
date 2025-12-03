@@ -11,19 +11,28 @@
         }
 
         & button {
-            --button-background: transparent;
-            --button-border-color: transparent;
+            --button-background: var(--button-ghost-background);
+            --button-border-color: var(--button-ghost-border);
             --button-padding: calc(var(--sp-px) * 4);
-            --button-color: var(--gray-12);
+            --button-color: var(--button-ghost-color);
+            
+            &:hover, &[data-hovered] {
+                --button-ghost-background: var(--button-background-hovered);
+                --button-ghost-border: var(--button-border-color-hovered);
+            }
         }
         & a[href]{
            padding: calc(var(--sp-px) * 4);
             --component-link-color: var(--gray-12);
+            --component-link-background: var(--button-ghost-background);
             text-decoration: none;
             border-width: var(--default-border-width);
-            border-color: transparent;
+            border-color: var(--button-ghost-border);
             position: relative;
             top: calc(var(--sp-px) * 4);
+            &:hover, &[data-hovered] {
+                    --button-ghost-background: var(--button-background-hovered);
+            }
             
         }
     }
