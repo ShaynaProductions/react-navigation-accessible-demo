@@ -5,8 +5,10 @@ import {LinkProps} from "next/link";
 import {Link, ListItem, ListItemProps} from "@/ui/components";
 import {usePathname, usePrevious} from "@/ui/hooks";
 import {Keys, returnTrueElementOrUndefined} from "@/ui/utilities";
-import {NavigationListContext} from "../providers/NavigationListProvider";
 import {FocusableElementType, NavigationLinkProps} from '../NavigationTypes';
+import {useNavigationList} from "../hooks";
+import {NavigationListContext} from "../providers";
+
 
 export function NavigationLink({
     cx,
@@ -17,7 +19,8 @@ export function NavigationLink({
 }: NavigationLinkProps) {
     const navigationListContextObject = use(NavigationListContext);
 
-    const {registerListItem, setFirstFocus, setLastFocus, setNextFocus, setPreviousFocus} = returnTrueElementOrUndefined(!!navigationListContextObject, navigationListContextObject);
+    const {registerListItem} = returnTrueElementOrUndefined(!!navigationListContextObject, navigationListContextObject);
+    const {setFirstFocus, setLastFocus, setNextFocus, setPreviousFocus} = useNavigationList();
     const currentPath = usePathname();
 
     const linkRef = useRef<FocusableElementType | null>(null);

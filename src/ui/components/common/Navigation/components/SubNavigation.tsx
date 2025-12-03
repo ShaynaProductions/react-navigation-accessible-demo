@@ -7,7 +7,8 @@ import {ChevronRightIcon} from "@/ui/svg";
 import {Keys, returnTrueElementOrUndefined} from "@/ui/utilities";
 
 import {FocusableElementType, NavigationListProps, ParentElementType, SubNavigationProps} from "../NavigationTypes";
-import {NavigationListContext} from "../providers/NavigationListProvider";
+import {useNavigationList} from "../hooks";
+import {NavigationListContext} from "../providers";
 import NavigationList from "./NavigationList";
 
 export function SubNavigation({
@@ -19,7 +20,8 @@ export function SubNavigation({
 }: SubNavigationProps) {
     const navigationListContextObject = use(NavigationListContext);
 
-    const {registerListItem, setFirstFocus, setLastFocus, setNextFocus, setPreviousFocus} = returnTrueElementOrUndefined(!!navigationListContextObject, navigationListContextObject);
+    const {registerListItem} = returnTrueElementOrUndefined(!!navigationListContextObject, navigationListContextObject);
+    const {setFirstFocus, setLastFocus, setNextFocus, setPreviousFocus} = useNavigationList();
 
     const buttonRef = useRef<ParentElementType>(null);
     const prevButtonRef = usePrevious(buttonRef);
