@@ -1,16 +1,29 @@
 "use client";
+import {useRef} from "react";
 import classNames from "classnames";
 
 import {List, ListProps} from "@/ui/components";
-import {NavigationListProps} from "../NavigationTypes";
+import {
+    NavigationListContextStoredValueProps, NavigationListProvider
+} from "../providers/NavigationListProvider";
+import {NavigationListProps, ParentElementType} from "../NavigationTypes";
 
 export default function NavigationList({
     children,
     cx,
     id,
     isOpen,
+    parentRef,
     ...rest
 }: NavigationListProps) {
+
+    const emptyRef = useRef<ParentElementType>(null);
+
+    const listContext: NavigationListContextStoredValueProps = {
+        isListOpen: isOpen,
+        parentRef: parentRef || emptyRef,
+    };
+
     const listProps: ListProps = {
         id,
         cx: classNames({srOnly: !isOpen}, cx),
@@ -18,8 +31,10 @@ export default function NavigationList({
     };
 
     return (
+        <NavigationListProvider value={listContext}>
         <List key={`list-${id}`} {...listProps}>
             {children}
         </List>
+        </NavigationListProvider>
     );
 }

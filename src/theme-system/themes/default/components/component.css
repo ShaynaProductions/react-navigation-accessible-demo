@@ -3,13 +3,14 @@
 
         --component-border-width: var(--default-border-width);
         --component-border-radius: var(--default-border-radius);
+        --component-border-color: var(--default-border-color);
         --component-ease:var(--default-ease);
         --component-text-size: var(--default-text-size);
         --component-item-size: var(--component-text-size);
 
         /* Links */
         --component-link-border-radius: calc(var(--sp-px) * 4);
-        --component-link-focus-outline: calc(var(--sp-px) * 0);
+        --component-link-focus-outline: calc(var(--sp-px) * 2);
         --component-link-outline-offset: calc(var(--sp-px) * 4);
         --component-link-background: transparent;
         --component-link-background-focused: var(--default-background-focused);

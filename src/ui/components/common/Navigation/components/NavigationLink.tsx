@@ -1,10 +1,12 @@
 "use client";
 
-import {Link, ListItem} from "@/ui/components";
-import {usePathname} from "@/ui/hooks";
-import {returnTrueElementOrUndefined} from "@/ui/utilities";
-import {NavigationLinkProps} from '../NavigationTypes';
+import React, {use, useCallback, useEffect, useRef} from "react";
 import {LinkProps} from "next/link";
+import {Link, ListItem, ListItemProps} from "@/ui/components";
+import {usePathname, usePrevious} from "@/ui/hooks";
+import {Keys, returnTrueElementOrUndefined} from "@/ui/utilities";
+import {NavigationListContext} from "../providers/NavigationListProvider";
+import {FocusableElementType, NavigationLinkProps} from '../NavigationTypes';
 
 export function NavigationLink({
     cx,
@@ -13,16 +15,60 @@ export function NavigationLink({
     label,
     ...rest
 }: NavigationLinkProps) {
-    const currentPath   = usePathname();
+    const navigationListContextObject = use(NavigationListContext);
 
-    const listItemProps = {
+    const {registerListItem, setFirstFocus, setLastFocus, setNextFocus, setPreviousFocus} = returnTrueElementOrUndefined(!!navigationListContextObject, navigationListContextObject);
+    const currentPath = usePathname();
+
+    const linkRef = useRef<FocusableElementType | null>(null);
+    const prevLinkRef = usePrevious(linkRef);
+
+    useEffect(() => {
+        if (linkRef.current && linkRef !== prevLinkRef) {
+            registerListItem(linkRef.current);
+        }
+    }, [linkRef, prevLinkRef, registerListItem]);
+
+
+    const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
+        const linkEl = linkRef.current as FocusableElementType;
+
+        switch (e.key) {
+            case Keys.HOME:
+            case Keys.END:
+            case Keys.LEFT:
+            case Keys.RIGHT:
+                e.preventDefault();
+                e.stopPropagation();
+                break;
+        }
+        switch (e.key) {
+            case Keys.HOME:
+                setFirstFocus();
+                break;
+            case Keys.END:
+                setLastFocus();
+                break;
+            case Keys.LEFT:
+                setPreviousFocus(linkEl);
+                break;
+            case Keys.RIGHT:
+                setNextFocus(linkEl);
+                break;
+        }
+
+    }, [setFirstFocus, setLastFocus, setNextFocus, setPreviousFocus]);
+
+    const listItemProps: Omit<ListItemProps, "children"> = {
         cx: cx,
         id: id,
     };
 
-    const linkProps: LinkProps = {
+    const linkProps: Omit<LinkProps, "onMouseEnter" | "onMouseLeave"> = {
         "aria-current": returnTrueElementOrUndefined(currentPath === href),
         href: href,
+        onKeyDown: handleKeyDown,
+        ref: linkRef,
         ...rest,
     };
 

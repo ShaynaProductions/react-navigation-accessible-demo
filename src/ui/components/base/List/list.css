@@ -4,6 +4,8 @@
         margin: 0;
         display: flex;
         list-style: none;
+        border-width: var(--component-border-width);
+        border-color: var(--component-border-color);
         color: var(--component-text-color);
 
         &[data-orientation="horizontal"] {

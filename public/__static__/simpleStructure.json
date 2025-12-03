@@ -10,8 +10,13 @@
       "id": "base-components"
     },
     {
-      "label": "Basic Structure",
-      "id": "basic-structure",
-      "href": "/examples/prototype"
-    }
+      "label": "Simple Links",
+      "id": "links-simple",
+      "href": "/examples/simple-links"
+    },
+  {
+    "label": "Single SubNavigation",
+    "id": "single-subnav",
+    "href": "/examples/simple-subnav"
+  }
   ]
