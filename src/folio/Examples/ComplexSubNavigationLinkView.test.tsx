@@ -1,7 +1,7 @@
 import React, {act} from "react";
 import fs from "fs";
 import {axe, render} from "@/test";
-import ComplexSubNavigationLinkView from "./ComplexSubNavigationLinkView";
+import {ComplexSubNavigationLinkView} from "./ComplexSubNavigationLinkView";
 
 const jsonObj = fs.readFileSync(
     "public/__static__/complexStructureWithSubNavLinks.json",

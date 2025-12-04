@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import SimpleLinksView from "../../../folio/Examples/SimpleLinksView";
+import {SimpleLinksView} from "@/folio";
 import * as fs from "fs";
 
 const jsonObj = fs.readFileSync(

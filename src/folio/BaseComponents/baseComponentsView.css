@@ -1,0 +1,75 @@
+@layer main {
+    main > .base-components ul.general{
+        display: flex;
+        width: 100%;
+
+        list-style: inside;
+        & li {
+            padding-left: calc(var(--sp-px) * 16);
+            padding-bottom: calc(var(--sp-px) * 16);
+            & p {padding-left: calc(var(--sp-px) * 24);}
+        }
+
+    }
+    main > ul:not(.general) {
+        display: flex;
+        position: relative;
+        flex-wrap: wrap;
+
+        & > li {
+            border-width: calc(var(--sp-px) * 8);
+            padding: calc(var(--sp-px) * 32);
+            margin-bottom: calc(var(--sp-px) * 8);
+            mask: radial-gradient(calc(var(--sp-px) * 21) at 50% calc(var(--sp-px) * 21), #0000 calc(100% - var(--sp-px) * 1), #000) 50% calc(-1 * var(--sp-px) * 21)/calc(var(--sp-px) * 38.85) 100%;
+            width: 47%;
+
+
+
+        }
+    }
+    @media screen and (max-width: 767px) {
+        main > ul:not(.general) {
+            & > li {
+                display: block;
+                width: 95%;
+                margin-left: 2.5%;
+            }
+        }
+    }
+
+    li {
+        &.link {
+            background-color: var(--purple-3);
+        }
+
+        &.button {
+            background-color: var(--purple-4);
+
+            --button-border-color: var(--gray-4);
+            --button-color: var(--purple-11);
+            --button-color-hover: var(--purple-1);
+            --button-color-focus: var(--purple-1);
+            --button-background: var(--purple-2);
+            --button-background-hover: var(--purple-6);
+            --button-background-focus: var(--purple-6);
+        }
+        &.heading {
+            background-color: var(--purple-2);
+        }
+
+        &.list {
+            background-color: var(--purple-5)
+        }
+        &.text {
+            background-color: var(--purple-1);
+        }
+
+    }
+    p.counter {
+        color: var(--vibrant-blue-5);
+        height: calc(var(--sp-px) * 24);
+        padding-left: calc(var(--sp-px) * 24);
+    }
+
+
+}

@@ -1,7 +1,7 @@
 "use client";
 import {Box, Button, Heading, Navigation, NavigationLinkProps, Text, transformNavigation,} from "@/ui/components";
 
-export default function SimpleSubNavigationView(navObject: { navigation: NavigationLinkProps[]; }) {
+export function SimpleSubNavigationView(navObject: { navigation: NavigationLinkProps[]; }) {
     const navigation = transformNavigation(navObject.navigation);
 
     return (

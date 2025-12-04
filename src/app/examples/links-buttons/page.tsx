@@ -1,5 +1,5 @@
 import {Metadata} from "next";
-import LinksButtonsView from "../../../folio/Examples/LinksButtonsView";
+import {LinksButtonsView} from "@/folio";
 import * as fs from "fs";
 
 export const metadata: Metadata = {

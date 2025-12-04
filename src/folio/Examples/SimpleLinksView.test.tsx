@@ -1,7 +1,7 @@
 import React, {act} from "react";
 import fs from "fs";
 import {axe, render} from "@/test";
-import SimpleLinksView from "./SimpleLinksView";
+import {SimpleLinksView} from "./SimpleLinksView";
 
 const jsonObj = fs.readFileSync(
     "public/__static__/simpleStructure.json",

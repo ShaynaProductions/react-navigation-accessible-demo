@@ -1,5 +1,5 @@
 import {Metadata} from "next";
-import ComplexSubNavigationView from "../../../folio/Examples/ComplexSubNavigationView";
+import {ComplexSubNavigationView} from "@/folio";
 import * as fs from "fs";
 
 export const metadata: Metadata = {
