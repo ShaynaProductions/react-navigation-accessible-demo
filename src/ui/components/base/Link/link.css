@@ -29,13 +29,13 @@
             cursor: default;
         }
 
-        &:hover {
+        &:hover, &data[hovered="true"] {
             --component-link-background: var(--component-link-background-hovered);
             --component-link-color: var(--component-link-color-hovered);
             --component-link-fill: var(--component-link-color-hovered);
         }
 
-        &:focus-visible {
+        &:focus-visible, &[data-focused="true"] {
             --component-link-background: var(--component-link-background-focused);
             --component-link-color: var(--component-link-color-focused);
             --component-link-fill: var(--component-link-color-focused);

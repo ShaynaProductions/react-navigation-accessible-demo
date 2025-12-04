@@ -1,5 +1,5 @@
 import React, { act } from "react";
-import { axe, render } from "@/test";
+import { axe, fireEvent, render } from "@/test";
 import { LinkProps } from "./LinkTypes";
 import { InternalLink as Link } from "./Link";
 
@@ -24,18 +24,7 @@ describe("<Link />", () => {
         expect(results).toHaveNoViolations();
     });
 
-    it("6.2.2 should not have an href when disabled", () => {
-        const optProps = { isDisabled: true };
-        const { getByTestId } = renderLink(optProps);
-
-        const link = getByTestId(TEST_ID);
-        expect(link).toBeInTheDocument();
-
-        expect(link).toHaveAttribute("aria-disabled", "true");
-        expect(link).toHaveAttribute("href", "");
-    });
-
-    it("6.1.1 should have an href when enabled", () => {
+    it("6.1.1 should have an href when one is passed in", () => {
         const optProps = {};
         const { getByRole } = renderLink(optProps);
 
@@ -87,5 +76,103 @@ describe("<Link />", () => {
 
         const wording = getByText("opens in a new tab");
         expect(wording).toBeInTheDocument();
+    });
+    it("should not have a data-focused attribute when isFocused is false", () => {
+        const optProps = { isFocused: false };
+
+        const { getByTestId } = renderLink(optProps);
+
+        const link = getByTestId(TEST_ID);
+        expect(link).toBeInTheDocument();
+        expect(link).not.toHaveAttribute("data-focused", "true");
+    });
+
+    it("should have a data-focused attribute when isFocused is true", () => {
+        const optProps = { isFocused: true };
+
+        const { getByTestId } = renderLink(optProps);
+
+        const link = getByTestId(TEST_ID);
+        expect(link).toBeInTheDocument();
+        expect(link).toHaveAttribute("data-focused", "true");
+    });
+
+    it("should not have a data-hovered attribute when isHovered is false", () => {
+        const optProps = { isHovered: false };
+
+        const { getByTestId } = renderLink(optProps);
+
+        const link = getByTestId(TEST_ID);
+        expect(link).toBeInTheDocument();
+        expect(link).not.toHaveAttribute("data-hovered", "true");
+    });
+
+    it("should have a data-hovered attribute when isHovered is true", () => {
+        const optProps = { isHovered: true };
+
+        const { getByTestId } = renderLink(optProps);
+
+        const link = getByTestId(TEST_ID);
+        expect(link).toBeInTheDocument();
+        expect(link).toHaveAttribute("data-hovered", "true");
+    });
+
+    it("should handle an onFocusEvent when onFocus is triggered", () => {
+        const handleOnFocus = jest.fn();
+
+        const optProps = { onFocus: handleOnFocus };
+        const { getByTestId } = renderLink(optProps);
+
+        const link = getByTestId(TEST_ID);
+        expect(link).toBeInTheDocument();
+
+        fireEvent.focus(link);
+
+
+        expect(handleOnFocus).toHaveBeenCalled();
+    });
+    it("should handle an onBlurEvent when onBlur is triggered", async () => {
+        const handleOnBlur = jest.fn();
+        const handleOnFocus = jest.fn();
+
+        const optProps = {
+            onFocus: handleOnFocus,
+            onBlur: handleOnBlur,
+        };
+        const { getByTestId } = renderLink(optProps);
+
+        const link = getByTestId(TEST_ID);
+        expect(link).toBeInTheDocument();
+        fireEvent.focus(link);
+        expect(handleOnFocus).toHaveBeenCalled();
+
+        fireEvent.blur(link);
+
+        expect(handleOnBlur).toHaveBeenCalled();
+    });
+
+    it("should handle onHoverEvents when onMouseEnter is triggered", async () => {
+        const handleMouseEnter = jest.fn();
+        const handleMouseLeave = jest.fn();
+
+        const optProps = {
+            onMouseEnter: handleMouseEnter,
+            onMouseLeave: handleMouseLeave,
+        };
+        const { getByTestId } = renderLink(optProps);
+
+        const link = getByTestId(TEST_ID);
+        expect(link).toBeInTheDocument();
+
+        fireEvent.mouseEnter(link);
+
+        await act(() => {
+            expect(handleMouseEnter).toHaveBeenCalled();
+        });
+
+        fireEvent.mouseLeave(link);
+        await act(() => {
+            expect(handleMouseLeave).toHaveBeenCalled();
+        });
     });
 });

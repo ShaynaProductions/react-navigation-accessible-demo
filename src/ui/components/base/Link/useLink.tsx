@@ -36,11 +36,11 @@ export default function useLink() {
         }
     };
 
-    const getSafeHref: UseLinkProps["GetSafeHrefTypes"] = (isDisabled, url) => {
-        if (isDisabled) {
-            return;
+    const getSafeHref: UseLinkProps["GetSafeHrefTypes"] = (url) => {
+        if (url.length > 0) {
+            return sanitizeUrl(url);
         }
-        return sanitizeUrl(url);
+        return;
     };
 
 
