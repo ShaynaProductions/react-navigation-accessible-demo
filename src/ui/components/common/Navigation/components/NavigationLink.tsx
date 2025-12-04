@@ -1,12 +1,13 @@
 "use client";
 
-import React, {useCallback, useEffect, useRef} from "react";
+import React, {KeyboardEvent, useCallback, useEffect, useRef} from "react";
 import {LinkProps} from "next/link";
 import {Link, ListItem, ListItemProps} from "@/ui/components";
 import {usePathname, usePrevious} from "@/ui/hooks";
 import {Keys, returnTrueElementOrUndefined} from "@/ui/utilities";
 import {FocusableElementType, NavigationLinkProps} from '../NavigationTypes';
 import {useNavigationList} from "../hooks";
+import {_handleKeyDown} from "../utilities";
 
 
 export function NavigationLink({
@@ -28,8 +29,7 @@ export function NavigationLink({
         }
     }, [linkRef, prevLinkRef, registerListItem]);
 
-
-    const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
+    const handleKeyDown = useCallback((e: KeyboardEvent) => {
         const linkEl = linkRef.current as FocusableElementType;
 
         switch (e.key) {
@@ -41,22 +41,11 @@ export function NavigationLink({
                 e.stopPropagation();
                 break;
         }
-        switch (e.key) {
-            case Keys.HOME:
-                setFirstFocus();
-                break;
-            case Keys.END:
-                setLastFocus();
-                break;
-            case Keys.LEFT:
-                setPreviousFocus(linkEl);
-                break;
-            case Keys.RIGHT:
-                setNextFocus(linkEl);
-                break;
-        }
 
+        _handleKeyDown(e, linkEl, setFirstFocus, setLastFocus, setNextFocus, setPreviousFocus);
     }, [setFirstFocus, setLastFocus, setNextFocus, setPreviousFocus]);
+
+
 
     const listItemProps: Omit<ListItemProps, "children"> = {
         cx: cx,

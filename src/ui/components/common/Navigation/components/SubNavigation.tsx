@@ -8,6 +8,7 @@ import {Keys} from "@/ui/utilities";
 
 import {FocusableElementType, NavigationListProps, ParentElementType, SubNavigationProps} from "../NavigationTypes";
 import {useNavigationList} from "../hooks";
+import {_handleKeyDown} from "../utilities";
 import NavigationList from "./NavigationList";
 
 export function SubNavigation({
@@ -42,21 +43,8 @@ export function SubNavigation({
                 e.preventDefault();
                 break;
         }
-        switch (e.key) {
-            case Keys.HOME:
-                setFirstFocus();
-                break;
-            case Keys.END:
-                setLastFocus();
-                break;
-            case Keys.LEFT:
-                setPreviousFocus(buttonEl);
-                break;
-            case Keys.RIGHT:
-                setNextFocus(buttonEl);
-                break;
-        }
 
+        _handleKeyDown(e, buttonEl, setFirstFocus, setLastFocus, setNextFocus, setPreviousFocus);
     }, [setFirstFocus, setLastFocus, setNextFocus, setPreviousFocus]);
 
     const handlePress = () => {

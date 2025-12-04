@@ -1,5 +1,5 @@
 import React from "react";
-import {FocusableElementType, NavigationLinkProps, ParentElementType} from "../../NavigationTypes";
+import {FocusableElementType, ParentElementType} from "../../NavigationTypes";
 
 
 export interface NavigationListContextStoredValueProps {
