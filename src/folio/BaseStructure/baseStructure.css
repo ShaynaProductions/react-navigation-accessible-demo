@@ -22,5 +22,8 @@
             --button-padding: calc(var(--sp-px) * 4);
             --button-color: var(--gray-12);
         }
+        & a[href] {
+            text-decoration: none;
+        }
     }
 }

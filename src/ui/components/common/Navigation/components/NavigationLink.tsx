@@ -20,7 +20,7 @@ export function NavigationLink({
         id: id,
     };
 
-    const linkProps: LinkProps = {
+    const linkProps: Omit<LinkProps, "onMouseEnter" | "onMouseLeave"> = {
         "aria-current": returnTrueElementOrUndefined(currentPath === href),
         href: href,
         ...rest,
