@@ -1,10 +1,15 @@
 "use client";
 
-import {useState} from "react";
+import {KeyboardEvent, useCallback, useEffect, useRef, useState} from "react";
 import {Button, ButtonProps, Icon, IconProps, ListItem} from "@/ui/components";
+import {usePrevious} from "@/ui/hooks";
 import {ChevronRightIcon} from "@/ui/svg";
+import {Keys} from "@/ui/utilities";
+
+import {FocusableElementType, NavigationListProps, ParentElementType, SubNavigationProps} from "../NavigationTypes";
+import {useNavigationList} from "../hooks";
+import {_handleKeyDown} from "../utilities";
 import NavigationList from "./NavigationList";
-import {NavigationListProps, SubNavigationProps} from "../NavigationTypes";
 
 export function SubNavigation({
     children,
@@ -13,7 +18,34 @@ export function SubNavigation({
     label,
     testId,
 }: SubNavigationProps) {
+    const {registerListItem, setFirstFocus, setLastFocus, setNextFocus, setPreviousFocus} = useNavigationList();
+
+    const buttonRef = useRef<ParentElementType>(null);
+    const prevButtonRef = usePrevious(buttonRef);
+
     const [isSubListOpen, setIsSubListOpen] = useState<boolean>(false);
+
+
+    useEffect(() => {
+        if (buttonRef !== prevButtonRef && buttonRef.current) {
+            registerListItem(buttonRef.current);
+        }
+    }, [buttonRef, prevButtonRef, registerListItem]);
+
+    const handleKeyDown = useCallback((e: KeyboardEvent) => {
+        const buttonEl = buttonRef.current as FocusableElementType;
+
+        switch (e.key) {
+            case Keys.HOME:
+            case Keys.END:
+            case Keys.LEFT:
+            case Keys.RIGHT:
+                e.preventDefault();
+                break;
+        }
+
+        _handleKeyDown(e, buttonEl, setFirstFocus, setLastFocus, setNextFocus, setPreviousFocus);
+    }, [setFirstFocus, setLastFocus, setNextFocus, setPreviousFocus]);
 
     const handlePress = () => {
         setIsSubListOpen(!isSubListOpen);
@@ -23,17 +55,18 @@ export function SubNavigation({
         "aria-controls": id,
         "aria-expanded": isSubListOpen,
         "aria-label": `${label} navigation`,
+        onKeyDown: handleKeyDown,
         onPress: handlePress,
+        ref: buttonRef,
         testId: testId,
     };
 
     const iconProps: IconProps = {
-
         IconComponent: ChevronRightIcon,
         isSilent: true,
     }
 
-    const navigationListProps:NavigationListProps = {
+    const navigationListProps: NavigationListProps = {
         id: id,
         isOpen: isSubListOpen,
         testId: testId && `${testId}-list`,

@@ -1,0 +1,42 @@
+"use client";
+import React, {createContext, useCallback, useState} from "react";
+import {EmptyObject} from "@/ui/types";
+
+import {FocusableElementType} from "../../NavigationTypes";
+import {
+    NavigationListContextReturnValueProps,
+} from "./NavigationListProviderTypes";
+
+export const NavigationListContext = createContext<
+    Partial<NavigationListContextReturnValueProps> | EmptyObject
+>({});
+
+export function NavigationListProvider({children}) {
+    const [currentListItems] = useState<FocusableElementType[]>([]);
+
+
+    const _getCurrentListItems: NavigationListContextReturnValueProps["_getCurrentListItems"] = useCallback(() => {
+        return currentListItems;
+    }, [currentListItems]);
+
+    const _registerListItem = useCallback((focusableEl: FocusableElementType) => {
+        /* istanbul ignore else */
+        if (currentListItems?.indexOf(focusableEl) === -1) {
+            currentListItems.push(focusableEl);
+        }
+    },[currentListItems])
+
+
+    return (
+        <NavigationListContext.Provider
+            value={{
+                _getCurrentListItems,
+                _registerListItem,
+            }}
+        >
+            {children}
+        </NavigationListContext.Provider>
+    );
+}
+
+NavigationListProvider.context = NavigationListContext;

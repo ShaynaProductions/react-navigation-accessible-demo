@@ -1,12 +1,17 @@
-import {BaseProps} from "@/ui/types";
+
+import React from "react";
 import {LinkProps, ListProps} from "@/ui/components";
+import {BaseProps, Orientation} from "@/ui/types";
+
+export type FocusableElementType = HTMLAnchorElement | HTMLButtonElement;
+export type ParentElementType = HTMLButtonElement | null;
 
 export interface NavigationProps extends Omit<BaseProps, "id"> {
     children: React.ReactNode;
     id: string;
     label: string;
     isOpen?: boolean;
-    orientation?: "horizontal" | "vertical";
+    orientation?: Orientation;
 }
 
 export interface NavigationLinkProps extends BaseProps, Omit<LinkProps,"children"> {
@@ -19,6 +24,7 @@ export interface NavigationLinkProps extends BaseProps, Omit<LinkProps,"children
 export interface NavigationListProps extends Omit<BaseProps, "id">, ListProps {
     id: string;
     isOpen: boolean;
+  /**/  parentRef?: React.RefObject<ParentElementType>;
 }
 
 export interface SubNavigationProps extends Omit<NavigationLinkProps, "href" | "id">{

@@ -1,0 +1,58 @@
+@layer main {
+
+   .example nav {
+        padding: calc(var(--sp-px) * 16) 0;
+
+        & li {
+
+            padding-left: calc(var(--sp-px) * 16);
+            padding-top: calc(var(--sp-px) * 8);
+            
+        }
+
+        & button {
+            --button-background: var(--button-ghost-background);
+            --button-border-color: var(--button-ghost-border);
+            --button-padding: calc(var(--sp-px) * 4);
+            --button-color: var(--button-ghost-color);
+            
+            &:hover, &[data-hovered] {
+                --button-ghost-background: var(--button-background-hovered);
+                --button-ghost-border: var(--button-border-color-hovered);
+            }
+        }
+        & a[href]{
+           padding: calc(var(--sp-px) * 4);
+            --component-link-color: var(--gray-12);
+            --component-link-background: var(--button-ghost-background);
+            text-decoration: none;
+            border-width: var(--default-border-width);
+            border-color: var(--button-ghost-border);
+            position: relative;
+            top: calc(var(--sp-px) * 4);
+            &:hover, &[data-hovered] {
+                    --button-ghost-background: var(--button-background-hovered);
+            }
+            
+        }
+    }
+    .example.complex {
+        border-width: var(--component-border-width);
+        border-style: solid;
+        border-color: var(--component-border-color);
+        margin-top: calc(var(--sp-px) * 16);
+        padding: calc(var(--sp-px) * 16);
+    }
+
+    .example.simple {
+        border-width: var(--component-border-width);
+        border-style: solid;
+        border-color: var(--component-border-color);
+       margin-top: calc(var(--sp-px) * 16);
+        padding: calc(var(--sp-px) * 16);
+        & li {
+            border-bottom: var(--component-border-width) solid var(--purple-3);
+        }
+
+    }
+}

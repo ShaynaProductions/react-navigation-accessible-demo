@@ -1,5 +1,6 @@
 @import url("../theme-system/index.css");
 @import url("../ui/ui.css");
+@import url("../folio/folio.css");
 
 @layer default-theme {
     body header, body footer  body main{

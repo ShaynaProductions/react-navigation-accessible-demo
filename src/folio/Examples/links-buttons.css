@@ -1,0 +1,9 @@
+@layer common-component{
+    .example.simple {
+        display: flex;
+        flex-direction: column;
+        & button {
+            margin: calc(var(--sp-px) * 8) 0;
+        }
+    }
+}

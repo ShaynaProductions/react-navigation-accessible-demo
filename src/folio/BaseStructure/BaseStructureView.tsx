@@ -1,9 +1,8 @@
 "use client";
 
-import {Heading, Link, Navigation, Text, transformNavigation} from "@/ui/components";
-import "./baseStructure.css";
+import {Heading, Link, Navigation, NavigationLinkProps, Text, transformNavigation} from "@/ui/components";
 
-export function BaseStructureView(navObj) {
+export function BaseStructureView(navObj: { navigation: NavigationLinkProps[]; }) {
     const navigation = transformNavigation(navObj.navigation)
     return (
         <>
