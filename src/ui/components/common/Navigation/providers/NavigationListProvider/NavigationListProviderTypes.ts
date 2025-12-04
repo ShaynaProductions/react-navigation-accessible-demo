@@ -3,8 +3,7 @@ import {FocusableElementType, ParentElementType} from "../../NavigationTypes";
 
 
 export interface NavigationListContextStoredValueProps {
-    isListOpen?: boolean;
-    parentRef?: React.RefObject<ParentElementType>;
+              unknown
 }
 
 export interface NavigationListContextInternalProps {

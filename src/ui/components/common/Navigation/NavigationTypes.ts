@@ -24,7 +24,7 @@ export interface NavigationLinkProps extends BaseProps, Omit<LinkProps,"children
 export interface NavigationListProps extends Omit<BaseProps, "id">, ListProps {
     id: string;
     isOpen: boolean;
-    parentRef?: React.RefObject<ParentElementType>;
+  /**/  parentRef?: React.RefObject<ParentElementType>;
 }
 
 export interface SubNavigationProps extends Omit<NavigationLinkProps, "href" | "id">{

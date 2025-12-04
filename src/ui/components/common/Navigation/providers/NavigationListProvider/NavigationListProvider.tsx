@@ -5,16 +5,14 @@ import {EmptyObject} from "@/ui/types";
 import {FocusableElementType} from "../../NavigationTypes";
 import {
     NavigationListContextReturnValueProps,
-    NavigationListContextStoredValueProps,
 } from "./NavigationListProviderTypes";
 
 export const NavigationListContext = createContext<
     Partial<NavigationListContextReturnValueProps> | EmptyObject
 >({});
 
-export function NavigationListProvider({children, value}) {
+export function NavigationListProvider({children}) {
     const [currentListItems] = useState<FocusableElementType[]>([]);
-    const {parentRef}: NavigationListContextStoredValueProps = value;
 
 
     const _getCurrentListItems: NavigationListContextReturnValueProps["_getCurrentListItems"] = useCallback(() => {
@@ -33,7 +31,6 @@ export function NavigationListProvider({children, value}) {
         <NavigationListContext.Provider
             value={{
                 _getCurrentListItems,
-                parentRef,
                 _registerListItem,
             }}
         >

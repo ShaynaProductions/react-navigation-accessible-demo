@@ -45,7 +45,7 @@ export function useNavigationList(): UseNavigationListReturnProps {
     const setNextFocus: UseNavigationListReturnProps["setNextFocus"] = useCallback((item) => {
         const newIndex = getCurrentIndex(item) + 1;
         if (newIndex >= currentListItems.length) {
-            setFirstFocus()
+            setFirstFocus();
         } else {
             setSpecificFocus(currentListItems[newIndex]);
         }
