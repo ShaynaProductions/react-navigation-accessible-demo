@@ -23,5 +23,5 @@ Each published article is linked and will refer to the appropriate Github tag to
 
 - Introduction: [Creating an Accessible Nav Component](https://dev.to/shaynaproductions/creating-an-accessible-nav-component-an-introduction-3j9m)
 - [Base Components are key to accessibility](https://dev.to/shaynaproductions/base-components-are-key-to-accessibility-2bd8)
-- [Implementing a Base Structure](https://dev.to/shaynaproductions/first-layer-implementing-a-base-structure-492o)
+- [First Layer - Implementing a Base Structure](https://dev.to/shaynaproductions/first-layer-implementing-a-base-structure-492o)
 - [Second Layer - Keyboard handling through a single list](https://dev.to/shaynaproductions/second-layer-keyboard-handling-through-a-single-list-1ded)

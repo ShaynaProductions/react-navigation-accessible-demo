@@ -16,8 +16,11 @@
         }
 
         & .intro {
-            width: 75%;
-            margin-left: 12.5%;
+          
+            & p{
+
+                line-height: calc(var(--sp-px) * 28);
+            }
         }
 
         & .examples {
@@ -93,7 +96,7 @@
                             display: inline-block;
                             margin-inline-start: 0;
                             width: calc(100% - var(--dt-width));
-                            margin-bottom: calc(var(--sp-px) * 16);
+                            margin-bottom: calc(var(--sp-px) * 8);
 
                         }
                     }

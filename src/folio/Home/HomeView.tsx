@@ -15,7 +15,7 @@ export function HomeView() {
                     articles hosted on Dev.to</Link>.
                 </Text>
                 <Text>The examples below represent the progression of the code as completed in the accompanying
-                    article: <Link href="" openInNewTab={true}>Second Layer - Single List Keyboard Handling</Link>. The
+                    article: <Link href="" openInNewTab={true}>Second Layer - Keyboard handling through a single list</Link>. The
                     source code is provided through a series of releases, each release fully typed and tested.
                 </Text>
                 <Text> Examples are provided which work up to the specific release constraints. This release begins
