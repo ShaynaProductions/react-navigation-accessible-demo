@@ -1,6 +1,7 @@
 import { Metadata } from "next";
-import SimpleLinksView from "../../../folio/Examples/SimpleLinksView";
 import * as fs from "fs";
+import {SimpleLinksView} from "@/folio";
+import "./page.css";
 
 const jsonObj = fs.readFileSync(
     "public/__static__/simpleStructure.json",

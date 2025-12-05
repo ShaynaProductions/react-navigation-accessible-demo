@@ -2,8 +2,9 @@
 
 import React, {KeyboardEvent, useCallback, useEffect, useRef} from "react";
 import {LinkProps} from "next/link";
+import {usePathname} from "@/hooks";
 import {Link, ListItem, ListItemProps} from "@/ui/components";
-import {usePathname, usePrevious} from "@/ui/hooks";
+import {usePrevious} from "@/ui/hooks";
 import {Keys, returnTrueElementOrUndefined} from "@/ui/utilities";
 import {FocusableElementType, NavigationLinkProps} from '../NavigationTypes';
 import {useNavigationList} from "../hooks";

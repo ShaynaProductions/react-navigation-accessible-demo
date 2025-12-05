@@ -1,7 +1,7 @@
 "use client";
 import {Box, Heading, Navigation, Text, transformNavigation,} from "@/ui/components";
 
-export default function SimpleLinksView(navObject) {
+export function SimpleLinksView(navObject) {
     const navigation = transformNavigation(navObject.navigation);
 
     return (

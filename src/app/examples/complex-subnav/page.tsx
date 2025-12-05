@@ -1,6 +1,8 @@
 import {Metadata} from "next";
-import ComplexSubNavigationView from "../../../folio/Examples/ComplexSubNavigationView";
 import * as fs from "fs";
+
+import {ComplexSubNavigationView} from "@/folio";
+import "./page.css";
 
 export const metadata: Metadata = {
     title: "Complex Subnavigation Example",

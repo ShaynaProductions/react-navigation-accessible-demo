@@ -1,7 +1,7 @@
 import React, {act} from "react";
 import fs from "fs";
 import {axe, render} from "@/test";
-import SimpleSubNavigationView from "./SimpleSubNavigationView";
+import {SimpleSubNavigationView} from "./SimpleSubNavigationView";
 
 const jsonObj = fs.readFileSync(
     "public/__static__/simpleStructureWithSubNav.json",

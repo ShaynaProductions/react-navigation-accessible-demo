@@ -1,7 +1,108 @@
 @layer main {
-   ul > li {
-       padding-bottom: calc(var(--sp-px) * 16);
-   }
+    #home-view {
+        width: 100%;
+        padding: calc(var(--sp-px) * 16);
+        display: flex;
+        flex-direction: column;
 
+        & > div {
+            h2 {
+                color: var(--purple-9);
+            }
+
+            p {
+                color: var(--purple-12);
+            }
+        }
+
+        & .intro {
+          
+            & p{
+
+                line-height: calc(var(--sp-px) * 28);
+            }
+        }
+
+        & .examples {
+            margin-top: calc(var(--sp-px) * 16);
+            width: 100%;
+
+            & ul {
+                flex-wrap: wrap;
+                align-content: end;
+                justify-content: space-between;
+                padding-left: calc(var(--sp-px) * 24);
+
+                & li {
+                    width: 40%;
+
+                    &:nth-child(even) {
+                        padding-right: calc(var(--sp-px) * 24);
+                    }
+                }
+
+                & p {
+                    position: relative;
+                    left: calc(var(--sp-px) * 24);
+                }
+            }
+        }
+
+        & .prev-releases {
+            width: 100%;
+            margin-top: calc(var(--sp-px) * 16);
+
+            & ul {
+                margin-top: calc(var(--sp-px) * 16);
+                display: flex;
+                flex-direction: row;
+                flex-wrap: wrap;
+                              align-content: space-evenly;
+                justify-content: space-between;
+                padding-left: calc(var(--sp-px) * 24);
+
+                & li {
+                   font-size: calc(var(--sp-px) * 18);
+                    width: 40%;
+
+                    &:nth-child(even) {
+                        padding-right: calc(var(--sp-px) * 24);
+                    }
+
+
+                    & dl {
+                        font-size: calc(var(--sp-px) * 16);
+                        --dt-width: calc(var(--sp-px) * (5 * 16));
+                        margin-bottom: calc(var(--sp-px) * 16);
+
+                        & dt {
+                            color: var(--red-7);
+                            display: inline-block;
+                            font-weight: bolder;
+                            padding-right: calc(var(--sp-px) * 8);
+                            text-align: right;
+                            vertical-align: top;
+                            width: var(--dt-width);
+
+                            &:after {
+                                content: ":";
+                            }
+
+                      
+                        }
+
+                        & dd {
+                            vertical-align: bottom;
+                            display: inline-block;
+                            margin-inline-start: 0;
+                            width: calc(100% - var(--dt-width));
+                            margin-bottom: calc(var(--sp-px) * 8);
+
+                        }
+                    }
+                }
+            }
+        }
+    }
 
 }

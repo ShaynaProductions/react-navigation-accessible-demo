@@ -52,6 +52,9 @@
         padding: calc(var(--sp-px) * 16);
         & li {
             border-bottom: var(--component-border-width) solid var(--purple-3);
+            &:has(a[href]){
+                padding-bottom: calc(var(--sp-px) * 16);
+            }
         }
 
     }

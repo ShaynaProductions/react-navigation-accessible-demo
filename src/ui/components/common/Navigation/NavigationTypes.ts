@@ -1,4 +1,3 @@
-
 import React from "react";
 import {LinkProps, ListProps} from "@/ui/components";
 import {BaseProps, Orientation} from "@/ui/types";
@@ -14,7 +13,7 @@ export interface NavigationProps extends Omit<BaseProps, "id"> {
     orientation?: Orientation;
 }
 
-export interface NavigationLinkProps extends BaseProps, Omit<LinkProps,"children"> {
+export interface NavigationLinkProps extends BaseProps, Omit<LinkProps, "children"> {
     href: string;
     id: string;
     label: string;
@@ -24,10 +23,10 @@ export interface NavigationLinkProps extends BaseProps, Omit<LinkProps,"children
 export interface NavigationListProps extends Omit<BaseProps, "id">, ListProps {
     id: string;
     isOpen: boolean;
-  /**/  parentRef?: React.RefObject<ParentElementType>;
+    parentRef?: React.RefObject<ParentElementType>;
 }
 
-export interface SubNavigationProps extends Omit<NavigationLinkProps, "href" | "id">{
+export interface SubNavigationProps extends Omit<NavigationLinkProps, "href" | "id"> {
     children: React.ReactNode;
     id: string;
 }
