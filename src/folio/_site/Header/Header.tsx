@@ -1,6 +1,6 @@
 "use client";
 import { JSX } from "react";
-import { Heading, Link, List, ListItem, Text } from "@/ui/components";
+import { Heading, Link, List, ListItem } from "@/ui/components";
 
 export const Header = (): JSX.Element => {
     return (
