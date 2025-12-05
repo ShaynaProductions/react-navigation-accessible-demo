@@ -1,6 +1,7 @@
 import {Metadata} from "next";
-import {LinksButtonsView} from "@/folio";
 import * as fs from "fs";
+import {LinksButtonsView} from "@/folio";
+import "./page.css";
 
 export const metadata: Metadata = {
     title: "Simple Links Navigation with buttons outside of the component",

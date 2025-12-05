@@ -14,7 +14,7 @@ export function BaseComponentsView() {
 
     const pressedText = `Button has been pressed ${numTimes} times`;
     return (
-        <Box cx="base-components">
+        <Box id="base-components">
             <Heading headingLevel={2}>Story - Accessible Base Components</Heading>
             <Text aria-live="polite" aria-atomic="true" cx="counter"><strong>{numTimes > 0 && pressedText}</strong></Text>
             <Introduction />

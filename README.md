@@ -21,6 +21,7 @@ You will now have a fully working example site located at localhost:3000/
 ## DEV Articles in the Accessible React Navigation Component Series
 Each published article is linked and will refer to the appropriate Github tag to download and follow along.
 
-- Introduction/Story One: [Creating an Accessible Nav Component](https://dev.to/shaynaproductions/creating-an-accessible-nav-component-an-introduction-3j9m)
-- Story Two:  [Base Components are key to accessibility](https://dev.to/shaynaproductions/base-components-are-key-to-accessibility-2bd8)
-- Story Three: [Implementing a Base Structure](https://dev.to/shaynaproductions/first-layer-implementing-a-base-structure-492o)
+- Introduction: [Creating an Accessible Nav Component](https://dev.to/shaynaproductions/creating-an-accessible-nav-component-an-introduction-3j9m)
+- [Base Components are key to accessibility](https://dev.to/shaynaproductions/base-components-are-key-to-accessibility-2bd8)
+- [Implementing a Base Structure](https://dev.to/shaynaproductions/first-layer-implementing-a-base-structure-492o)
+- [Second Layer - Keyboard handling through a single list](https://dev.to/shaynaproductions/second-layer-keyboard-handling-through-a-single-list-1ded)
