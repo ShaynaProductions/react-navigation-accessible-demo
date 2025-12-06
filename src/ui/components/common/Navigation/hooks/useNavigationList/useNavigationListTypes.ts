@@ -1,6 +1,10 @@
-import {FocusableElementType} from "@/ui/components/common/Navigation/NavigationTypes";
+import {FocusableElementType, ParentElementType} from "@/ui/components/common/Navigation/NavigationTypes";
+import React from "react";
 
 export interface UseNavigationListReturnProps {
+    currentListItems: FocusableElementType[];
+    parentEl: ParentElementType | null;
+    parentRef?: React.RefObject<ParentElementType>;
     registerListItem: (focusableEl: FocusableElementType) => void;
     setFirstFocus: () => void;
     setLastFocus: () => void;

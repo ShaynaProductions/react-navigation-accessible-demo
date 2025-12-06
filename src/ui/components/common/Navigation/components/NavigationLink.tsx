@@ -7,7 +7,7 @@ import {Link, ListItem, ListItemProps} from "@/ui/components";
 import {usePrevious} from "@/ui/hooks";
 import {Keys, returnTrueElementOrUndefined} from "@/ui/utilities";
 import {FocusableElementType, NavigationLinkProps} from '../NavigationTypes';
-import {useNavigationList} from "../hooks";
+import {useNavigation, useNavigationList} from "../hooks";
 import {_handleKeyDown} from "../utilities";
 
 
@@ -18,20 +18,37 @@ export function NavigationLink({
     label,
     ...rest
 }: NavigationLinkProps) {
-    const {registerListItem, setFirstFocus, setLastFocus, setNextFocus, setPreviousFocus} = useNavigationList();
+    const {
+        currentListItems,
+        parentEl,
+        registerListItem,
+        setFirstFocus,
+        setLastFocus,
+        setNextFocus,
+        setPreviousFocus
+    } = useNavigationList();
+    const {registerNavigationItem} = useNavigation();
     const currentPath = usePathname();
+
 
     const linkRef = useRef<FocusableElementType | null>(null);
     const prevLinkRef = usePrevious(linkRef);
 
     useEffect(() => {
-        if (linkRef.current && linkRef !== prevLinkRef) {
-            registerListItem(linkRef.current);
+        if (linkRef !== prevLinkRef) {
+            registerListItem(linkRef.current as HTMLAnchorElement);
         }
     }, [linkRef, prevLinkRef, registerListItem]);
 
+
+    useEffect(() => {
+        registerNavigationItem(currentListItems, parentEl);
+
+    }, [currentListItems, parentEl, registerNavigationItem])
+
     const handleKeyDown = useCallback((e: KeyboardEvent) => {
         const linkEl = linkRef.current as FocusableElementType;
+
 
         switch (e.key) {
             case Keys.HOME:
@@ -45,7 +62,6 @@ export function NavigationLink({
 
         _handleKeyDown(e, linkEl, setFirstFocus, setLastFocus, setNextFocus, setPreviousFocus);
     }, [setFirstFocus, setLastFocus, setNextFocus, setPreviousFocus]);
-
 
 
     const listItemProps: Omit<ListItemProps, "children"> = {

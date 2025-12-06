@@ -2,18 +2,23 @@
 import classNames from "classnames";
 
 import {List, ListProps} from "@/ui/components";
-import {NavigationListProvider} from "../providers/NavigationListProvider";
-import {NavigationListProps} from "../NavigationTypes";
+import {NavigationListContextStoredValueProps, NavigationListProvider} from "../providers/NavigationListProvider";
+import {NavigationListProps, ParentElementType} from "../NavigationTypes";
+import {useRef} from "react";
 
 export default function NavigationList({
     children,
     cx,
     id,
     isOpen,
+    parentRef,
 
     ...rest
 }: NavigationListProps) {
-
+    const emptyRef = useRef<ParentElementType>(null);
+    const listContext: NavigationListContextStoredValueProps = {
+        parentRef: parentRef || emptyRef,
+    };
 
     const listProps: ListProps = {
         id,
@@ -22,7 +27,7 @@ export default function NavigationList({
     };
 
     return (
-        <NavigationListProvider>
+        <NavigationListProvider value={listContext}>
             <List key={`list-${id}`} {...listProps}>
                 {children}
             </List>

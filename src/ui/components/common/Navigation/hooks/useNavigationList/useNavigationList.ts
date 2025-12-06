@@ -8,14 +8,14 @@ import {UseNavigationListInternal, UseNavigationListReturnProps} from "./useNavi
 
 export function useNavigationList(): UseNavigationListReturnProps {
     const navigationListContextObj = use(NavigationListContext);
-    const {_getCurrentListItems, _registerListItem} =
+    const {_getCurrentListItems, _getParentRef, _registerListItem,} =
         returnTrueElementOrUndefined(!!navigationListContextObj, navigationListContextObj);
 
     const currentListItems = _getCurrentListItems();
-    const registerListItem = (focusableEl: FocusableElementType) => {
-        _registerListItem(focusableEl);
-    }
 
+    const parentRef = _getParentRef();
+    const parentEl = _getParentRef().current;
+    
     const getCurrentIndex: UseNavigationListInternal["getCurrentIndex"] = useCallback(
         (
             focusableEl: FocusableElementType
@@ -28,6 +28,8 @@ export function useNavigationList(): UseNavigationListReturnProps {
             return currentIndex;
         }, [currentListItems],
     );
+
+
 
     const setSpecificFocus: UseNavigationListReturnProps["setSpecificFocus"] = useCallback((item) => {
         item.focus({preventScroll: true});
@@ -59,6 +61,6 @@ export function useNavigationList(): UseNavigationListReturnProps {
             setSpecificFocus(currentListItems[newIndex]);
         }
     }, [getCurrentIndex, currentListItems, setLastFocus, setSpecificFocus])
-    return {registerListItem, setFirstFocus, setLastFocus, setNextFocus, setPreviousFocus, setSpecificFocus};
+    return {currentListItems, parentEl, parentRef, registerListItem: _registerListItem, setFirstFocus, setLastFocus, setNextFocus, setPreviousFocus, setSpecificFocus};
 
 }

@@ -7,7 +7,7 @@ import {ChevronRightIcon} from "@/ui/svg";
 import {Keys} from "@/ui/utilities";
 
 import {FocusableElementType, NavigationListProps, ParentElementType, SubNavigationProps} from "../NavigationTypes";
-import {useNavigationList} from "../hooks";
+import {useNavigation, useNavigationList} from "../hooks";
 import {_handleKeyDown} from "../utilities";
 import NavigationList from "./NavigationList";
 
@@ -18,7 +18,8 @@ export function SubNavigation({
     label,
     testId,
 }: SubNavigationProps) {
-    const {registerListItem, setFirstFocus, setLastFocus, setNextFocus, setPreviousFocus} = useNavigationList();
+    const {currentListItems, parentRef, registerListItem, setFirstFocus, setLastFocus, setNextFocus, setPreviousFocus} = useNavigationList();
+    const     {registerSubNavigation, setListItems} = useNavigation();
 
     const buttonRef = useRef<ParentElementType>(null);
     const prevButtonRef = usePrevious(buttonRef);
@@ -27,10 +28,14 @@ export function SubNavigation({
 
 
     useEffect(() => {
-        if (buttonRef !== prevButtonRef && buttonRef.current) {
-            registerListItem(buttonRef.current);
-        }
-    }, [buttonRef, prevButtonRef, registerListItem]);
+          const buttonEl =  buttonRef.current as FocusableElementType;
+            registerListItem(buttonEl);
+            registerSubNavigation(buttonEl);
+    }, [buttonRef, prevButtonRef, registerListItem, registerSubNavigation]);
+
+    useEffect(() => {
+        setListItems(currentListItems, parentRef?.current || null);
+    }, [currentListItems, parentRef, setListItems]);
 
     const handleKeyDown = useCallback((e: KeyboardEvent) => {
         const buttonEl = buttonRef.current as FocusableElementType;
@@ -69,6 +74,7 @@ export function SubNavigation({
     const navigationListProps: NavigationListProps = {
         id: id,
         isOpen: isSubListOpen,
+        parentRef: buttonRef,
         testId: testId && `${testId}-list`,
     };
     return (

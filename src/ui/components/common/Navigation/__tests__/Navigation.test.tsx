@@ -1,10 +1,15 @@
 import fs from "fs";
 import {act, axe, render, userEvent} from "@/test";
 import {transformNavigation} from "../utilities/transformNavigation";
-import {NavigationProps} from "../NavigationTypes";
+import {NavigationProps, ParentElementType} from "../NavigationTypes";
 import Navigation from "../components/Navigation";
+import React from "react";
+import {Box, Button} from "@/ui/components";
+import {useMergedRef} from "@/ui/hooks";
 
 const TEST_ID = "Navigation";
+const endButtonLabel = "Focusable End";
+const frontButtonLabel = "Focusable Front";
 
 jest.mock("next/navigation", () => ({
     usePathname: () => "/#about",
@@ -26,19 +31,71 @@ const renderNavigation = (
     );
 };
 
+const renderNavigationWithParent = ({filename, parentRef, buttonComponent, ...rest}) => {
+    const jsonObj = fs.readFileSync(`public/__static__/${filename}.json`, "utf8");
+
+    const navObject = JSON.parse(jsonObj);
+    const navigation = transformNavigation(navObject, TEST_ID);
+    return render(
+        <Box cx="simple">
+            {buttonComponent}
+            <Navigation id="parent-ref-test" parentRef={parentRef} label="With ParentRef" testId={TEST_ID} {...rest}>
+                {navigation}
+            </Navigation>
+            <Button id="end" testId={TEST_ID && `${TEST_ID}-end`}>
+                {endButtonLabel}
+            </Button>
+        </Box>,
+    );
+}
+
 describe("<Navigation /> Base Structure", () => {
 
 
     it("Simple Sub Navigation should be WCAG compliant", async () => {
         const optProps = {};
         const {container} = await act(() =>
-            renderNavigation("simpleStructure", optProps),
+            renderNavigation("simpleStructureWithSubNav", optProps),
         );
 
         const results = await act(() => axe(container));
 
         expect(results).toHaveNoViolations();
     });
+    it("should render with a parentRef", async () => {
+     let frontRef;
+
+
+        const FrontButton = (frontRef) => {
+            const ref= React.useRef<ParentElementType>(null);
+            const combinedRef = useMergedRef(ref, frontRef) as unknown as React.RefObject<HTMLButtonElement>;
+        
+            return (
+                <Button id="front" ref={combinedRef}>
+                    {frontButtonLabel}
+                </Button>
+            );
+        }
+
+        const optProps = {
+            filename: "simpleStructureWithSubNav",
+            buttonComponent: <FrontButton/>,
+            parentRef: frontRef,
+
+        }
+        const {container, getByRole} = renderNavigationWithParent(optProps);
+        const frontButton = getByRole("button", { name: frontButtonLabel});
+        const aboutLink = getByRole("link", { name: "About" });
+        const readButton = getByRole("button", { name: "Read navigation" });
+
+        expect(aboutLink).toBeInTheDocument();
+        expect(frontButton).toBeInTheDocument();
+        expect(readButton).toBeInTheDocument();
+
+        const results = await act(() => axe(container));
+
+        expect(results).toHaveNoViolations();
+    })
     it("Complex Sub Navigation should be WCAG compliant", async () => {
         const optProps = {};
         const {container} = await act(() =>
@@ -72,4 +129,5 @@ describe("<Navigation /> Base Structure", () => {
         expect(currentLink).toBeInTheDocument();
         expect(currentLink).toHaveAttribute("aria-current", "true");
     })
-});
+})
+;

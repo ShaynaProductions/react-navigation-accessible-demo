@@ -11,6 +11,7 @@ export interface NavigationProps extends Omit<BaseProps, "id"> {
     label: string;
     isOpen?: boolean;
     orientation?: Orientation;
+    parentRef?: React.RefObject<ParentElementType>;
 }
 
 export interface NavigationLinkProps extends BaseProps, Omit<LinkProps, "children"> {

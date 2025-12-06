@@ -1,8 +1,12 @@
 "use client";
 import {Box, Button, Heading, Navigation, NavigationLinkProps, Text, transformNavigation,} from "@/ui/components";
+import {ParentElementType} from "@/ui/components/common/Navigation/NavigationTypes";
+import {useRef} from "react";
 
 export function SimpleSubNavigationView(navObject: { navigation: NavigationLinkProps[]; }) {
     const navigation = transformNavigation(navObject.navigation);
+
+    const buttonRef = useRef<ParentElementType>(null);
 
     return (
         <>
@@ -13,10 +17,11 @@ export function SimpleSubNavigationView(navObject: { navigation: NavigationLinkP
             <Text><strong>Note: </strong>This example will only implement keyboard handling
                 within each sublist. Use the tab key to move into and out of sub navigation.</Text>
             <Box cx="example simple">
-                <Button id="front">Focusable Front</Button>
+                <Button ref={buttonRef} id="front">Focusable Front</Button>
                 <Navigation
                     id="simple-sub-navigation"
                     label="Simple Sub Navigation Demo"
+                    parentRef={buttonRef}
                 >
                     {navigation}
                 </Navigation>
