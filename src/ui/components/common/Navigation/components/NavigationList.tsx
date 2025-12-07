@@ -1,10 +1,10 @@
 "use client";
 import classNames from "classnames";
 
+import {useRef} from "react";
 import {List, ListProps} from "@/ui/components";
 import {NavigationListContextStoredValueProps, NavigationListProvider} from "../providers/NavigationListProvider";
 import {NavigationListProps, ParentElementType} from "../NavigationTypes";
-import {useRef} from "react";
 
 export default function NavigationList({
     children,
@@ -12,7 +12,6 @@ export default function NavigationList({
     id,
     isOpen,
     parentRef,
-
     ...rest
 }: NavigationListProps) {
     const emptyRef = useRef<ParentElementType>(null);

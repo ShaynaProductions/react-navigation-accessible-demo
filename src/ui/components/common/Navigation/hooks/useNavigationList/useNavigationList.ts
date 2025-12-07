@@ -17,9 +17,7 @@ export function useNavigationList(): UseNavigationListReturnProps {
     const parentEl = _getParentRef().current;
     
     const getCurrentIndex: UseNavigationListInternal["getCurrentIndex"] = useCallback(
-        (
-            focusableEl: FocusableElementType
-        ): number => {
+        (focusableEl: FocusableElementType): number => {
             let currentIndex = -1;
             /* istanbul ignore else */
             if (currentListItems.length > 0) {
@@ -28,8 +26,6 @@ export function useNavigationList(): UseNavigationListReturnProps {
             return currentIndex;
         }, [currentListItems],
     );
-
-
 
     const setSpecificFocus: UseNavigationListReturnProps["setSpecificFocus"] = useCallback((item) => {
         item.focus({preventScroll: true});
@@ -40,7 +36,6 @@ export function useNavigationList(): UseNavigationListReturnProps {
     }, [currentListItems, setSpecificFocus]);
 
     const setLastFocus: UseNavigationListReturnProps["setLastFocus"] = useCallback(() => {
-
         setSpecificFocus(currentListItems[currentListItems.length - 1]);
     }, [currentListItems, setSpecificFocus]);
 

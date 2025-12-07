@@ -49,9 +49,7 @@ const renderNavigationWithParent = ({filename, parentRef, buttonComponent, ...re
     );
 }
 
-describe("<Navigation /> Base Structure", () => {
-
-
+describe("<Navigation />", () => {
     it("Simple Sub Navigation should be WCAG compliant", async () => {
         const optProps = {};
         const {container} = await act(() =>
@@ -63,13 +61,11 @@ describe("<Navigation /> Base Structure", () => {
         expect(results).toHaveNoViolations();
     });
     it("should render with a parentRef", async () => {
-     let frontRef;
-
-
+        let frontRef;
         const FrontButton = (frontRef) => {
-            const ref= React.useRef<ParentElementType>(null);
+            const ref = React.useRef<ParentElementType>(null);
             const combinedRef = useMergedRef(ref, frontRef) as unknown as React.RefObject<HTMLButtonElement>;
-        
+
             return (
                 <Button id="front" ref={combinedRef}>
                     {frontButtonLabel}
@@ -84,9 +80,9 @@ describe("<Navigation /> Base Structure", () => {
 
         }
         const {container, getByRole} = renderNavigationWithParent(optProps);
-        const frontButton = getByRole("button", { name: frontButtonLabel});
-        const aboutLink = getByRole("link", { name: "About" });
-        const readButton = getByRole("button", { name: "Read navigation" });
+        const frontButton = getByRole("button", {name: frontButtonLabel});
+        const aboutLink = getByRole("link", {name: "About"});
+        const readButton = getByRole("button", {name: "Read navigation"});
 
         expect(aboutLink).toBeInTheDocument();
         expect(frontButton).toBeInTheDocument();

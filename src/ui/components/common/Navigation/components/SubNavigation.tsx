@@ -18,19 +18,25 @@ export function SubNavigation({
     label,
     testId,
 }: SubNavigationProps) {
-    const {currentListItems, parentRef, registerListItem, setFirstFocus, setLastFocus, setNextFocus, setPreviousFocus} = useNavigationList();
-    const     {registerSubNavigation, setListItems} = useNavigation();
+    const {
+        currentListItems,
+        parentRef,
+        registerListItem,
+        setFirstFocus,
+        setLastFocus,
+        setNextFocus,
+        setPreviousFocus
+    } = useNavigationList();
+    const {registerSubNavigation, setListItems} = useNavigation();
 
     const buttonRef = useRef<ParentElementType>(null);
     const prevButtonRef = usePrevious(buttonRef);
-
     const [isSubListOpen, setIsSubListOpen] = useState<boolean>(false);
 
-
     useEffect(() => {
-          const buttonEl =  buttonRef.current as FocusableElementType;
-            registerListItem(buttonEl);
-            registerSubNavigation(buttonEl);
+        const buttonEl = buttonRef.current as FocusableElementType;
+        registerListItem(buttonEl);
+        registerSubNavigation(buttonEl);
     }, [buttonRef, prevButtonRef, registerListItem, registerSubNavigation]);
 
     useEffect(() => {
@@ -77,6 +83,7 @@ export function SubNavigation({
         parentRef: buttonRef,
         testId: testId && `${testId}-list`,
     };
+
     return (
         <ListItem key={id} cx={cx}>
             <Button {...buttonProps}>

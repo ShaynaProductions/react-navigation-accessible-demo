@@ -1,8 +1,9 @@
 "use client";
+
+import {useEffect, useState} from "react";
+import {NavigationProvider} from "../providers";
 import {NavigationListProps, NavigationProps, ParentElementType} from "../NavigationTypes";
 import NavigationList from "./NavigationList";
-import {NavigationProvider} from "@/ui/components/common/Navigation/providers";
-import {useEffect, useState} from "react";
 
 export default function Navigation({
     children,
@@ -12,7 +13,6 @@ export default function Navigation({
     parentRef,
     ...rest
 }: NavigationProps) {
-
     const [parentEl, setParentEl] = useState<ParentElementType>(null);
 
     useEffect(() => {
@@ -22,7 +22,6 @@ export default function Navigation({
         },
         [parentRef, setParentEl]
     );
-    
 
     const navListProps: NavigationListProps = {
         isOpen: isOpen,
@@ -30,7 +29,6 @@ export default function Navigation({
         parentRef: parentRef,
         ...rest,
     }
-
 
     return (
         <NavigationProvider value={{

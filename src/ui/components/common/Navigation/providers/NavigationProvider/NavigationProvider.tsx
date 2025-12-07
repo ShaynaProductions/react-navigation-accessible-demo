@@ -8,7 +8,6 @@ import {
 import {EmptyObject} from "@/ui/types";
 import {arraysEqual} from "@/ui/utilities";
 
-
 export const NavigationContext = createContext<
     NavigationContextValueProps | EmptyObject
 >({});
@@ -46,7 +45,7 @@ export function NavigationProvider({children, value}): JSX.Element {
         setNavigationArray(mutableArray);
     }, [getNavigationArray])
 
-    const _setListItems /*: NavigationContextReturnValueProps["_setListItems"]*/ = useCallback((navigationList, parentEl) => {
+    const _setListItems : NavigationContextReturnValueProps["_setListItems"] = useCallback((navigationList, parentEl) => {
         const parentIndex = getNavigationIndex(parentEl);
         if (parentIndex >= 0) {
             const currentObj = getNavigationArray()[parentIndex];
@@ -65,7 +64,7 @@ export function NavigationProvider({children, value}): JSX.Element {
     }, [getNavigationIndex, navigationArray])
 
 
-    const _registerNavItem=
+    const _registerNavItem: NavigationContextReturnValueProps["_registerNavItem"]=
         (navigationList, parentEl) => {
             setParentEl(parentEl);
             _setListItems(navigationList, parentEl);

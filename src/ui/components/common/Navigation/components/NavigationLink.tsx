@@ -6,10 +6,9 @@ import {usePathname} from "@/hooks";
 import {Link, ListItem, ListItemProps} from "@/ui/components";
 import {usePrevious} from "@/ui/hooks";
 import {Keys, returnTrueElementOrUndefined} from "@/ui/utilities";
-import {FocusableElementType, NavigationLinkProps} from '../NavigationTypes';
 import {useNavigation, useNavigationList} from "../hooks";
 import {_handleKeyDown} from "../utilities";
-
+import {FocusableElementType, NavigationLinkProps} from '../NavigationTypes';
 
 export function NavigationLink({
     cx,
@@ -30,7 +29,6 @@ export function NavigationLink({
     const {registerNavigationItem} = useNavigation();
     const currentPath = usePathname();
 
-
     const linkRef = useRef<FocusableElementType | null>(null);
     const prevLinkRef = usePrevious(linkRef);
 
@@ -40,15 +38,12 @@ export function NavigationLink({
         }
     }, [linkRef, prevLinkRef, registerListItem]);
 
-
     useEffect(() => {
         registerNavigationItem(currentListItems, parentEl);
-
     }, [currentListItems, parentEl, registerNavigationItem])
 
     const handleKeyDown = useCallback((e: KeyboardEvent) => {
         const linkEl = linkRef.current as FocusableElementType;
-
 
         switch (e.key) {
             case Keys.HOME:
