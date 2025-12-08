@@ -2,7 +2,6 @@
 import {useRef, useState} from "react";
 import {Box, Button, Heading, Navigation, NavigationLinkProps, Text, transformNavigation,} from "@/ui/components";
 import {ParentElementType} from "@/ui/components/common/Navigation/NavigationTypes";
-import classNames from "classnames";
 
 
 export function SimpleSubNavigationView(navObject: { navigation: NavigationLinkProps[]; }) {
@@ -14,8 +13,6 @@ export function SimpleSubNavigationView(navObject: { navigation: NavigationLinkP
     const handlePress = () => {
         setOpen(!open);
     }
-
-    const navClass = classNames({open: open});
 
     const buttonProps = {
         ref: buttonRef,
@@ -38,7 +35,6 @@ export function SimpleSubNavigationView(navObject: { navigation: NavigationLinkP
                     id="simple-sub-navigation"
                     label="Simple Sub Navigation Demo"
                     parentRef={buttonRef}
-                    cx={navClass}
 
                 >
                     {navigation}
