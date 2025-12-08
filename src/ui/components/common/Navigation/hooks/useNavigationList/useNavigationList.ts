@@ -1,25 +1,23 @@
-import {use, useCallback} from "react";
+import {RefObject, use, useCallback} from "react";
 
 import {returnTrueElementOrUndefined} from "@/ui/utilities";
 
-import {FocusableElementType} from "../../NavigationTypes";
+import {FocusableElementType, ParentElementType} from "../../NavigationTypes";
 import {NavigationListContext} from "../../providers/NavigationListProvider";
 import {UseNavigationListInternal, UseNavigationListReturnProps} from "./useNavigationListTypes";
 
 export function useNavigationList(): UseNavigationListReturnProps {
     const navigationListContextObj = use(NavigationListContext);
-    const {_getCurrentListItems, _registerListItem} =
+    const {_getCurrentListItems, _getParentRef, _registerListItem,} =
         returnTrueElementOrUndefined(!!navigationListContextObj, navigationListContextObj);
 
     const currentListItems = _getCurrentListItems();
-    const registerListItem = (focusableEl: FocusableElementType) => {
-        _registerListItem(focusableEl);
-    }
+
+    const parentRef: RefObject<ParentElementType> = _getParentRef();
+    const parentEl: ParentElementType = _getParentRef().current;
 
     const getCurrentIndex: UseNavigationListInternal["getCurrentIndex"] = useCallback(
-        (
-            focusableEl: FocusableElementType
-        ): number => {
+        (focusableEl: FocusableElementType): number => {
             let currentIndex = -1;
             /* istanbul ignore else */
             if (currentListItems.length > 0) {
@@ -38,7 +36,6 @@ export function useNavigationList(): UseNavigationListReturnProps {
     }, [currentListItems, setSpecificFocus]);
 
     const setLastFocus: UseNavigationListReturnProps["setLastFocus"] = useCallback(() => {
-
         setSpecificFocus(currentListItems[currentListItems.length - 1]);
     }, [currentListItems, setSpecificFocus]);
 
@@ -59,6 +56,17 @@ export function useNavigationList(): UseNavigationListReturnProps {
             setSpecificFocus(currentListItems[newIndex]);
         }
     }, [getCurrentIndex, currentListItems, setLastFocus, setSpecificFocus])
-    return {registerListItem, setFirstFocus, setLastFocus, setNextFocus, setPreviousFocus, setSpecificFocus};
+
+    return {
+        currentListItems,
+        parentEl,
+        parentRef,
+        registerListItem: _registerListItem,
+        setFirstFocus,
+        setLastFocus,
+        setNextFocus,
+        setPreviousFocus,
+        setSpecificFocus
+    };
 
 }

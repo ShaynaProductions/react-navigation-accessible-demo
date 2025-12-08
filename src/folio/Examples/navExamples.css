@@ -58,4 +58,10 @@
         }
 
     }
+    .example.mobile nav{
+        display:none;
+        & .open {
+            display: block;
+        }
+    }
 }

@@ -11,6 +11,7 @@ export interface NavigationProps extends Omit<BaseProps, "id"> {
     label: string;
     isOpen?: boolean;
     orientation?: Orientation;
+    parentRef?: React.RefObject<ParentElementType>;
 }
 
 export interface NavigationLinkProps extends BaseProps, Omit<LinkProps, "children"> {
@@ -29,4 +30,10 @@ export interface NavigationListProps extends Omit<BaseProps, "id">, ListProps {
 export interface SubNavigationProps extends Omit<NavigationLinkProps, "href" | "id"> {
     children: React.ReactNode;
     id: string;
+}
+
+export interface NavigationWrapperProps extends Omit<BaseProps, "testid"> {
+    children: React.ReactNode;
+    label: string;
+    parentRef?: React.RefObject<ParentElementType>;
 }
