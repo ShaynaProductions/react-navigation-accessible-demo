@@ -24,7 +24,7 @@ export interface NavigationContextReturnValueProps {
     _registerSubNav: (
         parentEl: ParentElementType,
     ) => void;
-    _resetParentNav: (parentEl: HTMLButtonElement) => void;
+    _resetTopNavArray: (parentEl: HTMLButtonElement) => void;
     _setListItems: (
         navigationList: FocusableElementType[],
         parentEl: ParentElementType,

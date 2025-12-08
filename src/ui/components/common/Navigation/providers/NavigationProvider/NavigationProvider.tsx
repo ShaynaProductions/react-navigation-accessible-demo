@@ -80,7 +80,7 @@ export function NavigationProvider({children, value}): JSX.Element {
         }
     }, [getNavigationIndex, setParentEl])
 
-    const _resetParentNav: NavigationContextReturnValueProps["_resetParentNav"] =
+    const _resetTopNavArray: NavigationContextReturnValueProps["_resetTopNavArray"] =
         useCallback(
             (parentEl) => {
                 const parentIndex = getNavigationIndex(parentEl);
@@ -98,7 +98,7 @@ export function NavigationProvider({children, value}): JSX.Element {
                 _getNavigationArray,
                 _registerNavLink,
                 _registerSubNav,
-                _resetParentNav,
+                _resetTopNavArray,
                 _setListItems
             }}>{children}</NavigationContext.Provider>
     )

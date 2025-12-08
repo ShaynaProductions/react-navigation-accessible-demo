@@ -8,14 +8,14 @@ interface ResetArrayProps {
     resetArray: (
         parentEl: ParentElementType,
         storedParentEl: ParentElementType,
-        resetParentNav: (parentEl: ParentElementType) => void) => void;
+        _resetTopNavArray: (parentEl: ParentElementType) => void) => void;
 }
 
 const resetArray: ResetArrayProps["resetArray"] = (
-    parentEl, storedParentEl, resetParentNav) => {
+    parentEl, storedParentEl, _resetTopNavArray) => {
     /* istanbul ignore else */
     if (storedParentEl === null && !!parentEl && parentEl !== storedParentEl) {
-        resetParentNav(parentEl);
+        _resetTopNavArray(parentEl);
     }
 }
 
@@ -27,16 +27,16 @@ export function NavigationWrapper({
     ...rest
 }: NavigationWrapperProps) {
 
-    const {getNavigationParent, resetParentNav} = useNavigation();
+    const {getNavigationParent, _resetTopNavArray} = useNavigation();
 
     useEffect(() => {
         const storedParentEl: ParentElementType = getNavigationParent().storedParentEl as ParentElementType;
         const parentEl = parentRef?.current as ParentElementType;
         /* istanbul ignore else */
         if (storedParentEl !== parentEl) {
-            resetArray(parentEl, storedParentEl, resetParentNav,);
+            resetArray(parentEl, storedParentEl, _resetTopNavArray,);
         }
-    }, [getNavigationParent, parentRef, resetParentNav])
+    }, [getNavigationParent, parentRef, _resetTopNavArray])
 
     return (
         <>

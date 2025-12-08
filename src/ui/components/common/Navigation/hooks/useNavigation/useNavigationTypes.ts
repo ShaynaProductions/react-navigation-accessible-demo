@@ -11,7 +11,7 @@ export interface UseNavigationTypes {
     registerSubNav: (
         parentEl: ParentElementType,
     ) => void;
-    resetParentNav: (parentEl: HTMLButtonElement) => void;
+    _resetTopNavArray: (parentEl: HTMLButtonElement) => void;
     setListItems: (
         navigationList: FocusableElementType[],
         parentEl: ParentElementType,
