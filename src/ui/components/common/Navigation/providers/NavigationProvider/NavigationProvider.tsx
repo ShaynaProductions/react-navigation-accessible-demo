@@ -1,3 +1,4 @@
+"use client"
 import {createContext, JSX, useCallback, useState} from "react";
 import {
     NavigationContextInternalProps,
@@ -31,30 +32,32 @@ export function NavigationProvider({children, value}): JSX.Element {
 
     }, [navigationArray])
 
-    const getNavigationArray: NavigationContextInternalProps["getNavigationArray"] = useCallback(() => {
+    const _getNavigationArray: NavigationContextInternalProps["_getNavigationArray"] = useCallback(() => {
         return navigationArray as NavigationContextStoredValueProps[];
     }, [navigationArray]);
 
-    const setNavigationArrayObject = useCallback((index, updatedContent) => {
-        const currentObj = getNavigationArray()[index];
-        const mutableArray = getNavigationArray();
+    const setNavigationArrayObject: NavigationContextInternalProps["setNavigationArrayObject"] = useCallback((index, updatedContent) => {
+        const currentObj = _getNavigationArray()[index];
+        const mutableArray = _getNavigationArray();
         mutableArray[index] = {
             ...currentObj,
             ...updatedContent,
         };
         setNavigationArray(mutableArray);
-    }, [getNavigationArray])
+    }, [_getNavigationArray])
 
-    const _setListItems : NavigationContextReturnValueProps["_setListItems"] = useCallback((navigationList, parentEl) => {
+    const _setListItems: NavigationContextReturnValueProps["_setListItems"] = useCallback((navigationList, parentEl) => {
         const parentIndex = getNavigationIndex(parentEl);
+        /* istanbul ignore else */
         if (parentIndex >= 0) {
-            const currentObj = getNavigationArray()[parentIndex];
+            const currentObj = _getNavigationArray()[parentIndex];
             if (!currentObj.storedList ||
-                !arraysEqual(currentObj.storedList, navigationList)){
+                !arraysEqual(currentObj.storedList, navigationList)) {
                 setNavigationArrayObject(parentIndex, {storedList: navigationList});
             }
         }
-    }, [getNavigationArray, getNavigationIndex, setNavigationArrayObject]);
+        // console.log(_getNavigationArray());
+    }, [_getNavigationArray, getNavigationIndex, setNavigationArrayObject]);
 
     const setParentEl: NavigationContextInternalProps["setParentEl"] = useCallback((parentEl) => {
         const parentIndex = getNavigationIndex(parentEl);
@@ -64,23 +67,41 @@ export function NavigationProvider({children, value}): JSX.Element {
     }, [getNavigationIndex, navigationArray])
 
 
-    const _registerNavItem: NavigationContextReturnValueProps["_registerNavItem"]=
+    const _registerNavLink: NavigationContextReturnValueProps["_registerNavLink"] =
         (navigationList, parentEl) => {
             setParentEl(parentEl);
             _setListItems(navigationList, parentEl);
         };
-    
+
     const _registerSubNav: NavigationContextReturnValueProps["_registerSubNav"] = useCallback((parentEl) => {
-        setParentEl(parentEl);
-    },[setParentEl])
+        const parentIndex = getNavigationIndex(parentEl);
+        if (parentIndex === -1) {
+            setParentEl(parentEl);
+        }
+    }, [getNavigationIndex, setParentEl])
+
+    const _resetParentNav: NavigationContextReturnValueProps["_resetParentNav"] =
+        useCallback(
+            (parentEl) => {
+                const parentIndex = getNavigationIndex(parentEl);
+                /* istanbul ignore else */
+                if (parentIndex !== 0) {
+                    navigationArray.shift();
+                }
+            },
+            [getNavigationIndex, navigationArray],
+        );
 
     return (
         <NavigationContext.Provider
             value={{
-                _registerNavItem,
+                _getNavigationArray,
+                _registerNavLink,
                 _registerSubNav,
+                _resetParentNav,
                 _setListItems
             }}>{children}</NavigationContext.Provider>
     )
 }
+
 NavigationProvider.context = NavigationContext;

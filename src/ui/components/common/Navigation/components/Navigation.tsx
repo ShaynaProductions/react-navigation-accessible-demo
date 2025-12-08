@@ -1,31 +1,35 @@
 "use client";
 
-import {useEffect, useState} from "react";
+import {RefObject} from "react";
 import {NavigationProvider} from "../providers";
-import {NavigationListProps, NavigationProps, ParentElementType} from "../NavigationTypes";
+import {NavigationListProps, NavigationProps, NavigationWrapperProps, ParentElementType} from "../NavigationTypes";
 import NavigationList from "./NavigationList";
+import {NavigationWrapper} from "@/ui/components/common/Navigation/components/NavigationWrapper";
+
+const returnStoredParentEl = (parentRef?: RefObject<ParentElementType | null>) => {
+    return parentRef?.current || null
+}
 
 export default function Navigation({
     children,
-    label,
     isOpen = true,
     orientation = "vertical",
     parentRef,
+    testId,
     ...rest
 }: NavigationProps) {
-    const [parentEl, setParentEl] = useState<ParentElementType>(null);
 
-    useEffect(() => {
-            if (parentRef) {
-                setParentEl(parentRef.current);
-            }
-        },
-        [parentRef, setParentEl]
-    );
+    const storedParentEl = returnStoredParentEl(parentRef);
 
     const navListProps: NavigationListProps = {
         isOpen: isOpen,
         orientation: orientation,
+        parentRef: parentRef,
+        testId: testId,
+        ...rest,
+    }
+
+    const navigationWrapperProps: Omit<NavigationWrapperProps, "children"> = {
         parentRef: parentRef,
         ...rest,
     }
@@ -33,11 +37,11 @@ export default function Navigation({
     return (
         <NavigationProvider value={{
             storedList: [],
-            storedParentEl: parentEl,
+            storedParentEl: storedParentEl,
         }}>
-            <nav aria-label={label}>
+            <NavigationWrapper {...navigationWrapperProps}>
                 <NavigationList {...navListProps}>{children}</NavigationList>
-            </nav>
+            </NavigationWrapper>
         </NavigationProvider>
     );
 }

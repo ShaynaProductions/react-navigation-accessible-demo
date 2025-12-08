@@ -31,3 +31,9 @@ export interface SubNavigationProps extends Omit<NavigationLinkProps, "href" | "
     children: React.ReactNode;
     id: string;
 }
+
+export interface NavigationWrapperProps extends Omit<BaseProps, "testid"> {
+    children: React.ReactNode;
+    label: string;
+    parentRef?: React.RefObject<ParentElementType>;
+}

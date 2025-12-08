@@ -1,7 +1,9 @@
 import {FocusableElementType, ParentElementType} from "@/ui/components/common/Navigation/NavigationTypes";
+import {NavigationContextStoredValueProps} from "../../providers";
 
 
 export interface UseNavigationTypes {
+    getNavigationParent: () => NavigationContextStoredValueProps;
     registerNavigationItem: (
         navigationList: FocusableElementType[],
         parentEl: ParentElementType,
@@ -9,6 +11,7 @@ export interface UseNavigationTypes {
     registerSubNav: (
         parentEl: ParentElementType,
     ) => void;
+    resetParentNav: (parentEl: HTMLButtonElement) => void;
     setListItems: (
         navigationList: FocusableElementType[],
         parentEl: ParentElementType,

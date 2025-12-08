@@ -19,7 +19,7 @@ export function NavigationLink({
 }: NavigationLinkProps) {
     const {
         currentListItems,
-        parentEl,
+        parentRef,
         registerListItem,
         setFirstFocus,
         setLastFocus,
@@ -31,7 +31,7 @@ export function NavigationLink({
 
     const linkRef = useRef<FocusableElementType | null>(null);
     const prevLinkRef = usePrevious(linkRef);
-
+    
     useEffect(() => {
         if (linkRef !== prevLinkRef) {
             registerListItem(linkRef.current as HTMLAnchorElement);
@@ -39,8 +39,9 @@ export function NavigationLink({
     }, [linkRef, prevLinkRef, registerListItem]);
 
     useEffect(() => {
-        registerNavigationItem(currentListItems, parentEl);
-    }, [currentListItems, parentEl, registerNavigationItem])
+        registerNavigationItem(currentListItems, parentRef.current);
+    }, [currentListItems, parentRef, registerNavigationItem]);
+
 
     const handleKeyDown = useCallback((e: KeyboardEvent) => {
         const linkEl = linkRef.current as FocusableElementType;

@@ -1,9 +1,9 @@
 "use client";
-import classNames from "classnames";
 
 import {useRef} from "react";
+import classNames from "classnames";
 import {List, ListProps} from "@/ui/components";
-import {NavigationListContextStoredValueProps, NavigationListProvider} from "../providers/NavigationListProvider";
+import {NavigationListContextStoredValueProps, NavigationListProvider} from "../providers";
 import {NavigationListProps, ParentElementType} from "../NavigationTypes";
 
 export default function NavigationList({
@@ -20,9 +20,9 @@ export default function NavigationList({
     };
 
     const listProps: ListProps = {
+        ...rest,
         id,
         cx: classNames({srOnly: !isOpen}, cx),
-        ...rest,
     };
 
     return (

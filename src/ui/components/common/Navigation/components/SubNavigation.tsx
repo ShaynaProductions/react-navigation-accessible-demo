@@ -33,6 +33,8 @@ export function SubNavigation({
     const prevButtonRef = usePrevious(buttonRef);
     const [isSubListOpen, setIsSubListOpen] = useState<boolean>(false);
 
+
+
     useEffect(() => {
         const buttonEl = buttonRef.current as FocusableElementType;
         registerListItem(buttonEl);
@@ -40,7 +42,7 @@ export function SubNavigation({
     }, [buttonRef, prevButtonRef, registerListItem, registerSubNavigation]);
 
     useEffect(() => {
-        setListItems(currentListItems, parentRef?.current || null);
+        setListItems(currentListItems, parentRef.current);
     }, [currentListItems, parentRef, setListItems]);
 
     const handleKeyDown = useCallback((e: KeyboardEvent) => {
