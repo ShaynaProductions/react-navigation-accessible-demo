@@ -15,7 +15,8 @@ export function HomeView() {
                     articles hosted on Dev.to</Link>.
                 </Text>
                 <Text>The examples below represent the progression of the code as completed in the accompanying
-                    article: <Link href="" openInNewTab={true}>Second Layer - Keyboard handling through a single list</Link>. The
+                    article: <Link href="https://dev.to/shaynaproductions/third-layer-who-is-the-parent-21ob"
+                                   openInNewTab={true}>Third Layer - Who is the Parent?</Link>. The
                     source code is provided through a series of releases, each release fully typed and tested.
                 </Text>
                 <Text> Examples are provided which work up to the specific release constraints. This release begins
@@ -56,23 +57,36 @@ export function HomeView() {
                         <dl>
                             <dt>Article</dt>
                             <dd><Link openInNewTab={true}
-                                href="https://dev.to/shaynaproductions/first-layer-implementing-a-base-structure-492o">First
+                                      href="https://dev.to/shaynaproductions/first-layer-implementing-a-base-structure-492o">First
                                 Layer - Implementing a Base Structure</Link></dd>
                             <dt>Release</dt>
-                            <dd><Link  openInNewTab={true}
-                                href="https://github.com/ShaynaProductions/react-navigation-accessible-demo/releases/tag/v0.2.2">Implementing
+                            <dd><Link openInNewTab={true}
+                                      href="https://github.com/ShaynaProductions/react-navigation-accessible-demo/releases/tag/v0.2.2">Implementing
                                 a Base Structure</Link></dd>
                         </dl>
                     </ListItem>
-                    <ListItem><strong>Single List Keyboard Implementation</strong> - (current version)<br/>
+                    <ListItem><strong>Single List Keyboard Implementation</strong>
                         <dl>
                             <dt>Article</dt>
-                            <dd><Link href="https://dev.to/shaynaproductions/second-layer-keyboard-handling-through-a-single-list-1ded">Second Layer - Keyboard handling through a single list
+                            <dd><Link
+                                href="https://dev.to/shaynaproductions/second-layer-keyboard-handling-through-a-single-list-1ded">Second
+                                Layer - Keyboard handling through a single list
                             </Link></dd>
                             <dt>Release:</dt>
                             <dd><Link
                                 href="https://github.com/ShaynaProductions/react-navigation-accessible-demo/releases/tag/v0.3.0">Implementing
                                 Single List Keyboard Handling</Link></dd>
+                        </dl>
+                    </ListItem>
+                    <ListItem><strong>Adding Architecture</strong>  - (current version)
+                        <dl>
+                            <dt>Article</dt>
+                            <dd><Link
+                                href="https://dev.to/shaynaproductions/third-layer-who-is-the-parent-21ob">Third Layer - Who is the Parent?
+                            </Link></dd>
+                            <dt>Release:</dt>
+                            <dd><Link
+                                href="https://github.com/ShaynaProductions/react-navigation-accessible-demo/releases/tag/v0.4.0">Adding Architecture - A Navigatiion Provider</Link></dd>
                         </dl>
                     </ListItem>
                 </List>

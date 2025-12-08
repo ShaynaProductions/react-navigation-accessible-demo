@@ -12,6 +12,7 @@ const returnStoredParentEl = (parentRef?: RefObject<ParentElementType | null>) =
 
 export default function Navigation({
     children,
+    cx,
     isOpen = true,
     orientation = "vertical",
     parentRef,
@@ -30,6 +31,7 @@ export default function Navigation({
     }
 
     const navigationWrapperProps: Omit<NavigationWrapperProps, "children"> = {
+       cx: cx,
         parentRef: parentRef,
         ...rest,
     }

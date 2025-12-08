@@ -25,3 +25,4 @@ Each published article is linked and will refer to the appropriate Github tag to
 - [Base Components are key to accessibility](https://dev.to/shaynaproductions/base-components-are-key-to-accessibility-2bd8)
 - [First Layer - Implementing a Base Structure](https://dev.to/shaynaproductions/first-layer-implementing-a-base-structure-492o)
 - [Second Layer - Keyboard handling through a single list](https://dev.to/shaynaproductions/second-layer-keyboard-handling-through-a-single-list-1ded)
+- [Third Layer - Who is the Parent?](https://dev.to/shaynaproductions/third-layer-who-is-the-parent-21ob)
