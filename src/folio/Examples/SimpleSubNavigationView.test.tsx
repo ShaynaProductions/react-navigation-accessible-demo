@@ -1,7 +1,7 @@
 import React, {act} from "react";
 import fs from "fs";
-import {axe, render} from "@/test";
-import {SimpleSubNavigationView} from "./SimpleSubNavigationView";
+import {axe, render, userEvent} from "@/test";
+import {SimpleSubNavigationView} from "@/folio";
 
 const jsonObj = fs.readFileSync(
     "public/__static__/simpleStructureWithSubNav.json",
@@ -10,7 +10,7 @@ const jsonObj = fs.readFileSync(
 const nav = JSON.parse(jsonObj);
 
 const renderView = () => {
-    return render(<SimpleSubNavigationView navigation={nav}/>);
+    return render(<SimpleSubNavigationView navigation={nav} />);
 }
 
 describe("SimpleSubNavigationView", () => {
@@ -19,4 +19,13 @@ describe("SimpleSubNavigationView", () => {
         const results = await act(() => axe(container));
         expect(results).toHaveNoViolations();
     });
+
+    it('opens and closes the navigation component', async () => {
+        const {getByRole} = renderView();
+        const menuButton = getByRole("button", {name: "Menu"})
+        expect(menuButton).toBeInTheDocument();
+        expect(menuButton).toHaveAttribute("aria-expanded", "false");
+        await userEvent.click(menuButton);
+        expect(menuButton).toHaveAttribute("aria-expanded", "true");
+    })
 })

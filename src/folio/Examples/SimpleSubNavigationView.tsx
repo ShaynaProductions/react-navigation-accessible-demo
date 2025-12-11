@@ -1,10 +1,12 @@
 "use client";
 import {useRef, useState} from "react";
-import {Box, Button, Heading, Navigation, NavigationLinkProps, Text, transformNavigation,} from "@/ui/components";
-import {ParentElementType} from "@/ui/components/common/Navigation/NavigationTypes";
+import {Box, Button, Heading, Navigation, NavigationLinkProps, ParentElementType, Text, transformNavigation,} from "@/ui/components";
 
 
-export function SimpleSubNavigationView(navObject: { navigation: NavigationLinkProps[]; }) {
+
+export function SimpleSubNavigationView(
+    navObject: { navigation: NavigationLinkProps[]; },
+    testId?: string) {
     const [open, setOpen] = useState(false);
     const navigation = transformNavigation(navObject.navigation);
 
@@ -29,13 +31,13 @@ export function SimpleSubNavigationView(navObject: { navigation: NavigationLinkP
                 component and help identify keyboard traps. This example emulates a mobile menu and passes the reference into the navigation compnent.</Text>
             <Text><strong>Note: </strong>This example will only implement keyboard handling
                 within each sublist. Use the tab key to move into and out of sub navigation.</Text>
-            <Box cx="example simple mobile">
+            <Box cx="example simple mobile" testId={testId}>
                 <Button{...buttonProps}>Menu</Button>
                 <Navigation
                     id="simple-sub-navigation"
                     label="Simple Sub Navigation Demo"
                     parentRef={buttonRef}
-
+                    testId={testId}
                 >
                     {navigation}
                 </Navigation>
