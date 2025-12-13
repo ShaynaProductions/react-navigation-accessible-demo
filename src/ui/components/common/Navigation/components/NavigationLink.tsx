@@ -26,7 +26,7 @@ export function NavigationLink({
         setPreviousFocus,
         setSpecificFocus
     } = useNavigationList();
-    const {getNextByLink, getPreviousByElement, registerNavigationItem} = useNavigation();
+    const {getNextByLink, getPreviousByLink, registerNavigationItem} = useNavigation();
     const currentPath = usePathname();
 
     const linkRef = useRef<FocusableElementType | null>(null);
@@ -63,7 +63,7 @@ export function NavigationLink({
                 // specific to link.
                 switch (e.key) {
                     case Keys.UP:
-                        const  prevFocusableEl =  getPreviousByElement( linkEl);
+                        const  prevFocusableEl =  getPreviousByLink( linkEl);
                         /* istanbul ignore else */
                         if (prevFocusableEl) {
                             setSpecificFocus(prevFocusableEl);
@@ -79,7 +79,7 @@ export function NavigationLink({
                         break;
                 }
             },
-            [getNextByLink, getPreviousByElement, setFirstFocus, setLastFocus, setNextFocus, setPreviousFocus, setSpecificFocus]
+            [getNextByLink, getPreviousByLink, setFirstFocus, setLastFocus, setNextFocus, setPreviousFocus, setSpecificFocus]
         )
     ;
 

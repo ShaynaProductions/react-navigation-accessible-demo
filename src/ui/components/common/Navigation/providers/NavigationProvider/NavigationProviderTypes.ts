@@ -3,6 +3,7 @@ import {FocusableElementType, ParentElementType} from "../../NavigationTypes";
 export interface NavigationContextStoredValueProps {
     storedList?: FocusableElementType[];
     storedParentEl?: ParentElementType;
+    isSubListOpen?: boolean;
 }
 
 export interface NavigationContextInternalProps {
@@ -22,7 +23,9 @@ export interface NavigationContextReturnValueProps {
         navigationList: FocusableElementType[],
         parentEl: ParentElementType,
     ) => void;
+    _registerSubNav: (isListOpen: boolean, parentEl: ParentElementType) => void;
     _resetTopNavArray: (parentEl: HTMLButtonElement) => void;
+    _setIsListOpen: (isListOpen: boolean, parentEl: ParentElementType) => void;
     _setListItems: (
         navigationList: FocusableElementType[],
         parentEl: ParentElementType,

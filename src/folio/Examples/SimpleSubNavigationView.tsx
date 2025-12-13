@@ -35,6 +35,7 @@ export function SimpleSubNavigationView(
                 <Button{...buttonProps}>Menu</Button>
                 <Navigation
                     id="simple-sub-navigation"
+                    isOpen={open}
                     label="Simple Sub Navigation Demo"
                     parentRef={buttonRef}
                     testId={testId}

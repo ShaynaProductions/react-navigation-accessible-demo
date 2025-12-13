@@ -11,7 +11,7 @@ export function useNavigationList(): UseNavigationListReturnProps {
     const {_getCurrentListItems, _getParentRef, _registerItemInList,} =
         returnTrueElementOrUndefined(!!navigationListContextObj, navigationListContextObj);
 
-    const currentListItems = _getCurrentListItems();
+    const currentListItems: FocusableElementType[] = _getCurrentListItems();
 
     const parentRef: RefObject<ParentElementType> = _getParentRef();
     const parentEl: ParentElementType = _getParentRef().current;

@@ -33,6 +33,7 @@ export default function Navigation({
 
     const navigationWrapperProps: Omit<NavigationWrapperProps, "children"> = {
         cx,
+        isOpen,
         label,
         parentRef,
     }
@@ -41,6 +42,7 @@ export default function Navigation({
         <NavigationProvider value={{
             storedList: [],
             storedParentEl: storedParentEl,
+            isSubListOpen: isOpen,
         }}>
             <NavigationWrapper {...navigationWrapperProps}>
                 <NavigationList {...navListProps}>{children}</NavigationList>

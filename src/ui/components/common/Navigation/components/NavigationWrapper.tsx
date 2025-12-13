@@ -22,12 +22,13 @@ const resetArray: ResetArrayProps["resetArray"] = (
 export function NavigationWrapper({
     children,
     cx,
+    isOpen,
     label,
     parentRef,
     ...rest
 }: NavigationWrapperProps) {
 
-    const {getNavigationParent, _resetTopNavArray} = useNavigation();
+    const {getNavigationParent, registerSubNavigation, _resetTopNavArray} = useNavigation();
 
     useEffect(() => {
         const storedParentEl: ParentElementType = getNavigationParent().storedParentEl as ParentElementType;
@@ -36,7 +37,8 @@ export function NavigationWrapper({
         if (storedParentEl !== parentEl) {
             resetArray(parentEl, storedParentEl, _resetTopNavArray,);
         }
-    }, [getNavigationParent, parentRef, _resetTopNavArray])
+        registerSubNavigation(isOpen, parentEl);
+    }, [getNavigationParent, parentRef, _resetTopNavArray, registerSubNavigation, isOpen])
 
     return (
         <>

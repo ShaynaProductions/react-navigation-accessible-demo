@@ -2,17 +2,30 @@
 import {use, useCallback} from "react";
 import {returnTrueElementOrUndefined} from "@/ui/utilities";
 import {NavigationContext} from "../../providers";
-import {UseNavigationInternalTypes, UseNavigationTypes} from "./useNavigationTypes";
+import {
+    UseNavigationInternalTypes,
+    UseNavigationTypes
+} from "./useNavigationTypes";
 import {FocusableElementType, ParentElementType} from "../../NavigationTypes";
+import {
+    getRecursiveTopParentByElement
+} from "@/ui/components/common/Navigation/hooks/useNavigation/hookFunctions";
 
 
 export default function useNavigation() {
     const navigationContextObj = use(NavigationContext);
-    const {_getNavigationArray, _registerNavLink,  _resetTopNavArray, _setListItems} =
+    const {
+        _getNavigationArray,
+        _registerNavLink,
+        _registerSubNav,
+        _resetTopNavArray,
+        _setIsListOpen,
+        _setListItems
+    } =
         returnTrueElementOrUndefined(!!navigationContextObj, navigationContextObj);
 
-    const _getIndexInTopRow = useCallback(
-        (focusedEl: FocusableElementType): number => {
+    const _getIndexInTopRow: UseNavigationInternalTypes["_getIndexInTopRow"] = useCallback(
+        (focusedEl) => {
             const topRow = _getNavigationArray()[0];
             return topRow.storedList?.indexOf(focusedEl) as number;
         },
@@ -94,25 +107,13 @@ export default function useNavigation() {
 
     const _getTopParentByElement: UseNavigationInternalTypes["_getTopParentByElement"] = useCallback(
         (focusableEl) => {
-            const {storedParentEl} = _getNavigationObjectContainingElement(focusableEl);
-            const indexInTopRow = _getIndexInTopRow(
-                storedParentEl as FocusableElementType,
-            );
-            /* istanbul ignore if */
-            if (storedParentEl && indexInTopRow < 0) {
-                const parentNavObject = _getNavigationObjectContainingElement(storedParentEl as FocusableElementType);
-
-                /* eslint-disable-next-line react-hooks/immutability  */ // recursion
-               return _getTopParentByElement(parentNavObject.storedParentEl as FocusableElementType);
-            } else {
-                return storedParentEl as ParentElementType;
-            }
+            return getRecursiveTopParentByElement(focusableEl, _getNavigationObjectContainingElement, _getIndexInTopRow);
         },
         [_getNavigationObjectContainingElement, _getIndexInTopRow],
     );
 
-    const _isInTopRow: UseNavigationInternalTypes["_isInTopRow"] = useCallback((parentEl) => {
-        const topIndex = _getIndexInTopRow(parentEl as FocusableElementType);
+    const _isInTopRow: UseNavigationInternalTypes["_isInTopRow"] = useCallback((focusableEl) => {
+        const topIndex = _getIndexInTopRow(focusableEl);
         return topIndex >= 0;
     }, [_getIndexInTopRow])
 
@@ -121,6 +122,46 @@ export default function useNavigation() {
             return _getNavigationArray()[0];
         }, [_getNavigationArray]);
 
+    // -------------------------------------------------------
+    // Controllers
+    // -------------------------------------------------------
+    const _getNextElement: UseNavigationInternalTypes["_getNextElement"] = useCallback(
+        (focusableEl, currentItemsList) => {
+            return _getNextElementInRow(
+                focusableEl,
+                currentItemsList,
+            );
+        }, [_getNextElementInRow]);
+
+    const _getPreviousByElement: UseNavigationInternalTypes["_getPreviousElement"] = useCallback((
+        focusableEl,
+    ) => {
+
+        const currentObject = _getNavigationObjectContainingElement(focusableEl);
+        /* istanbul ignore next */
+        const currentItemsList = currentObject.storedList || [];
+        const currentParent = currentObject.storedParentEl;
+
+        const isInTopRow = _isInTopRow(focusableEl);
+
+
+        // default to previous item in List
+        let prevFocusableEl: FocusableElementType = _getPreviousElementInRow(
+            focusableEl,
+            currentItemsList,
+        );
+
+        // Not in top row, and is first child
+        if (!isInTopRow && currentItemsList.indexOf(focusableEl) === 0) {
+            prevFocusableEl = currentParent as FocusableElementType;
+        }
+
+        if (!isInTopRow) {
+            return prevFocusableEl;
+        }
+
+    }, [_getNavigationObjectContainingElement, _getPreviousElementInRow, _isInTopRow])
+
     const getNextByButton: UseNavigationTypes["getNextByButton"] = useCallback((
         buttonEl, isSubListOpen
     ) => {
@@ -128,9 +169,10 @@ export default function useNavigation() {
         /* istanbul ignore next */
         const currentItemsList = buttonNavObject.storedList || [];
 
-        let nextFocusableElement: FocusableElementType = _getNextElementInRow(
+
+        let nextFocusableElement: FocusableElementType = _getNextElement(
             buttonEl,
-            currentItemsList,
+            currentItemsList
         );
         // default to next item in List
         const currentNavObject = _getNavigationObjectByParent(
@@ -145,36 +187,39 @@ export default function useNavigation() {
             nextFocusableElement = subNavigation[0];
         }
 
-        //last focusable element and sub list is collapsed. Set to topmost parent.
+        //last focusable element and sub list is collapsed. Set to topmost
+        // parent.
         if (!isSubListOpen && currentItemsList.indexOf(buttonEl) === currentItemsList.length - 1) {
             nextFocusableElement = _getTopParentByElement(buttonEl) as FocusableElementType;
         }
 
         return nextFocusableElement;
 
-    }, [_getNavigationObjectByParent, _getNavigationObjectContainingElement, _getNextElementInRow, _getTopParentByElement]);
+    }, [_getNavigationObjectByParent, _getNavigationObjectContainingElement, _getNextElement, _getTopParentByElement]);
 
     const getNextByLink: UseNavigationTypes["getNextByLink"] = useCallback((linkEl) => {
             const linkNavObject = _getNavigationObjectContainingElement(linkEl);
             /* istanbul ignore next */
             const currentItemsList = linkNavObject.storedList || [];
 
-
             // default to next item in List
-            let nextFocusableEl: FocusableElementType = _getNextElementInRow(
+            let nextFocusableEl: FocusableElementType = _getNextElement(
                 linkEl,
                 currentItemsList,
             );
 
-            // if focus is on the last link in the list, move to the topmost parent
-            if (currentItemsList.indexOf(linkEl) === currentItemsList.length - 1) {
+            // if focus is on the last link in the list, move to the topmost
+            // parent
+            if (currentItemsList.indexOf(linkEl) === currentItemsList.length
+                - 1) {
                 const {storedParentEl} = linkNavObject;
-                const isInTopRow = storedParentEl && _isInTopRow(storedParentEl);
+                const isInTopRow
+                    = storedParentEl && _isInTopRow(storedParentEl);
                 if (isInTopRow) {
                     nextFocusableEl = storedParentEl as FocusableElementType;
                 } else {
-                    const lastEl = _getLastElementByParent(storedParentEl as ParentElementType);
-                    /* istanbul ignore else */
+                    const lastEl = _getLastElementByParent(storedParentEl as
+                        ParentElementType); /* istanbul ignore else */
                     if (linkEl === lastEl && !isInTopRow) {
                         nextFocusableEl = _getTopParentByElement(storedParentEl as FocusableElementType) as FocusableElementType;
                     }
@@ -182,44 +227,30 @@ export default function useNavigation() {
             }
             return nextFocusableEl;
         },
-        [_getLastElementByParent, _getNavigationObjectContainingElement, _getNextElementInRow, _getTopParentByElement, _isInTopRow]
+        [_getLastElementByParent, _getNavigationObjectContainingElement, _getNextElement, _getTopParentByElement, _isInTopRow]
     );
 
-    const getPreviousByElement = useCallback((
-        focusableEl,
-    ) => {
 
-        const currentObject = _getNavigationObjectContainingElement(focusableEl);
-        /* istanbul ignore next */
-        const currentItemsList = currentObject.storedList || [];
-        const currentParent = currentObject.storedParentEl;
+    const getPreviousByButton = useCallback((focusableEl) => {
+        return _getPreviousByElement(focusableEl);
+    }, [_getPreviousByElement])
 
-        const isInTopRow = _isInTopRow(focusableEl);
+    const getPreviousByLink = useCallback((focusableEl) => {
+        return _getPreviousByElement(focusableEl);
 
-
-        // default to next item in List
-        let prevFocusableEl: FocusableElementType = _getPreviousElementInRow(
-            focusableEl,
-            currentItemsList,
-        );
-
-        // Not in top row, and is first child
-        if (!isInTopRow && currentItemsList.indexOf(focusableEl) === 0) {
-            prevFocusableEl = currentParent as FocusableElementType;
-        }
-
-        return !isInTopRow && prevFocusableEl;
-
-    }, [_getNavigationObjectContainingElement, _getPreviousElementInRow, _isInTopRow])
+    }, [_getPreviousByElement])
 
 
     return {
         getNavigationParent,
         getNextByButton,
         getNextByLink,
-        getPreviousByElement,
+        getPreviousByButton,
+        getPreviousByLink,
         registerNavigationItem: _registerNavLink,
+        registerSubNavigation: _registerSubNav,
         _resetTopNavArray: _resetTopNavArray,
+        setIsListOpen: _setIsListOpen,
         setListItems: _setListItems,
     }
 

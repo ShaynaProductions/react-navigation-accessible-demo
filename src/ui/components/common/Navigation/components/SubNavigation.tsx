@@ -27,7 +27,7 @@ export function SubNavigation({
         setPreviousFocus,
         setSpecificFocus
     } = useNavigationList();
-    const {getNextByButton, getPreviousByElement,  setListItems} = useNavigation();
+    const {getNextByButton, getPreviousByButton,  registerSubNavigation, setListItems} = useNavigation();
 
     const buttonRef = useRef<ParentElementType>(null);
     const [isSubListOpen, setIsSubListOpen] = useState<boolean>(false);
@@ -36,8 +36,13 @@ export function SubNavigation({
     useEffect(() => {
         const buttonEl = buttonRef.current as FocusableElementType;
         registerItemInList(buttonEl);
-        setListItems(currentListItems, parentRef.current);
-    }, [currentListItems, parentRef, registerItemInList, setListItems]);
+        registerSubNavigation(isSubListOpen, buttonEl);
+       
+    }, [currentListItems, isSubListOpen, parentRef, registerItemInList, registerSubNavigation, setListItems]);
+
+    useEffect(() => {
+        setListItems(currentListItems, parentRef.current)
+    },[currentListItems, parentRef, setListItems])
 
     const handleKeyDown = useCallback((e: KeyboardEvent) => {
         const buttonEl = buttonRef.current as FocusableElementType;
@@ -58,7 +63,7 @@ export function SubNavigation({
         // specific to button.
         switch (e.key) {
             case Keys.UP:
-                const  prevFocusableEl =  getPreviousByElement( buttonEl);
+                const  prevFocusableEl =  getPreviousByButton( buttonEl);
                 /* istanbul ignore else */
                 if (prevFocusableEl) {
                     setSpecificFocus(prevFocusableEl);
@@ -73,7 +78,7 @@ export function SubNavigation({
                 break;
         }
 
-    }, [getNextByButton, getPreviousByElement, isSubListOpen, setFirstFocus, setLastFocus, setNextFocus, setPreviousFocus, setSpecificFocus]);
+    }, [getNextByButton, getPreviousByButton, isSubListOpen, setFirstFocus, setLastFocus, setNextFocus, setPreviousFocus, setSpecificFocus]);
 
     const handlePress = () => {
         setIsSubListOpen(!isSubListOpen);
