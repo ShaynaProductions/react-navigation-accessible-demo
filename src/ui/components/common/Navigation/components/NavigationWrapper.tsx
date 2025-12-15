@@ -28,17 +28,19 @@ export function NavigationWrapper({
     ...rest
 }: NavigationWrapperProps) {
 
-    const {getNavigationParent, registerSubNavigation, _resetTopNavArray} = useNavigation();
+    const {getTopNavigationParent, registerSubNavigation, _resetTopNavArray} = useNavigation();
 
     useEffect(() => {
-        const storedParentEl: ParentElementType = getNavigationParent().storedParentEl as ParentElementType;
+        const storedParentEl: ParentElementType = getTopNavigationParent().storedParentEl as ParentElementType;
         const parentEl = parentRef?.current as ParentElementType;
         /* istanbul ignore else */
         if (storedParentEl !== parentEl) {
             resetArray(parentEl, storedParentEl, _resetTopNavArray,);
         }
-        registerSubNavigation(isOpen, parentEl);
-    }, [getNavigationParent, parentRef, _resetTopNavArray, registerSubNavigation, isOpen])
+        if(!!parentEl){
+         registerSubNavigation(isOpen, parentEl);
+        }
+    }, [getTopNavigationParent, parentRef, _resetTopNavArray, registerSubNavigation, isOpen])
 
     return (
         <>

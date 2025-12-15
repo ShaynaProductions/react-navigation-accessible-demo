@@ -37,6 +37,20 @@ export const getComplexButtonTestElements = (getByRole, getByTestId, testId) => 
         communityList: getByTestId(`${testId}-community-menu-list`),
         blogLink: getByRole("link", {name: "Musings"}),
         forumLink: getByRole("link", {name: "Forum"}),
+        storiesButton: getByRole("button", {name: "Search, Stories and" +
+                " Commentary navigation"}),
+        storiesList: getByTestId(`${testId}-stories-menu-list`),
+        searchButton: getByRole("button", {name: "Search navigation"}),
+        searchList: getByTestId(`${testId}-search-menu-list`),
+        basicSearchLink: getByRole("link", {name: "Basic Search"}),
+        advancedSearchLink: getByRole("link", {name: "Advanced Search"}),
+        allStoriesLink: getByRole("link", {name: "All Stories"}),
+        allCommentaryLink: getByRole("link", {name: "All Commentary"}),
+           findNextStoryButton: getByRole("button", {name: "Find Your Next" +
+                   " Story navigation"}),
+        findNextStoryList: getByTestId(`${testId}-find-next-story-list`),
+        byStorytellerLink: getByRole("link", {name: "By Storyteller"}),
+        byEraLink: getByRole("link", {name: "By Era"}),
 
     })
 }

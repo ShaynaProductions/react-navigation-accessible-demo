@@ -90,8 +90,9 @@ export function SubNavigation({
         "aria-label": `${label} navigation`,
         onKeyDown: handleKeyDown,
         onPress: handlePress,
-        ref: buttonRef,
+        ref: buttonRef,             
         testId: testId,
+        type:"button"
     };
 
     const iconProps: IconProps = {

@@ -7,6 +7,7 @@ import {
     NavigationContextValueProps
 } from "./NavigationProviderTypes";
 import {EmptyObject} from "@/ui/types";
+import {arraysEqual} from "@/ui/utilities";
 
 
 export const NavigationContext = createContext<
@@ -51,7 +52,7 @@ export function NavigationProvider({children, value}): JSX.Element {
         /* istanbul ignore else */
         if (parentIndex >= 0) {
             const currentObj = _getNavigationArray()[parentIndex];
-            if (currentObj.storedList !== navigationList) {
+            if ((!currentObj.storedList ) || (!arraysEqual(currentObj.storedList, navigationList))) {
                 setNavigationArrayObject(parentIndex, {
                     storedList: navigationList,
                 });
@@ -72,6 +73,7 @@ export function NavigationProvider({children, value}): JSX.Element {
             (isListOpen, parentEl) => {
                 const parentIndex: number = getNavigationIndex(parentEl);
                 const currentObj = _getNavigationArray()[parentIndex];
+                /* istanbul ignore else */
                 if (parentIndex >= 0 && currentObj.isSubListOpen !== isListOpen) {
                     setNavigationArrayObject(parentIndex, {
                         isSubListOpen: isListOpen,

@@ -1,41 +1,42 @@
 import {ParentElementType} from "@/ui/components";
-import {
-    FocusableElementType
-} from "@/ui/components/common/Navigation/NavigationTypes";
-import {
-    ExternalNavHookProps
-} from "@/ui/components/common/Navigation/hooks/useNavigation/useNavigationTypes";
+import {FocusableElementType} from "../../NavigationTypes";
+import {NavigationContextStoredValueProps} from "../../providers";
+import {UseNavigationInternalTypes} from "./useNavigationTypes";
 
 
-export const getRecursiveLastElementByParent: ExternalNavHookProps["getRecursiveLastElementByParent"] = ((parentEl, getNavObjectByParent) => {
+export const getRecursiveTopElementByElement = (focusableEl, getNavObjectContainingElement, isInTopRow) => {
 
-    const currentNavObject = getNavObjectByParent(parentEl);
-
-    /* istanbul ignore next */
-    const {storedList = []} = currentNavObject;
-    const lastIndex = storedList.length - 1;
-    if (storedList[lastIndex].type === "button") {
-        const nextParentEl= storedList[lastIndex];
-        return getRecursiveLastElementByParent(
-            nextParentEl as ParentElementType,
-            getNavObjectByParent,
-        );
+    const parentNavObject = getNavObjectContainingElement(focusableEl);
+    const currentStoredParentEl = parentNavObject.storedParentEl as FocusableElementType;
+    if (isInTopRow(currentStoredParentEl) > 0) {
+        return currentStoredParentEl;
     } else {
-        return storedList[lastIndex];
+        return getRecursiveTopElementByElement(currentStoredParentEl, getNavObjectContainingElement, isInTopRow) as FocusableElementType;
     }
-});
+}
 
-export const getRecursiveTopParentByElement =
-    (focusableEl, getNavObjectContainingElement, getIndexInTopRow) => {
-        const {storedParentEl} = getNavObjectContainingElement(focusableEl);
-        const indexInTopRow = getIndexInTopRow(
-            storedParentEl as FocusableElementType,
-        );
-        if (storedParentEl && indexInTopRow < 0) {
-            const parentNavObject = getNavObjectContainingElement(storedParentEl as FocusableElementType);
+export const getRecursiveLastElementByParent = (
+    focusableEl: FocusableElementType,
+    getNavObjectByParent: UseNavigationInternalTypes["_getNavigationObjectByParent"],
+    getNavObjectContainingElement: UseNavigationInternalTypes["_getNavigationObjectContainingElement"]
+) => {
+    let navObj: NavigationContextStoredValueProps;
+    if (focusableEl.type === "button") {
+        navObj = getNavObjectByParent(focusableEl as ParentElementType);
+        /* istanbul ignore next */
+        const storedList = navObj.storedList || [];
 
-            return getRecursiveTopParentByElement(parentNavObject.storedParentEl as FocusableElementType, getIndexInTopRow, getNavObjectContainingElement);
-        } else {
-            return storedParentEl as ParentElementType;
-        }
-    };
+        return getRecursiveLastElementByParent(
+            storedList[storedList.length - 1],
+            getNavObjectByParent,
+            getNavObjectContainingElement
+        )
+    } else {
+        navObj = getNavObjectContainingElement(focusableEl);
+}
+    /* istanbul ignore next */
+    const currentList = navObj.storedList || [];
+    const listLength = currentList.length;
+
+    return currentList[listLength - 1];
+}
