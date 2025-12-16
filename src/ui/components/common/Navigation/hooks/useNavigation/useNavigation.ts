@@ -3,12 +3,8 @@ import {use, useCallback} from "react";
 import {returnTrueElementOrUndefined} from "@/ui/utilities";
 import {NavigationContext} from "../../providers";
 import {FocusableElementType, ParentElementType} from "../../NavigationTypes";
-import {
-    getRecursiveLastElementByParent,
-    getRecursiveTopElementByElement,
-} from "./hookFunctions";
+import {getRecursiveLastElementByParent, getRecursiveTopElementByElement,} from "./hookFunctions";
 import {UseNavigationInternalTypes, UseNavigationTypes} from "./useNavigationTypes";
-
 
 
 export default function useNavigation() {
@@ -71,41 +67,32 @@ export default function useNavigation() {
         UseNavigationInternalTypes["_getLastFocusableElementTypeByParent"] = useCallback(
         (focusableEl) => {
             return getRecursiveLastElementByParent(
-                focusableEl,
+                focusableEl as ParentElementType,
                 _getNavigationObjectByParent,
                 _getNavigationObjectContainingElement
             );
         }, [_getNavigationObjectByParent, _getNavigationObjectContainingElement])
 
     const _getNextElementInRow: UseNavigationInternalTypes["_getNextElementInRow"] = useCallback(
-        (
-            focusableEl,
-            currentList,
-        ) => {
+        (focusableEl, currentList) => {
             const currentIndex = currentList.indexOf(focusableEl);
             const newIndex = currentIndex + 1;
             return currentList[newIndex];
-        },
-        [],
-    );
+        }, [],);
 
-    const _getPreviousElementInRow: UseNavigationInternalTypes["_getPreviousElementInRow"] =
-        useCallback(
-            (focusableEl, currentList) => {
-                const currentIndex = currentList.indexOf(focusableEl);
-                const newIndex = currentIndex - 1;
-                return currentList[newIndex];
-            }, []);
+    const _getPreviousElementInRow: UseNavigationInternalTypes["_getPreviousElementInRow"] = useCallback(
+        (focusableEl, currentList) => {
+            const currentIndex = currentList.indexOf(focusableEl);
+            const newIndex = currentIndex - 1;
+            return currentList[newIndex];
+        }, []);
 
 
-    const _getTopParentByElement: UseNavigationInternalTypes["_getTopParentByElement"] =
-        useCallback(
-            (focusableEl) => {
-                const {storedParentEl} = _getNavigationObjectContainingElement(focusableEl);
-                return storedParentEl as ParentElementType
-            },
-            [_getNavigationObjectContainingElement],
-        );
+    const _getParentByElement: UseNavigationInternalTypes["_getParentByElement"] = useCallback(
+        (focusableEl) => {
+            const {storedParentEl} = _getNavigationObjectContainingElement(focusableEl);
+            return storedParentEl as ParentElementType;
+        }, [_getNavigationObjectContainingElement]);
 
     const _isInTopRow: UseNavigationInternalTypes["_isInTopRow"] = useCallback(
         (focusableEl) => {
@@ -115,23 +102,9 @@ export default function useNavigation() {
 
     const _getTopElement: UseNavigationInternalTypes["_getTopElement"] = useCallback(
         (focusableEl) => {
-
             return getRecursiveTopElementByElement(focusableEl, _getNavigationObjectContainingElement, _getIndexInTopRow);
         }, [_getIndexInTopRow, _getNavigationObjectContainingElement])
 
-    const getTopNavigationParent: UseNavigationTypes["getTopNavigationParent"] =
-        useCallback(() => {
-            return _getNavigationArray()[0];
-        }, [_getNavigationArray]);
-
-
-    const _getNextElement: UseNavigationInternalTypes["_getNextElement"] = useCallback(
-        (focusableEl, currentItemsList) => {
-            return _getNextElementInRow(
-                focusableEl,
-                currentItemsList,
-            );
-        }, [_getNextElementInRow]);
 
     const _getPreviousByElement: UseNavigationInternalTypes["_getPreviousElement"] = useCallback(
         (focusableEl) => {
@@ -159,7 +132,7 @@ export default function useNavigation() {
         }, [_getNavigationObjectContainingElement, _getPreviousElementInRow, _isInTopRow])
 
     // -------------------------------------------------------
-    // Controllers
+    // Controllers and public functions
     // -------------------------------------------------------
 
     const getNextByButton: UseNavigationTypes["getNextByButton"] = useCallback((
@@ -169,13 +142,13 @@ export default function useNavigation() {
         /* istanbul ignore next */
         const currentItemsList = buttonNavObject.storedList || [];
 
-        let nextFocusableElement: FocusableElementType = _getNextElement(
+        let nextFocusableElement: FocusableElementType = _getNextElementInRow(
             buttonEl,
             currentItemsList
         );
         // default to next item in List
         const currentNavObject = _getNavigationObjectByParent(
-            buttonEl as HTMLButtonElement,
+            buttonEl as HTMLButtonElement
         );
         const {storedList} = currentNavObject;
         /* istanbul ignore next */
@@ -186,15 +159,14 @@ export default function useNavigation() {
             nextFocusableElement = subNavigation[0];
         }
 
-        //last focusable element and sub list is collapsed. Set to topmost
-        // parent.
+        //last focusable element and sub list is collapsed. Set to topmost parent.
         if (!isSubListOpen && currentItemsList.indexOf(buttonEl) === currentItemsList.length - 1) {
-            nextFocusableElement = _getTopParentByElement(buttonEl) as FocusableElementType;
+            nextFocusableElement = _getParentByElement(buttonEl) as FocusableElementType;
         }
 
         return nextFocusableElement;
 
-    }, [_getNavigationObjectByParent, _getNavigationObjectContainingElement, _getNextElement, _getTopParentByElement]);
+    }, [_getNavigationObjectByParent, _getNavigationObjectContainingElement, _getNextElementInRow, _getParentByElement]);
 
     const getNextByLink: UseNavigationTypes["getNextByLink"] = useCallback((linkEl) => {
                 const linkNavObject = _getNavigationObjectContainingElement(linkEl);
@@ -202,7 +174,7 @@ export default function useNavigation() {
                 const currentItemsList = linkNavObject.storedList || [];
 
                 // default to next item in List
-                let nextFocusableEl: FocusableElementType = _getNextElement(
+                let nextFocusableEl: FocusableElementType = _getNextElementInRow(
                     linkEl,
                     currentItemsList,
                 );
@@ -212,14 +184,14 @@ export default function useNavigation() {
                     const isInTopRow
                         = storedParentEl && _isInTopRow(storedParentEl);
                     if (isInTopRow) {
-                        nextFocusableEl = storedParentEl as FocusableElementType;
+                        nextFocusableEl = storedParentEl;
                     } else {
                         // get Top Element
                         const topParent = _getTopElement(linkEl);
-                        const lastEl = _getLastFocusableElementTypeByParent(topParent as FocusableElementType) as FocusableElementType;
+                        const lastEl = _getLastFocusableElementTypeByParent(topParent);
 
                         if (linkEl === lastEl) {
-                            nextFocusableEl = topParent as FocusableElementType;
+                            nextFocusableEl = topParent;
 
                         } else {
                             const parentNavObject = _getNavigationObjectContainingElement(storedParentEl as FocusableElementType);
@@ -233,7 +205,7 @@ export default function useNavigation() {
 
             }
             ,
-            [_getLastFocusableElementTypeByParent, _getNavigationObjectContainingElement, _getNextElement, _getNextElementInRow, _getTopElement, _isInTopRow]
+            [_getLastFocusableElementTypeByParent, _getNavigationObjectContainingElement, _getNextElementInRow, _getTopElement, _isInTopRow]
         )
     ;
 
@@ -243,9 +215,17 @@ export default function useNavigation() {
     }, [_getPreviousByElement])
 
     const getPreviousByLink = useCallback((focusableEl: FocusableElementType) => {
-        let previousFocusableEl = _getPreviousByElement(focusableEl) as FocusableElementType;
+        let previousFocusableEl = _getPreviousByElement(focusableEl);
 
-        if (previousFocusableEl.type === "button") {
+        const hasButtonType = () => {
+            let isButtonType = false;
+            if (previousFocusableEl && !!previousFocusableEl.type) {
+                isButtonType = previousFocusableEl.type === "button"
+            }
+            return isButtonType;
+        }
+
+        if (hasButtonType()) {
             const navObj = _getNavigationObjectByParent(previousFocusableEl as ParentElementType);
             /* istanbul ignore next */
             const currentList = navObj.storedList || [];
@@ -263,6 +243,10 @@ export default function useNavigation() {
         }
         return previousFocusableEl;
     }, [_getNavigationObjectByParent, _getPreviousByElement])
+
+    const getTopNavigationParent: UseNavigationTypes["getTopNavigationParent"] = useCallback(() => {
+        return _getNavigationArray()[0];
+    }, [_getNavigationArray]);
 
 
     return {

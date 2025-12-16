@@ -19,6 +19,7 @@ export function NavigationProvider({children, value}): JSX.Element {
 
     const [navigationArray, setNavigationArray] = useState([currentObj]);
 
+
     const getNavigationIndex: NavigationContextInternalProps["getNavigationIndex"] = useCallback((parentEl) => {
         let foundIndex = -1, index = 0;
         for (const navObject of navigationArray) {
@@ -52,7 +53,7 @@ export function NavigationProvider({children, value}): JSX.Element {
         /* istanbul ignore else */
         if (parentIndex >= 0) {
             const currentObj = _getNavigationArray()[parentIndex];
-            if ((!currentObj.storedList ) || (!arraysEqual(currentObj.storedList, navigationList))) {
+            if ((!currentObj.storedList) || (!arraysEqual(currentObj.storedList, navigationList))) {
                 setNavigationArrayObject(parentIndex, {
                     storedList: navigationList,
                 });
@@ -107,6 +108,7 @@ export function NavigationProvider({children, value}): JSX.Element {
     const _resetTopNavArray: NavigationContextReturnValueProps["_resetTopNavArray"] =
         useCallback(
             (parentEl) => {
+
                 const parentIndex = getNavigationIndex(parentEl);
                 /* istanbul ignore else */
                 if (parentIndex !== 0) {

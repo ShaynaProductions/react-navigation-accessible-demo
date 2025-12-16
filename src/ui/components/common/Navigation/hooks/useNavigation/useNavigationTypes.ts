@@ -1,24 +1,27 @@
 import {FocusableElementType, ParentElementType} from "../../NavigationTypes";
-import {NavigationContextStoredValueProps} from "../../providers";
+import {
+    NavigationArrayProps,
+    NavigationContextStoredValueProps,
+} from "../../providers";
 
 
 export interface UseNavigationInternalTypes {
     _getIndexInTopRow: (focusedEl: FocusableElementType) => number;
     _getLastElementByParent: (parentEl: ParentElementType) => FocusableElementType;
     _getLastFocusableElementTypeByParent: (parentEl: FocusableElementType) => FocusableElementType;
-    _getNavigationObjectByParent: (parentEl: ParentElementType) => NavigationContextStoredValueProps;
+    _getNavigationObjectByParent: (parentEl: ParentElementType) =>  Partial<NavigationArrayProps>;
     _getNavigationObjectContainingElement: (focusableEl: FocusableElementType) => NavigationContextStoredValueProps;
     _getNextElement: (focusableEl: FocusableElementType, currentItemsList: FocusableElementType[]) => FocusableElementType;
     _getNextElementInRow: (focusableEl: FocusableElementType, currentList: FocusableElementType[]) => FocusableElementType;
+    _getParentByElement: (focusableEl: FocusableElementType) => ParentElementType;
     _getPreviousElement: (focusableEl: FocusableElementType) => FocusableElementType | undefined;
     _getPreviousElementInRow: (focusableEl: FocusableElementType, currentList: FocusableElementType[]) => FocusableElementType;
     _getTopElement: (focusableEl: FocusableElementType) => FocusableElementType;
-    _getTopParentByElement: (focusableEl: FocusableElementType) => ParentElementType;
     _isInTopRow: (focusableEl: FocusableElementType) => boolean;
 }
 
 export interface UseNavigationTypes {
-    getTopNavigationParent: () => NavigationContextStoredValueProps;
+    getTopNavigationParent: () => NavigationArrayProps;
     getNextByButton: (
         buttonEl: FocusableElementType,
         isSubListOpen: boolean,
@@ -45,5 +48,9 @@ export interface UseNavigationTypes {
 }
 
 export interface ExternalNavHookProps {
-    getRecursiveLastElementByParent: (parentEl: ParentElementType, getNavObjectByParent: UseNavigationInternalTypes["_getNavigationObjectByParent"]) => FocusableElementType;
+    getRecursiveLastElementByParent: (
+        parentEl: ParentElementType,
+        getNavObjectByParent: UseNavigationInternalTypes["_getNavigationObjectByParent"],
+        getNavObjectContainingElement: UseNavigationInternalTypes["_getNavigationObjectContainingElement"]
+    ) => FocusableElementType;
 }

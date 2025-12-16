@@ -19,11 +19,11 @@ export const getSimpleLinkTestElements = (getByRole) => {
 export const getSubNavTestElements = (getByRole, getByTestId, testId) => {
     return ({
         aboutLink: getByRole("link", {name: "About"}),
-        readButton: getByRole("button", {name: "Read navigation"}),
+        readButton: getByRole("button", {name: "Read"}),
         readList: getByTestId(`${testId}-read-menu-list`),
         storiesLink: getByRole("link", {name: "Stories"}),
         blogLink: getByRole("link", {name: "Musings"}),
-        referenceButton: getByRole("button", {name: "Reference navigation"}),
+        referenceButton: getByRole("button", {name: "Reference"}),
         referenceList: getByTestId(`${testId}-reference-menu-list`),
         charactersLink: getByRole("link", {name: "Characters"}),
         glossaryLink: getByRole("link", {name: "Glossary"}),
@@ -33,24 +33,39 @@ export const getSubNavTestElements = (getByRole, getByTestId, testId) => {
 
 export const getComplexButtonTestElements = (getByRole, getByTestId, testId) => {
     return ({
-        communityButton: getByRole("button", {name: "Community navigation"}),
+        communityButton: getByRole("button", {name: "Community"}),
         communityList: getByTestId(`${testId}-community-menu-list`),
         blogLink: getByRole("link", {name: "Musings"}),
         forumLink: getByRole("link", {name: "Forum"}),
-        storiesButton: getByRole("button", {name: "Search, Stories and" +
-                " Commentary navigation"}),
+        storiesButton: getByRole("button", {
+            name: "Search, Stories and" +
+                " Commentary"
+        }),
         storiesList: getByTestId(`${testId}-stories-menu-list`),
-        searchButton: getByRole("button", {name: "Search navigation"}),
+        searchButton: getByRole("button", {name: "Search"}),
         searchList: getByTestId(`${testId}-search-menu-list`),
         basicSearchLink: getByRole("link", {name: "Basic Search"}),
         advancedSearchLink: getByRole("link", {name: "Advanced Search"}),
         allStoriesLink: getByRole("link", {name: "All Stories"}),
         allCommentaryLink: getByRole("link", {name: "All Commentary"}),
-           findNextStoryButton: getByRole("button", {name: "Find Your Next" +
-                   " Story navigation"}),
+        findNextStoryButton: getByRole("button", {
+            name: "Find Your Next" +
+                " Story"
+        }),
         findNextStoryList: getByTestId(`${testId}-find-next-story-list`),
         byStorytellerLink: getByRole("link", {name: "By Storyteller"}),
         byEraLink: getByRole("link", {name: "By Era"}),
 
     })
+}
+
+export const getComplexLinkTestElements = (getByRole, getByTestId, testId) => {
+    const commonElements = getComplexButtonTestElements(getByRole, getByTestId, testId);
+
+    return ({
+            homeLink: getByRole("link", {name: "Home"}),
+            contactLink: getByRole("link", {name: "Contact Us"}),
+            ...commonElements
+        }
+    )
 }

@@ -1,15 +1,10 @@
 "use client"
 
 import {useEffect} from "react";
-import {NavigationWrapperProps, ParentElementType} from "../NavigationTypes";
+import {NavigationWrapperProps, ParentElementType, ResetArrayProps} from "../NavigationTypes";
 import {useNavigation} from "../hooks";
 
-interface ResetArrayProps {
-    resetArray: (
-        parentEl: ParentElementType,
-        storedParentEl: ParentElementType,
-        _resetTopNavArray: (parentEl: ParentElementType) => void) => void;
-}
+
 
 const resetArray: ResetArrayProps["resetArray"] = (
     parentEl, storedParentEl, _resetTopNavArray) => {
@@ -31,7 +26,7 @@ export function NavigationWrapper({
     const {getTopNavigationParent, registerSubNavigation, _resetTopNavArray} = useNavigation();
 
     useEffect(() => {
-        const storedParentEl: ParentElementType = getTopNavigationParent().storedParentEl as ParentElementType;
+        const storedParentEl: ParentElementType = getTopNavigationParent().storedParentEl;
         const parentEl = parentRef?.current as ParentElementType;
         /* istanbul ignore else */
         if (storedParentEl !== parentEl) {

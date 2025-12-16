@@ -22,10 +22,28 @@
     ]
   },
   {
-    "label": "Stories and Commentary",
+    "label": "Search, Stories and Commentary",
     "id": "stories-menu",
     "href": "#",
     "menu": [
+      {
+        "label": "Search",
+        "id": "search-menu",
+        "href": "#",
+        "menu": [
+
+          {
+            "label": "Basic Search",
+            "id": "basic-search",
+            "href": "/#basicsearch"
+          },
+          {
+            "label": "Advanced Search",
+            "id": "advanced-search",
+            "href": "/#advsearch"
+          }
+        ]
+      },
       {
         "label": "All Stories",
         "id": "all-stories",
@@ -38,7 +56,7 @@
       },
       {
         "label": "Find Your Next Story",
-        "id": "find-your-next-story",
+        "id": "find-next-story",
         "href": "/#",
         "menu": [
           {

@@ -6,6 +6,14 @@ export interface NavigationContextStoredValueProps {
     isSubListOpen?: boolean;
 }
 
+export interface NavigationArrayProps {
+    storedList: FocusableElementType[];
+    storedParentEl: ParentElementType;
+    isSubListOpen: boolean
+}
+
+
+
 export interface NavigationContextInternalProps {
     _getNavigationArray: () => NavigationContextStoredValueProps[];
     getNavigationIndex: (parentEl: ParentElementType) => number;
@@ -18,6 +26,7 @@ export interface NavigationContextInternalProps {
 }
 
 export interface NavigationContextReturnValueProps {
+   
     _getNavigationArray: () => NavigationContextStoredValueProps[];
     _registerNavLink: (
         navigationList: FocusableElementType[],

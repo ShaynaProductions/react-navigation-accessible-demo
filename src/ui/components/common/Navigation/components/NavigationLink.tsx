@@ -68,7 +68,6 @@ export function NavigationLink({
                         if (prevFocusableEl) {
                             setSpecificFocus(prevFocusableEl);
                         }
-
                         break;
                     case Keys.DOWN:
                         const nextFocusableEl = getNextByLink( linkEl);

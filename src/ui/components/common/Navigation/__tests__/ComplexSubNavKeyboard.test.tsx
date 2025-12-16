@@ -1,11 +1,10 @@
 import {render, userEvent} from "@/test"
 import fs from "fs"
 import {Box, Button, Navigation, transformNavigation} from "@/ui/components";
-
-import {NavigationProps} from "../NavigationTypes";
 import {
     getCommonTestElements,
-    getComplexButtonTestElements
+    getComplexButtonTestElements,
+    getComplexLinkTestElements
 } from "../utilities/renderedItems";
 
 const complexSubNavButtonsJsonObj = fs.readFileSync(
@@ -13,47 +12,42 @@ const complexSubNavButtonsJsonObj = fs.readFileSync(
     "utf8",
 )
 
-// const complexSubNavLinksJsonObj = fs.readFileSync(
-//     "public/__static__/complexStructureWithSubNavlinks.json",
-//     "utf8",
-// )
+const complexSubNavLinksJsonObj = fs.readFileSync(
+    "public/__static__/complexStructureWithSubNavlinks.json",
+    "utf8",
+)
 
 const complexSubNavButtons = JSON.parse(complexSubNavButtonsJsonObj);
-// const complexSubNavLinks = JSON.parse(complexSubNavLinksJsonObj)
+const complexSubNavLinks = JSON.parse(complexSubNavLinksJsonObj)
 
 
 const TEST_ID = "navigation";
 const endButtonLabel = "Focusable End";
 const frontButtonLabel = "Focusable Front";
 const buttonChildren = transformNavigation(complexSubNavButtons, TEST_ID);
-// const linkChildren = transformNavigation(complexSubNavLinks, TEST_ID);
+const linkChildren = transformNavigation(complexSubNavLinks, TEST_ID);
 
-
-const renderNavigationButton = ({
+const renderNavigation = ({
     label,
+    children,
     ...rest
-}: Omit<NavigationProps, "children">) => {
+}) => {
     return render(
         <Box cx="simple">
             <Button id="front" testId={TEST_ID && `${TEST_ID}-front`}>
                 {frontButtonLabel}
             </Button>
-            <Navigation label={label} testId={TEST_ID} {...rest}>
-                {buttonChildren}
+            <Navigation id="test-menu" label={label} testId={TEST_ID} {...rest}>
+                {children}
             </Navigation>
             <Button id="button-end" testId={TEST_ID && `${TEST_ID}-end`}>
                 {endButtonLabel}
             </Button>
         </Box>,
-    );
-};
+    )
+}
 
-// const renderNavigationLinks = ({label, ...rest}: Omit<NavigationProps,
-// "children">) => { return render( <Box cx="simple"> <Button id="front"
-// testId={TEST_ID && `${TEST_ID}-front`}> {frontButtonLabel} </Button>
-// <Navigation label={label} testId={TEST_ID} {...rest}> {linkChildren}
-// </Navigation> <Button id="button-end" testId={TEST_ID && `${TEST_ID}-end`}>
-// {endButtonLabel} </Button> </Box>, ); };
+
 describe("Navigation Button Ends keyboard handling", () => {
 
     const reqProps = {
@@ -61,9 +55,14 @@ describe("Navigation Button Ends keyboard handling", () => {
         label: "Buttons SubNav List",
     };
 
-    it('should move to top Parent when arrow down on last link in first row', async () => {
+    const buttonProps = {
+        ...reqProps,
+        children: buttonChildren
+    }
 
-        const {getByTestId, getByRole} = renderNavigationButton(reqProps);
+    it('3.2.1.5.2 - should move to top Parent when arrow down on last link in first row', async () => {
+
+        const {getByTestId, getByRole} = renderNavigation(buttonProps);
         const {frontButton} = getCommonTestElements(getByRole, frontButtonLabel, endButtonLabel);
         const {
             communityButton,
@@ -89,7 +88,7 @@ describe("Navigation Button Ends keyboard handling", () => {
 
     it('should move through buttons and links when down is pressed', async () => {
 
-        const {getByTestId, getByRole} = renderNavigationButton(reqProps);
+        const {getByTestId, getByRole} = renderNavigation(buttonProps);
         const {
             searchButton,
             storiesButton,
@@ -115,13 +114,13 @@ describe("Navigation Button Ends keyboard handling", () => {
         expect(findNextStoryButton).toHaveAttribute("aria-expanded", "false");
 
     });
-    it("should move to parentRef's sibling", async () => {
+    it("3.2.1.6.4 - should move to parentRef's sibling", async () => {
         // When focus is on the last child in an expanded list, which is not
         // the ultimate last child for the topmost parentRef, focus moves to
         // the parent elements next sibling.
 
 
-        const {getByTestId, getByRole} = renderNavigationButton(reqProps);
+        const {getByTestId, getByRole} = renderNavigation(buttonProps);
         const {
             searchButton,
             storiesButton,
@@ -146,9 +145,15 @@ describe("Navigation Button Ends keyboard handling", () => {
 
     });
 
-    it ('should move to last child and then up through lists', async () => {
-        const {getByTestId, getByRole} = renderNavigationButton(reqProps);
-        const {storiesButton, searchButton, allStoriesLink, advancedSearchLink, basicSearchLink }= getComplexButtonTestElements(getByRole, getByTestId, TEST_ID);
+    it('3.2.1.6.* should move to last child and then up through lists', async () => {
+        const {getByTestId, getByRole} = renderNavigation(buttonProps);
+        const {
+            storiesButton,
+            searchButton,
+            allStoriesLink,
+            advancedSearchLink,
+            basicSearchLink
+        } = getComplexButtonTestElements(getByRole, getByTestId, TEST_ID);
         expect(storiesButton).toHaveAttribute("aria-expanded", "false");
         await userEvent.pointer({target: storiesButton, keys: "[MouseLeft]"});
         expect(storiesButton).toHaveAttribute("aria-expanded", "true");
@@ -164,8 +169,37 @@ describe("Navigation Button Ends keyboard handling", () => {
         expect(basicSearchLink).toHaveFocus();
         await userEvent.keyboard("{ArrowUp}");
         expect(searchButton).toHaveFocus();
-
-
+        await userEvent.keyboard("{ArrowUp}");
+        expect(storiesButton).toHaveFocus();
     })
 
 });
+
+describe("ComplexSubNav Keyboard with Links", () => {
+    const reqProps = {
+        id: "main-menu",
+        label: "Links SubNav List",
+    };
+    const linkProps = {
+        ...reqProps,
+        children: linkChildren
+    }
+
+    it("3.2.1.6.3 - if the link is on the topmost row, do nothing.", async () => {
+        const {getByTestId, getByRole} = renderNavigation(linkProps);
+        const {
+            homeLink,
+            communityButton,
+        } = getComplexLinkTestElements(getByRole, getByTestId, TEST_ID);
+        await userEvent.pointer({target: communityButton, keys: "[MouseLeft]"});
+        expect(communityButton).toHaveFocus();
+        await userEvent.keyboard("{ArrowUp}");
+        expect(communityButton).toHaveFocus();
+        await userEvent.keyboard("{ArrowLeft}");
+        expect(homeLink).toHaveFocus();
+        await userEvent.keyboard("{ArrowUp}");
+        expect(homeLink).toHaveFocus();
+    })
+
+
+})

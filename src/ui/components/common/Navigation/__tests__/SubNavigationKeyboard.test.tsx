@@ -39,7 +39,7 @@ describe("Navigation simple keyboard handling", () => {
         id: "main-menu",
         label: "Simple Link List",
     };
-    it("should move down the list when the sub navigation is collapsed.", async () => {
+    it("4.2.1.5.1.1 - should move down the list when the sub navigation is collapsed.", async () => {
         const {getByTestId, getByRole} = renderNavigation(reqProps);
         const {frontButton} = getCommonTestElements(getByRole, frontButtonLabel, endButtonLabel);
         const {aboutLink, readButton, readList, blogLink} = getSubNavTestElements(getByRole, getByTestId, TEST_ID);
@@ -57,7 +57,7 @@ describe("Navigation simple keyboard handling", () => {
 
     });
 
-    it("should move into it's child when the list is expanded.", async () => {
+    it("4.2.1.5.2 - should move into it's child when the list is expanded.", async () => {
         const {getByTestId, getByRole} = renderNavigation(reqProps);
         const {frontButton} = getCommonTestElements(getByRole, frontButtonLabel, endButtonLabel);
 
@@ -76,7 +76,8 @@ describe("Navigation simple keyboard handling", () => {
         expect(storiesLink).toHaveFocus();
     });
 
-    it("should move to its topmost parent when the last item is a button with a collapsed list.", async () => {
+    it("4.2.1.5.1.2 should move to its topmost parent when the last item is a button with a" +
+        " collapsed list.", async () => {
         const {getByTestId, getByRole} = renderNavigation(reqProps);
         const {frontButton} = getCommonTestElements(getByRole, frontButtonLabel, endButtonLabel);
 
@@ -101,7 +102,7 @@ describe("Navigation simple keyboard handling", () => {
         
     });
 
-    it("should move to it's topmost parent when the last child in the tree is reached.", async () => {
+    it("3.2.1.5.2/4.2.1.5.1.1 - should move to it's topmost parent when the last child in the tree is reached.", async () => {
         const {getByTestId, getByRole} = renderNavigation(reqProps);
         const {frontButton} = getCommonTestElements(getByRole, frontButtonLabel, endButtonLabel);
         const {
@@ -141,7 +142,8 @@ describe("Navigation simple keyboard handling", () => {
         expect(readButton).toHaveFocus();
     });
 
-    it("should move to it's parent when the item is the first child in it's list and not move when in the top row.",
+    it("4.2.1.6.* - should move to it's parent when the item is the first child in" +
+        " it's list and not move when in the top row.",
         async () => {
             const {getByTestId, getByRole} = renderNavigation(reqProps);
             const {

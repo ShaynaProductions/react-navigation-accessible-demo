@@ -1,7 +1,7 @@
 import {ParentElementType} from "@/ui/components";
 import {FocusableElementType} from "../../NavigationTypes";
-import {NavigationContextStoredValueProps} from "../../providers";
-import {UseNavigationInternalTypes} from "./useNavigationTypes";
+import {NavigationArrayProps,} from "../../providers";
+import {ExternalNavHookProps} from "./useNavigationTypes";
 
 
 export const getRecursiveTopElementByElement = (focusableEl, getNavObjectContainingElement, isInTopRow) => {
@@ -15,24 +15,24 @@ export const getRecursiveTopElementByElement = (focusableEl, getNavObjectContain
     }
 }
 
-export const getRecursiveLastElementByParent = (
-    focusableEl: FocusableElementType,
-    getNavObjectByParent: UseNavigationInternalTypes["_getNavigationObjectByParent"],
-    getNavObjectContainingElement: UseNavigationInternalTypes["_getNavigationObjectContainingElement"]
+export const getRecursiveLastElementByParent: ExternalNavHookProps["getRecursiveLastElementByParent"] = (
+    focusableEl,
+    getNavObjectByParent,
+    getNavObjectContainingElement
 ) => {
-    let navObj: NavigationContextStoredValueProps;
-    if (focusableEl.type === "button") {
-        navObj = getNavObjectByParent(focusableEl as ParentElementType);
+    let navObj: NavigationArrayProps;
+    if (!!focusableEl && focusableEl.type === "button") {
+        navObj = getNavObjectByParent(focusableEl as ParentElementType) as NavigationArrayProps;
         /* istanbul ignore next */
         const storedList = navObj.storedList || [];
 
         return getRecursiveLastElementByParent(
-            storedList[storedList.length - 1],
+            storedList[storedList.length - 1] as ParentElementType,
             getNavObjectByParent,
             getNavObjectContainingElement
         )
     } else {
-        navObj = getNavObjectContainingElement(focusableEl);
+        navObj = getNavObjectContainingElement(focusableEl as FocusableElementType) as NavigationArrayProps;
 }
     /* istanbul ignore next */
     const currentList = navObj.storedList || [];
