@@ -34,6 +34,14 @@ export interface SubNavigationProps extends Omit<NavigationLinkProps, "href" | "
 
 export interface NavigationWrapperProps extends Omit<BaseProps, "testid"> {
     children: React.ReactNode;
+    isOpen: boolean;
     label: string;
     parentRef?: React.RefObject<ParentElementType>;
+}
+
+export interface ResetArrayProps {
+    resetArray: (
+        parentEl: ParentElementType,
+        storedParentEl: ParentElementType,
+        _resetTopNavArray: (parentEl: ParentElementType) => void) => void;
 }

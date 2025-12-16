@@ -1,27 +1,49 @@
-[{
-  "label": "Community",
-  "id": "community-menu",
-  "href": "/#community",
-  "menu": [
-    {
-      "label": "Musings",
-      "id": "musings",
-      "href": "/#blog"
-    },
-    {
-      "label": "Forum",
-      "id": "forum",
-      "href": "/#forum"
-    }
-  ]
-},
-
+[
   {
-    "label": "Stories and Commentary",
+    "label": "Community",
+    "id": "community-menu",
+    "href": "/#community",
+    "menu": [
+      {
+        "label": "Musings",
+        "id": "musings",
+        "href": "/#blog"
+      },
+      {
+        "label": "Forum",
+        "id": "forum",
+        "href": "/#forum"
+      }
+    ]
+  },
+  {
+    "label": "Search, Stories and Commentary",
     "id": "stories-menu",
     "href": "#",
     "menu": [
-      { "label": "All Stories", "id": "all-stories", "href": "/#all-stories" },
+      {
+        "label": "Search",
+        "id": "search-menu",
+        "href": "#",
+        "menu": [
+         
+          {
+            "label": "Basic Search",
+            "id": "basic-search",
+            "href": "/#basicsearch"
+          },
+          {
+            "label": "Advanced Search",
+            "id": "advanced-search",
+            "href": "/#advsearch"
+          }
+        ]
+      },
+      {
+        "label": "All Stories",
+        "id": "all-stories",
+        "href": "/#all-stories"
+      },
       {
         "label": "All Commentary",
         "id": "all-commentary",
@@ -29,7 +51,7 @@
       },
       {
         "label": "Find Your Next Story",
-        "id": "find-your-next-story",
+        "id": "find-next-story",
         "href": "/#",
         "menu": [
           {
@@ -51,9 +73,21 @@
     "id": "reference-menu",
     "href": "#",
     "menu": [
-      { "label": "Appendices", "id": "appendices", "href": "/#appendices" },
-      { "label": "Characters", "id": "characters", "href": "/#characters" },
-      { "label": "Glossary", "id": "glossary", "href": "/#glossary" }
+      {
+        "label": "Appendices",
+        "id": "appendices",
+        "href": "/#appendices"
+      },
+      {
+        "label": "Characters",
+        "id": "characters",
+        "href": "/#characters"
+      },
+      {
+        "label": "Glossary",
+        "id": "glossary",
+        "href": "/#glossary"
+      }
     ]
   },
   {
@@ -66,13 +100,26 @@
         "id": "about-the-site",
         "href": "/#about-the-site"
       },
-      { "label": "Contact Us", "id": "contact-us", "href": "/#contact-us" },
+      {
+        "label": "Contact Us",
+        "id": "contact-us",
+        "href": "/#contact-us"
+      },
       {
         "label": "Privacy Policy",
         "id": "privacy-policy",
         "href": "/#privacy-policy"
       },
-      { "label": "Accessibility", "id": "accessibility", "href": "/#accessibility" },
-      { "label": "Donate", "id": "donate", "href": "/#donate" }
+      {
+        "label": "Accessibility",
+        "id": "accessibility",
+        "href": "/#accessibility"
+      },
+      {
+        "label": "Donate",
+        "id": "donate",
+        "href": "/#donate"
+      }
     ]
-  }]
+  }
+]

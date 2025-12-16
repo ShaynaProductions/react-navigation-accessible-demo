@@ -1,11 +1,16 @@
+
+import React from "react";
 import fs from "fs";
 import {act, axe, render, userEvent} from "@/test";
-import {transformNavigation} from "../utilities/transformNavigation";
-import {NavigationProps, ParentElementType} from "../NavigationTypes";
-import Navigation from "../components/Navigation";
-import React from "react";
-import {Box, Button} from "@/ui/components";
+import {Box, Button, transformNavigation} from "@/ui/components";
 import {useMergedRef} from "@/ui/hooks";
+
+import Navigation from "../components/Navigation";
+import {NavigationProps, ParentElementType} from "../NavigationTypes";
+import {
+    getCommonTestElements,
+    getSubNavTestElements
+} from "../utilities/renderedItems";
 
 const TEST_ID = "Navigation";
 const endButtonLabel = "Focusable End";
@@ -60,6 +65,7 @@ describe("<Navigation />", () => {
 
         expect(results).toHaveNoViolations();
     });
+
     it("should render with a parentRef", async () => {
         let frontRef;
         const FrontButton = (frontRef) => {
@@ -79,10 +85,9 @@ describe("<Navigation />", () => {
             parentRef: frontRef,
 
         }
-        const {container, getByRole} = renderNavigationWithParent(optProps);
-        const frontButton = getByRole("button", {name: frontButtonLabel});
-        const aboutLink = getByRole("link", {name: "About"});
-        const readButton = getByRole("button", {name: "Read navigation"});
+        const {container, getByRole, getByTestId} = renderNavigationWithParent(optProps);
+        const {frontButton} = getCommonTestElements(getByRole, frontButtonLabel, endButtonLabel);
+       const {aboutLink, readButton} = getSubNavTestElements(getByRole, getByTestId, TEST_ID)
 
         expect(aboutLink).toBeInTheDocument();
         expect(frontButton).toBeInTheDocument();
@@ -105,12 +110,11 @@ describe("<Navigation />", () => {
 
     it("4.1.3 should handle an OnClick", async () => {
         const optProps = {};
-        const {getByTestId, getByLabelText} = await act(() =>
+        const {getByTestId, getByRole} = await act(() =>
             renderNavigation("SimpleStructureWithSubNav", optProps),
         );
-        const readButton = getByLabelText("Read navigation");
-        const readList = getByTestId(`${TEST_ID}-read-menu-list`);
-
+        const {readButton, readList} = getSubNavTestElements(getByRole, getByTestId, TEST_ID)
+        
         expect(readButton).toBeInTheDocument();
         expect(readList).toBeInTheDocument();
         expect(readButton).not.toHaveAttribute("aria-expanded", "true");

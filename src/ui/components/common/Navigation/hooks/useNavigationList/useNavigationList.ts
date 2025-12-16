@@ -1,5 +1,5 @@
+"use client";
 import {RefObject, use, useCallback} from "react";
-
 import {returnTrueElementOrUndefined} from "@/ui/utilities";
 
 import {FocusableElementType, ParentElementType} from "../../NavigationTypes";
@@ -8,10 +8,10 @@ import {UseNavigationListInternal, UseNavigationListReturnProps} from "./useNavi
 
 export function useNavigationList(): UseNavigationListReturnProps {
     const navigationListContextObj = use(NavigationListContext);
-    const {_getCurrentListItems, _getParentRef, _registerListItem,} =
+    const {_getCurrentListItems, _getParentRef, _registerItemInList,} =
         returnTrueElementOrUndefined(!!navigationListContextObj, navigationListContextObj);
 
-    const currentListItems = _getCurrentListItems();
+    const currentListItems: FocusableElementType[] = _getCurrentListItems();
 
     const parentRef: RefObject<ParentElementType> = _getParentRef();
     const parentEl: ParentElementType = _getParentRef().current;
@@ -61,7 +61,7 @@ export function useNavigationList(): UseNavigationListReturnProps {
         currentListItems,
         parentEl,
         parentRef,
-        registerListItem: _registerListItem,
+        registerItemInList: _registerItemInList,
         setFirstFocus,
         setLastFocus,
         setNextFocus,

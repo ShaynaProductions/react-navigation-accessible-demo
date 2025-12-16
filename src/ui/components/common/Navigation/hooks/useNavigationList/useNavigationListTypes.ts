@@ -11,7 +11,7 @@ export interface UseNavigationListReturnProps {
     currentListItems: FocusableElementType[];
     parentEl: ParentElementType | null;
     parentRef: React.RefObject<ParentElementType>;
-    registerListItem: (focusableEl: FocusableElementType) => void;
+    registerItemInList: (focusableEl: FocusableElementType) => void;
     setFirstFocus: () => void;
     setLastFocus: () => void;
     setNextFocus: (focusableEl: FocusableElementType) => void;

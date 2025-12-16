@@ -25,7 +25,7 @@ export function NavigationListProvider({children, value}) {
         return parentRef;
     },[parentRef])
 
-    const _registerListItem = useCallback((focusableEl: FocusableElementType) => {
+    const _registerItemInList = useCallback((focusableEl: FocusableElementType) => {
         /* istanbul ignore else */
         if (currentListItems?.indexOf(focusableEl) === -1) {
             currentListItems.push(focusableEl);
@@ -38,7 +38,7 @@ export function NavigationListProvider({children, value}) {
             value={{
                 _getCurrentListItems,
                 _getParentRef,
-                _registerListItem,
+                _registerItemInList,
             }}
         >
             {children}

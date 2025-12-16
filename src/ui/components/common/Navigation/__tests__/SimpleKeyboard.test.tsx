@@ -2,6 +2,11 @@ import {render, userEvent} from "@/test"
 import fs from "fs"
 import {NavigationProps} from "../NavigationTypes";
 import {Box, Button, Navigation, transformNavigation} from "@/ui/components";
+import {
+    getCommonTestElements,
+    getSimpleLinkTestElements,
+    getSubNavTestElements
+} from "../utilities/renderedItems";
 
 const simpleJsonObj = fs.readFileSync(
     "public/__static__/simpleStructure.json",
@@ -50,13 +55,10 @@ describe("Navigation simple keyboard handling", () => {
             children: navigation,
         }
         const {getByRole} = renderNavigation(optProps);
-        const frontButton = getByRole("button", {name: frontButtonLabel});
-        const homeLink = getByRole("link", {name: "Home"});
-        const baseComponentsLink = getByRole("link", {name: "Accessible Base Components"});
-        const simpleLink = getByRole("link", {name: "Simple Links"});
-        const singleSubNavLink = getByRole("link", {name: "Single SubNavigation"})
-        expect(simpleLink).toBeInTheDocument();
+        const {frontButton} = getCommonTestElements(getByRole, frontButtonLabel, endButtonLabel);
+        const  {homeLink, baseComponentsLink, simpleLink, singleSubNavLink } = getSimpleLinkTestElements(getByRole)
 
+         expect(simpleLink).toBeInTheDocument();
         await userEvent.tab();
         expect(frontButton).toHaveFocus();
         await userEvent.tab();
@@ -82,16 +84,14 @@ describe("Navigation simple keyboard handling", () => {
 
     });
     it('should move up and down the closed subnavigation using the home, end, right and left arrow key', async () => {
-        const navigation = transformNavigation(singleSubNavObj);
+        const navigation = transformNavigation(singleSubNavObj, TEST_ID);
         const optProps = {
             ...reqProps,
             children: navigation,
         }
-        const {getByRole} = renderNavigation(optProps);
-        const frontButton = getByRole("button", {name: frontButtonLabel});
-        const aboutLink = getByRole("link", {name: "About"});
-        const readButton = getByRole("button", {name: "Read navigation"});
-        const blogLink = getByRole("link", {name: "Musings"});
+        const {getByRole, getByTestId} = renderNavigation(optProps);
+       const {frontButton} = getCommonTestElements(getByRole, frontButtonLabel, endButtonLabel);
+       const {aboutLink, readButton, blogLink } = getSubNavTestElements(getByRole, getByTestId, TEST_ID)
 
         await userEvent.tab();
         expect(frontButton).toHaveFocus();

@@ -1,9 +1,8 @@
 "use client";
 
-import React, {KeyboardEvent, useCallback, useEffect, useRef} from "react";
-import {LinkProps} from "next/link";
+import React, {KeyboardEvent, RefObject, useCallback, useEffect, useRef} from "react";
 import {usePathname} from "@/hooks";
-import {Link, ListItem, ListItemProps} from "@/ui/components";
+import {Link, LinkProps, ListItem, ListItemProps} from "@/ui/components";
 import {usePrevious} from "@/ui/hooks";
 import {Keys, returnTrueElementOrUndefined} from "@/ui/utilities";
 import {useNavigation, useNavigationList} from "../hooks";
@@ -20,23 +19,24 @@ export function NavigationLink({
     const {
         currentListItems,
         parentRef,
-        registerListItem,
+        registerItemInList,
         setFirstFocus,
         setLastFocus,
         setNextFocus,
-        setPreviousFocus
+        setPreviousFocus,
+        setSpecificFocus
     } = useNavigationList();
-    const {registerNavigationItem} = useNavigation();
+    const {getNextByLink, getPreviousByLink, registerNavigationItem} = useNavigation();
     const currentPath = usePathname();
 
     const linkRef = useRef<FocusableElementType | null>(null);
     const prevLinkRef = usePrevious(linkRef);
-    
+
     useEffect(() => {
         if (linkRef !== prevLinkRef) {
-            registerListItem(linkRef.current as HTMLAnchorElement);
+            registerItemInList(linkRef.current as HTMLAnchorElement);
         }
-    }, [linkRef, prevLinkRef, registerListItem]);
+    }, [linkRef, prevLinkRef, registerItemInList]);
 
     useEffect(() => {
         registerNavigationItem(currentListItems, parentRef.current);
@@ -44,20 +44,43 @@ export function NavigationLink({
 
 
     const handleKeyDown = useCallback((e: KeyboardEvent) => {
-        const linkEl = linkRef.current as FocusableElementType;
+                const linkEl = linkRef.current as FocusableElementType;
 
-        switch (e.key) {
-            case Keys.HOME:
-            case Keys.END:
-            case Keys.LEFT:
-            case Keys.RIGHT:
-                e.preventDefault();
-                e.stopPropagation();
-                break;
-        }
+                switch (e.key) {
+                    case Keys.HOME:
+                    case Keys.END:
+                    case Keys.LEFT:
+                    case Keys.RIGHT:
+                    case Keys.UP:
+                    case Keys.DOWN:
+                        e.preventDefault();
+                        e.stopPropagation();
+                        break;
+                }
 
-        _handleKeyDown(e, linkEl, setFirstFocus, setLastFocus, setNextFocus, setPreviousFocus);
-    }, [setFirstFocus, setLastFocus, setNextFocus, setPreviousFocus]);
+                // common between link and button
+                _handleKeyDown(e, linkEl, setFirstFocus, setLastFocus, setNextFocus, setPreviousFocus);
+                // specific to link.
+                switch (e.key) {
+                    case Keys.UP:
+                        const  prevFocusableEl =  getPreviousByLink( linkEl);
+                        /* istanbul ignore else */
+                        if (prevFocusableEl) {
+                            setSpecificFocus(prevFocusableEl);
+                        }
+                        break;
+                    case Keys.DOWN:
+                        const nextFocusableEl = getNextByLink( linkEl);
+                        /* istanbul ignore else */
+                        if (nextFocusableEl) {
+                            setSpecificFocus(nextFocusableEl);
+                        }
+                        break;
+                }
+            },
+            [getNextByLink, getPreviousByLink, setFirstFocus, setLastFocus, setNextFocus, setPreviousFocus, setSpecificFocus]
+        )
+    ;
 
 
     const listItemProps: Omit<ListItemProps, "children"> = {
@@ -65,11 +88,11 @@ export function NavigationLink({
         id: id,
     };
 
-    const linkProps: Omit<LinkProps, "onMouseEnter" | "onMouseLeave"> = {
+    const linkProps: Omit<LinkProps, "children"> = {
         "aria-current": returnTrueElementOrUndefined(currentPath === href),
         href: href,
         onKeyDown: handleKeyDown,
-        ref: linkRef,
+        ref: linkRef as RefObject<HTMLAnchorElement>,
         ...rest,
     };
 

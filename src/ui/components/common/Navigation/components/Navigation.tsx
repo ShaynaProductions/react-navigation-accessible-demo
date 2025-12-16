@@ -4,7 +4,7 @@ import {RefObject} from "react";
 import {NavigationProvider} from "../providers";
 import {NavigationListProps, NavigationProps, NavigationWrapperProps, ParentElementType} from "../NavigationTypes";
 import NavigationList from "./NavigationList";
-import {NavigationWrapper} from "@/ui/components/common/Navigation/components/NavigationWrapper";
+import {NavigationWrapper} from "./NavigationWrapper";
 
 const returnStoredParentEl = (parentRef?: RefObject<ParentElementType | null>) => {
     return parentRef?.current || null
@@ -14,6 +14,7 @@ export default function Navigation({
     children,
     cx,
     isOpen = true,
+    label,
     orientation = "vertical",
     parentRef,
     testId,
@@ -31,15 +32,17 @@ export default function Navigation({
     }
 
     const navigationWrapperProps: Omit<NavigationWrapperProps, "children"> = {
-       cx: cx,
-        parentRef: parentRef,
-        ...rest,
+        cx,
+        isOpen,
+        label,
+        parentRef,
     }
 
     return (
         <NavigationProvider value={{
             storedList: [],
             storedParentEl: storedParentEl,
+            isSubListOpen: isOpen,
         }}>
             <NavigationWrapper {...navigationWrapperProps}>
                 <NavigationList {...navListProps}>{children}</NavigationList>

@@ -9,7 +9,7 @@ export function LinksButtonsView(navObject: { navigation: NavigationLinkProps[];
             <Heading headingLevel={3}>Simple Link Structure</Heading>
             <Text>Demonstrates a simple subnavigation consisting entirely of links with outside buttons to check for
                 keyboard traps.</Text>
-            <Text>The example should be fully functional.</Text>
+            <Text>The example is fully functional.</Text>
             <Box cx="example simple">
                 <Button id="front">Focusable Front</Button>
                 <Navigation id="simple-links-demo" label="Simple Links Demo">
