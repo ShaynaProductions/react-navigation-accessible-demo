@@ -29,8 +29,8 @@ export function SimpleSubNavigationView(
             <Heading headingLevel={3}>Single SubNavigation</Heading>
             <Text>An example of a single navigation component with nested subnavigation. Focusable buttons surround the
                 component and help identify keyboard traps. This example emulates a mobile menu and passes the reference into the navigation compnent.</Text>
-            <Text><strong>Note: </strong>This example will only implement keyboard handling
-                within each sublist. Use the tab key to move into and out of sub navigation.</Text>
+            <Text><strong>Note: </strong>This example now implements keyboard handling
+               between sublists. Use the down and up arrow keys to move between a button and its controled list. Use the up arrow key to move up through collapsed or expanded lists.</Text>
             <Box cx="example simple mobile" testId={testId}>
                 <Button{...buttonProps}>Menu</Button>
                 <Navigation

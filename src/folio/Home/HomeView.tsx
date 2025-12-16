@@ -15,8 +15,8 @@ export function HomeView() {
                     articles hosted on Dev.to</Link>.
                 </Text>
                 <Text>The examples below represent the progression of the code as completed in the accompanying
-                    article: <Link href="https://dev.to/shaynaproductions/third-layer-who-is-the-parent-21ob"
-                                   openInNewTab={true}>Third Layer - Who is the Parent?</Link>. The
+                    article: <Link href="https://dev.to/shaynaproductions/fourth-layer-up-and-down-keyboard-handling-4fko"
+                                   openInNewTab={true}>Fourth Layer - Up and Down Keyboard Handling</Link>. The
                     source code is provided through a series of releases, each release fully typed and tested.
                 </Text>
                 <Text> Examples are provided which work up to the specific release constraints. This release begins
@@ -78,7 +78,7 @@ export function HomeView() {
                                 Single List Keyboard Handling</Link></dd>
                         </dl>
                     </ListItem>
-                    <ListItem><strong>Adding Architecture</strong>  - (current version)
+                    <ListItem><strong>Adding Architecture</strong>
                         <dl>
                             <dt>Article</dt>
                             <dd><Link
@@ -86,7 +86,18 @@ export function HomeView() {
                             </Link></dd>
                             <dt>Release:</dt>
                             <dd><Link
-                                href="https://github.com/ShaynaProductions/react-navigation-accessible-demo/releases/tag/v0.4.0">Adding Architecture - A Navigatiion Provider</Link></dd>
+                                href="https://github.com/ShaynaProductions/react-navigation-accessible-demo/releases/tag/v0.4.0">Adding Architecture - A Navigation Provider</Link></dd>
+                        </dl>
+                    </ListItem>
+                    <ListItem><strong>Focus between Lists</strong>  - (current version)
+                        <dl>
+                            <dt>Article</dt>
+                            <dd><Link
+                                href="https://dev.to/shaynaproductions/fourth-layer-up-and-down-keyboard-handling-4fko">Fourth Layer - Up and Down Keyboard Handling
+                            </Link></dd>
+                            <dt>Release:</dt>
+                            <dd><Link
+                                href="https://github.com/ShaynaProductions/react-navigation-accessible-demo/releases/tag/v0.5.0">Navigation between Lists</Link></dd>
                         </dl>
                     </ListItem>
                 </List>

@@ -9,8 +9,8 @@ export function ComplexSubNavigationView(navObject: { navigation: NavigationLink
             <Heading headingLevel={3}>Complex SubNavigation</Heading>
             <Text>An example of multiple nested subnavigation components. Focusable Front and End buttons help define
                 keyboard traps.</Text>
-            <Text><strong>Note: </strong>This example will only implement keyboard handling
-                within each sub list. Use the tab key to move between.</Text>
+            <Text><strong>Note: </strong>This example now implements keyboard handling
+                between sublists. Use the down and up arrow keys to move between a button and its controled list. Use the up arrow key to move up through collapsed or expanded lists.</Text>
             <Box cx="example complex">
                 <Button id="front">Focusable Front</Button>
                 <Navigation

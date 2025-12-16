@@ -19,7 +19,6 @@ export function NavigationProvider({children, value}): JSX.Element {
 
     const [navigationArray, setNavigationArray] = useState([currentObj]);
 
-
     const getNavigationIndex: NavigationContextInternalProps["getNavigationIndex"] = useCallback((parentEl) => {
         let foundIndex = -1, index = 0;
         for (const navObject of navigationArray) {
@@ -108,6 +107,7 @@ export function NavigationProvider({children, value}): JSX.Element {
     const _resetTopNavArray: NavigationContextReturnValueProps["_resetTopNavArray"] =
         useCallback(
             (parentEl) => {
+
 
                 const parentIndex = getNavigationIndex(parentEl);
                 /* istanbul ignore else */
