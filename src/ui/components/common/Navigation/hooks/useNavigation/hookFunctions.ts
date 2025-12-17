@@ -8,7 +8,7 @@ export const getRecursiveTopElementByElement = (focusableEl, getNavObjectContain
 
     const parentNavObject = getNavObjectContainingElement(focusableEl);
     const currentStoredParentEl = parentNavObject.storedParentEl as FocusableElementType;
-    if (isInTopRow(currentStoredParentEl) > 0) {
+    if (isInTopRow(currentStoredParentEl) >= 0) {
         return currentStoredParentEl;
     } else {
         return getRecursiveTopElementByElement(currentStoredParentEl, getNavObjectContainingElement, isInTopRow) as FocusableElementType;
