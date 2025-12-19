@@ -241,7 +241,7 @@ describe("Navigation Button Ends keyboard handling with tabs", () => {
 
   it("should move through buttons and links when tab is pressed", async () => {
     const { getByTestId, getByRole } = renderNavigation(buttonProps);
-    const { frontButton } = getCommonTestElements(
+    const { frontButton, endButton } = getCommonTestElements(
       getByRole,
       frontButtonLabel,
       endButtonLabel,
@@ -258,6 +258,7 @@ describe("Navigation Button Ends keyboard handling with tabs", () => {
       aboutButton,
       aboutSiteLink,
       accessibleLink,
+      donateLink,
     } = getComplexButtonTestElements(getByRole, getByTestId, TEST_ID);
 
     expect(storiesList).toHaveClass("srOnly");
@@ -290,8 +291,12 @@ describe("Navigation Button Ends keyboard handling with tabs", () => {
     await userEvent.tab();
     await userEvent.tab();
     expect(accessibleLink).toHaveFocus();
-    // await userEvent.tab();
-    // expect(donateLink).toHaveFocus();
+    await userEvent.tab();
+    expect(donateLink).toHaveFocus();
+    await userEvent.tab();
+    expect(endButton).toHaveFocus();
+    await userEvent.tab({ shift: true });
+    expect(aboutButton).toHaveFocus();
 
     await userEvent.tab();
   });

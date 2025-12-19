@@ -33,18 +33,16 @@ export interface UseNavigationInternalTypes {
     currentList: FocusableElementType[],
   ) => FocusableElementType;
   _getTopElement: (focusableEl: FocusableElementType) => FocusableElementType;
+  _isFirstOrLastItem: (focusableEl: FocusableElementType) => boolean;
   _isInTopRow: (focusableEl: FocusableElementType) => boolean;
   _isLastElementInTree: (focusableEl: FocusableElementType) => boolean;
 }
 
 export interface UseNavigationTypes {
-  getTopNavigationParent: () => NavigationArrayProps;
   getLastTopElement: (
-    focusableEl: FocusableElementType,
-  ) => FocusableElementType;
-  getLastComponentElement: (
-    focusableEl: FocusableElementType,
-  ) => FocusableElementType;
+    focusableEl: FocusableElementType | null,
+  ) => FocusableElementType | null;
+  getTopNavigationParent: () => NavigationArrayProps;
   getNextByButton: (
     buttonEl: FocusableElementType,
     isSubListOpen: boolean,
@@ -70,11 +68,12 @@ export interface UseNavigationTypes {
   getPreviousByLinkTab: (
     linkEl: FocusableElementType,
   ) => FocusableElementType | undefined;
+  handleNavigationItemFocus(focusableEl: FocusableElementType): void;
   registerNavigationItem: (
     navigationList: FocusableElementType[],
     parentEl: ParentElementType,
   ) => void;
-  _resetTopNavArray: (parentEl: HTMLButtonElement) => void;
+  resetTopNavArray: (parentEl: HTMLButtonElement) => void;
   setIsListOpen: (isListOpen: boolean, parentEl: ParentElementType) => void;
 
   setListItems: (

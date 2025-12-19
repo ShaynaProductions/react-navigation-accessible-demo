@@ -33,11 +33,12 @@ export function NavigationLink({
     setSpecificFocus,
   } = useNavigationList();
   const {
-    getLastComponentElement,
+    getLastTopElement,
     getNextByLink,
     getNextByLinkTab,
     getPreviousByLink,
     getPreviousByLinkTab,
+    handleNavigationItemFocus,
     registerNavigationItem,
   } = useNavigation();
   const currentPath = usePathname();
@@ -56,14 +57,16 @@ export function NavigationLink({
   }, [currentListItems, parentRef, registerNavigationItem]);
 
   const handleFocus = useCallback(() => {
-    const returnEl: FocusableElementType | undefined = getLastComponentElement(
-      linkRef.current,
-    );
-
+    /* istanbul ignore else */
+    if (linkRef.current) {
+      handleNavigationItemFocus(linkRef.current);
+    }
+    const returnEl = getLastTopElement(linkRef.current);
+    /* istanbul ignore else */
     if (returnEl) {
       setSpecificFocus(returnEl);
     }
-  }, [getLastComponentElement, setSpecificFocus]);
+  }, [getLastTopElement, handleNavigationItemFocus, setSpecificFocus]);
 
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {

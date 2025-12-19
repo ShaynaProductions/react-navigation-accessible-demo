@@ -43,6 +43,7 @@ export function SubNavigation({
     getNextByButtonTab,
     getPreviousByButton,
     getPreviousByButtonTab,
+    handleNavigationItemFocus,
     registerSubNavigation,
     setListItems,
   } = useNavigation();
@@ -66,6 +67,13 @@ export function SubNavigation({
   useEffect(() => {
     setListItems(currentListItems, parentRef.current);
   }, [currentListItems, parentRef, setListItems]);
+
+  const handleFocus = useCallback(() => {
+    /* istanbul ignore else */
+    if (buttonRef.current) {
+      handleNavigationItemFocus(buttonRef.current);
+    }
+  }, [handleNavigationItemFocus]);
 
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
@@ -147,6 +155,7 @@ export function SubNavigation({
     "aria-controls": id,
     "aria-expanded": isSubListOpen,
     "aria-label": `${label}`,
+    onFocus: handleFocus,
     onKeyDown: handleKeyDown,
     onPress: handlePress,
     ref: buttonRef,
