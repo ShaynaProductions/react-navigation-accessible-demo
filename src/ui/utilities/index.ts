@@ -1,4 +1,5 @@
 export * from "./constants";
+export * from "./getFocusableElement";
 export * from "./returnTrueElementOrUndefined/returnTrueElementOrUndefined";
 
 

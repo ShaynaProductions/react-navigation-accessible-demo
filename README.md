@@ -26,3 +26,5 @@ Each published article is linked and will refer to the appropriate Github tag to
 - [First Layer - Implementing a Base Structure](https://dev.to/shaynaproductions/first-layer-implementing-a-base-structure-492o)
 - [Second Layer - Keyboard handling through a single list](https://dev.to/shaynaproductions/second-layer-keyboard-handling-through-a-single-list-1ded)
 - [Third Layer - Who is the Parent?](https://dev.to/shaynaproductions/third-layer-who-is-the-parent-21ob)
+- [Fourth Layer - Up and Down Keyboard Handling](https://dev.to/shaynaproductions/fourth-layer-up-and-down-keyboard-handling-4fko)
+- [Fifth Layer - Tabbing Within and Without](https://dev.to/shaynaproductions/fifth-layer-tabbing-within-and-without-1ihi)
