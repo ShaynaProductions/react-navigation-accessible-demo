@@ -178,7 +178,7 @@ export default function useNavigation() {
       ],
     );
 
-  const _isLastElementInTree: UseNavigationInternalTypes["_isLastElementInTree"] =
+  const isLastElementInComponent: UseNavigationInternalTypes["isLastElementInComponent"] =
     useCallback(
       (focusableEl) => {
         const topParent = _getTopElement(focusableEl);
@@ -202,7 +202,7 @@ export default function useNavigation() {
         const currentIndexInTopRow = _getIndexInTopRow(focusableEl);
         let isFirstOrLastItem = false;
 
-        if (_isLastElementInTree(focusableEl)) {
+        if (isLastElementInComponent(focusableEl)) {
           isFirstOrLastItem = true;
         }
         if (currentIndexInTopRow === 0) {
@@ -210,20 +210,19 @@ export default function useNavigation() {
         }
         return isFirstOrLastItem;
       },
-      [_getIndexInTopRow, _isLastElementInTree],
+      [_getIndexInTopRow, isLastElementInComponent],
     );
 
   // -------------------------------------------------------
   // Controllers and public functions
   // -------------------------------------------------------
 
-  const getLastTopElement: UseNavigationTypes["getLastTopElement"] =
+  const getLastChildInTopRow: UseNavigationTypes["getLastChildInTopRow"] =
     useCallback(
       (focusableEl) => {
         const lastTopEl = _getLastChildInRow(0);
         const lastEl = _getLastFocusableElementTypeByParent(lastTopEl);
         if (!_componentActive && focusableEl === lastEl) {
-          _setComponentActive(true);
           return lastTopEl;
         } else {
           return focusableEl;
@@ -233,7 +232,6 @@ export default function useNavigation() {
         _componentActive,
         _getLastChildInRow,
         _getLastFocusableElementTypeByParent,
-        _setComponentActive,
       ],
     );
 
@@ -335,7 +333,7 @@ export default function useNavigation() {
           // get Top Element
           const topParent = _getTopElement(linkEl);
 
-          if (_isLastElementInTree(linkEl)) {
+          if (isLastElementInComponent(linkEl)) {
             nextFocusableEl = topParent;
           } else {
             const parentNavObject = _getNavigationObjectContainingElement(
@@ -357,7 +355,7 @@ export default function useNavigation() {
       _getNextElementInRow,
       _getTopElement,
       _isInTopRow,
-      _isLastElementInTree,
+      isLastElementInComponent,
     ],
   );
 
@@ -365,25 +363,21 @@ export default function useNavigation() {
     (linkEl) => {
       let nextFocusableEl = getNextByLink(linkEl);
       const isInTopRow = _isInTopRow(linkEl);
-      if (!isInTopRow && _isLastElementInTree(linkEl)) {
+      const navObject = _getNavigationObjectContainingElement(linkEl);
+      /* istanbul ignore next */
+      const storedList = navObject.storedList || [];
+
+      if (
+        (!isInTopRow && isLastElementInComponent(linkEl)) ||
+        (isInTopRow && storedList.indexOf(linkEl) === storedList.length - 1)
+      ) {
         nextFocusableEl = getFocusableElement(
           linkEl,
           "next",
         ) as FocusableElementType;
-        _setComponentActive(false);
       }
-
-      if (isInTopRow) {
-        const navObject = _getNavigationObjectContainingElement(linkEl);
-        /* istanbul ignore next */
-        const storedList = navObject.storedList || [];
-        if (storedList.indexOf(linkEl) === storedList.length - 1) {
-          nextFocusableEl = getFocusableElement(
-            linkEl,
-            "next",
-          ) as FocusableElementType;
-          _setComponentActive(false);
-        }
+      if (isInTopRow && storedList.indexOf(linkEl) === storedList.length - 1) {
+        _setComponentActive(false);
       }
 
       return nextFocusableEl;
@@ -391,7 +385,7 @@ export default function useNavigation() {
     [
       _getNavigationObjectContainingElement,
       _isInTopRow,
-      _isLastElementInTree,
+      isLastElementInComponent,
       _setComponentActive,
       getNextByLink,
     ],
@@ -517,7 +511,7 @@ export default function useNavigation() {
 
   return {
     getTopNavigationParent,
-    getLastTopElement,
+    getLastChildInTopRow,
     getNextByButton,
     getNextByButtonTab,
     getNextByLink,

@@ -35,13 +35,13 @@ export interface UseNavigationInternalTypes {
   _getTopElement: (focusableEl: FocusableElementType) => FocusableElementType;
   _isFirstOrLastItem: (focusableEl: FocusableElementType) => boolean;
   _isInTopRow: (focusableEl: FocusableElementType) => boolean;
-  _isLastElementInTree: (focusableEl: FocusableElementType) => boolean;
+  isLastElementInComponent: (focusableEl: FocusableElementType) => boolean;
 }
 
 export interface UseNavigationTypes {
-  getLastTopElement: (
-    focusableEl: FocusableElementType | null,
-  ) => FocusableElementType | null;
+  getLastChildInTopRow: (
+    focusableEl: FocusableElementType,
+  ) => FocusableElementType;
   getTopNavigationParent: () => NavigationArrayProps;
   getNextByButton: (
     buttonEl: FocusableElementType,

@@ -296,7 +296,7 @@ describe("Navigation Button Ends keyboard handling with tabs", () => {
     await userEvent.tab();
     expect(endButton).toHaveFocus();
     await userEvent.tab({ shift: true });
-    expect(aboutButton).toHaveFocus();
+    expect(donateLink).toHaveFocus();
 
     await userEvent.tab();
   });
