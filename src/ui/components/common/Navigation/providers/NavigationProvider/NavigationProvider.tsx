@@ -8,16 +8,24 @@ import {
 } from "./NavigationProviderTypes";
 import { EmptyObject } from "@/ui/types";
 import { arraysEqual } from "@/ui/utilities";
+import { ParentElementType } from "@/ui/components";
 
 export const NavigationContext = createContext<
   NavigationContextValueProps | EmptyObject
 >({});
+
+const registerTopLevelParent = (parentEl, setTopLevelParent) => {
+  setTopLevelParent(parentEl);
+};
 
 export function NavigationProvider({ children, value }): JSX.Element {
   const currentObj = { ...value };
 
   const [navigationArray, setNavigationArray] = useState([currentObj]);
   const [componentActive, setComponentActive] = useState<boolean>(false);
+  const [topLevelParent, setTopLevelParent] = useState<ParentElementType>(
+    currentObj.storedParentEl,
+  );
 
   const getNavigationIndex: NavigationContextInternalProps["getNavigationIndex"] =
     useCallback(
@@ -55,6 +63,25 @@ export function NavigationProvider({ children, value }): JSX.Element {
       },
       [_getNavigationArray],
     );
+
+  const _setDispatchChildClose = useCallback(
+    (parentEl: HTMLButtonElement, dispatchChildClose) => {
+      const parentIndex: number = getNavigationIndex(parentEl);
+      /* istanbul ignore else */
+      if (parentIndex >= 0) {
+        const currentObj = _getNavigationArray()[parentIndex];
+        if (
+          currentObj.dispatchChildClose?.toString() !==
+          dispatchChildClose?.toString()
+        ) {
+          setNavigationArrayObject(parentIndex, {
+            dispatchChildClose: dispatchChildClose,
+          });
+        }
+      }
+    },
+    [_getNavigationArray, getNavigationIndex, setNavigationArrayObject],
+  );
 
   const _setListItems: NavigationContextReturnValueProps["_setListItems"] =
     useCallback(
@@ -98,7 +125,6 @@ export function NavigationProvider({ children, value }): JSX.Element {
             isSubListOpen: isListOpen,
           });
         }
-        // console.log(_getNavigationArray());
       },
 
       [getNavigationIndex, _getNavigationArray, setNavigationArrayObject],
@@ -112,22 +138,28 @@ export function NavigationProvider({ children, value }): JSX.Element {
 
   const _registerSubNav: NavigationContextReturnValueProps["_registerSubNav"] =
     useCallback(
-      (isListOpen, parentEl) => {
+      (isListOpen, parentEl, dispatchChildClose) => {
         setParentEl(parentEl);
         _setIsListOpen(isListOpen, parentEl);
+        _setDispatchChildClose(
+          parentEl as HTMLButtonElement,
+          dispatchChildClose,
+        );
       },
-      [setParentEl, _setIsListOpen],
+      [setParentEl, _setIsListOpen, _setDispatchChildClose],
     );
   const _resetTopNavArray: NavigationContextReturnValueProps["_resetTopNavArray"] =
     useCallback(
       (parentEl) => {
         const parentIndex = getNavigationIndex(parentEl);
+        const nullIndex = getNavigationIndex(null);
         /* istanbul ignore else */
-        if (parentIndex !== 0) {
-          navigationArray.shift();
+        if (parentIndex !== 0 && navigationArray[0].storedParentEl === null) {
+          registerTopLevelParent(parentEl, setTopLevelParent);
+          navigationArray.splice(nullIndex, 1);
         }
       },
-      [getNavigationIndex, navigationArray],
+      [getNavigationIndex, navigationArray, setTopLevelParent],
     );
 
   return (
@@ -139,8 +171,10 @@ export function NavigationProvider({ children, value }): JSX.Element {
         _registerSubNav,
         _resetTopNavArray,
         _setComponentActive: setComponentActive,
+        _setDispatchChildClose,
         _setIsListOpen,
         _setListItems,
+        _topLevelParent: topLevelParent,
       }}
     >
       {children}

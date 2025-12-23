@@ -1,12 +1,14 @@
 import { FocusableElementType, ParentElementType } from "../../NavigationTypes";
 
 export interface NavigationContextStoredValueProps {
+  dispatchChildClose?: (parentEl: HTMLButtonElement) => void;
   storedList?: FocusableElementType[];
   storedParentEl?: ParentElementType;
   isSubListOpen?: boolean;
 }
 
-export interface NavigationArrayProps {
+export interface NavigationObjectProps {
+  dispatchChildClose?: (parentEl: HTMLButtonElement) => void;
   storedList: FocusableElementType[];
   storedParentEl: ParentElementType;
   isSubListOpen: boolean;
@@ -32,14 +34,23 @@ export interface NavigationContextReturnValueProps {
     navigationList: FocusableElementType[],
     parentEl: ParentElementType,
   ) => void;
-  _registerSubNav: (isListOpen: boolean, parentEl: ParentElementType) => void;
+  _registerSubNav: (
+    isListOpen: boolean,
+    parentEl: ParentElementType,
+    dispatchChildClose: () => void,
+  ) => void;
   _resetTopNavArray: (parentEl: HTMLButtonElement) => void;
   _setComponentActive: (componentActive: boolean) => void;
+  _setDispatchChildClose: (
+    parentEl: HTMLButtonElement,
+    dispatchChildClose: () => void,
+  ) => void;
   _setIsListOpen: (isListOpen: boolean, parentEl: ParentElementType) => void;
   _setListItems: (
     navigationList: FocusableElementType[],
     parentEl: ParentElementType,
   ) => void;
+  _topLevelParent: HTMLButtonElement | null;
 }
 
 export interface NavigationContextValueProps

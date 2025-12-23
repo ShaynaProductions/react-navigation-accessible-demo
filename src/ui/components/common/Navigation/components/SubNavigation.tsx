@@ -39,23 +39,52 @@ export function SubNavigation({
     setSpecificFocus,
   } = useNavigationList();
   const {
+    closeComponentWithFocus,
+    closeOpenSiblings,
     getNextByButton,
     getNextByButtonTab,
     getPreviousByButton,
     getPreviousByButtonTab,
+    getSubNavigation,
     handleNavigationItemFocus,
     registerSubNavigation,
+    setIsListOpen,
     setListItems,
   } = useNavigation();
 
   const buttonRef = useRef<ParentElementType>(null);
   const [isSubListOpen, setIsSubListOpen] = useState<boolean>(false);
 
+  const closeSubNavigation = useCallback(
+    (buttonEl: HTMLButtonElement) => {
+      const dispatchArray = getSubNavigation(buttonEl);
+      for (const dispatchObj of dispatchArray) {
+        const { dispatchChildClose, storedParentEl, isSubListOpen } =
+          dispatchObj;
+        if (isSubListOpen && dispatchChildClose && storedParentEl) {
+          dispatchChildClose(storedParentEl);
+        }
+      }
+      setIsListOpen(false, buttonEl);
+      setIsSubListOpen(false);
+    },
+    [getSubNavigation, setIsListOpen],
+  );
+
+  const openSubNavigation = useCallback(
+    (buttonEl: HTMLButtonElement) => {
+      setIsListOpen(true, buttonEl);
+      setIsSubListOpen(true);
+    },
+    [setIsListOpen],
+  );
+
   useEffect(() => {
     const buttonEl = buttonRef.current as FocusableElementType;
     registerItemInList(buttonEl);
-    registerSubNavigation(isSubListOpen, buttonEl);
+    registerSubNavigation(isSubListOpen, buttonEl, closeSubNavigation);
   }, [
+    closeSubNavigation,
     currentListItems,
     isSubListOpen,
     parentRef,
@@ -71,9 +100,9 @@ export function SubNavigation({
   const handleFocus = useCallback(() => {
     /* istanbul ignore else */
     if (buttonRef.current) {
-      handleNavigationItemFocus(buttonRef.current);
+      handleNavigationItemFocus(buttonRef.current, closeOpenSiblings);
     }
-  }, [handleNavigationItemFocus]);
+  }, [closeOpenSiblings, handleNavigationItemFocus]);
 
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
@@ -95,10 +124,12 @@ export function SubNavigation({
       _handleKeyDown(
         e,
         buttonEl,
+        closeComponentWithFocus,
         setFirstFocus,
         setLastFocus,
         setNextFocus,
         setPreviousFocus,
+        setSpecificFocus,
       );
       // specific to button.
       switch (e.key) {
@@ -134,6 +165,7 @@ export function SubNavigation({
       }
     },
     [
+      closeComponentWithFocus,
       getNextByButton,
       getNextByButtonTab,
       getPreviousByButton,
@@ -147,9 +179,14 @@ export function SubNavigation({
     ],
   );
 
-  const handlePress = () => {
-    setIsSubListOpen(!isSubListOpen);
-  };
+  const handlePress = useCallback(() => {
+    const buttonEl = buttonRef.current as HTMLButtonElement;
+    if (isSubListOpen) {
+      closeSubNavigation(buttonEl);
+    } else {
+      openSubNavigation(buttonEl);
+    }
+  }, [closeSubNavigation, isSubListOpen, openSubNavigation]);
 
   const buttonProps: ButtonProps = {
     "aria-controls": id,

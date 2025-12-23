@@ -33,6 +33,8 @@ export function NavigationLink({
     setSpecificFocus,
   } = useNavigationList();
   const {
+    closeComponentWithFocus,
+    closeOpenSiblings,
     getLastChildInTopRow,
     getNextByLink,
     getNextByLinkTab,
@@ -59,12 +61,18 @@ export function NavigationLink({
   const handleFocus = useCallback(() => {
     const linkEl = linkRef.current as FocusableElementType;
     const returnEl = getLastChildInTopRow(linkEl);
-    handleNavigationItemFocus(linkEl);
+
+    handleNavigationItemFocus(linkEl, closeOpenSiblings);
     /* istanbul ignore else */
     if (returnEl !== linkEl && returnEl !== null) {
       setSpecificFocus(returnEl);
     }
-  }, [getLastChildInTopRow, handleNavigationItemFocus, setSpecificFocus]);
+  }, [
+    closeOpenSiblings,
+    getLastChildInTopRow,
+    handleNavigationItemFocus,
+    setSpecificFocus,
+  ]);
 
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
@@ -87,10 +95,12 @@ export function NavigationLink({
       _handleKeyDown(
         e,
         linkEl,
+        closeComponentWithFocus,
         setFirstFocus,
         setLastFocus,
         setNextFocus,
         setPreviousFocus,
+        setSpecificFocus,
       );
       // specific to link.
       switch (e.key) {
@@ -127,6 +137,7 @@ export function NavigationLink({
       }
     },
     [
+      closeComponentWithFocus,
       getNextByLink,
       getNextByLinkTab,
       getPreviousByLink,

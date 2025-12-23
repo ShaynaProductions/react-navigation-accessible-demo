@@ -34,11 +34,10 @@ export function NavigationWrapper({
   } = useNavigation();
 
   useEffect(() => {
-    const storedParentEl: ParentElementType =
-      getTopNavigationParent().storedParentEl;
+    const storedParentEl = getTopNavigationParent().storedParentEl;
     const parentEl = parentRef?.current as ParentElementType;
     /* istanbul ignore else */
-    if (storedParentEl !== parentEl) {
+    if (!!parentEl && storedParentEl !== parentEl) {
       resetArray(parentEl, storedParentEl, resetTopNavigationArray);
     }
     if (!!parentEl) {

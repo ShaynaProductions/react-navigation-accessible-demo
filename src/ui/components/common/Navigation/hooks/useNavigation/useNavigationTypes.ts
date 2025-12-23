@@ -1,21 +1,22 @@
 import { FocusableElementType, ParentElementType } from "../../NavigationTypes";
 import {
-  NavigationArrayProps,
+  NavigationObjectProps,
   NavigationContextStoredValueProps,
 } from "../../providers";
 
 export interface UseNavigationInternalTypes {
-  _getIndexInTopRow: (focusedEl: FocusableElementType) => number;
+  _closeParentComponent: () => void;
+  _getIndexInTopRow: (focusedEl: FocusableElementType | undefined) => number;
   _getLastChildInRow: (index: number) => FocusableElementType;
   _getLastFocusableElementTypeByParent: (
     parentEl: FocusableElementType,
   ) => FocusableElementType;
   _getNavigationObjectByParent: (
     parentEl: ParentElementType,
-  ) => Partial<NavigationArrayProps>;
+  ) => Partial<NavigationObjectProps>;
   _getNavigationObjectContainingElement: (
     focusableEl: FocusableElementType,
-  ) => NavigationContextStoredValueProps;
+  ) => Partial<NavigationObjectProps>;
   _getNextElement: (
     focusableEl: FocusableElementType,
     currentItemsList: FocusableElementType[],
@@ -39,10 +40,11 @@ export interface UseNavigationInternalTypes {
 }
 
 export interface UseNavigationTypes {
+  closeOpenSiblings: (currentlyFocusedEl: FocusableElementType) => void;
   getLastChildInTopRow: (
     focusableEl: FocusableElementType,
   ) => FocusableElementType;
-  getTopNavigationParent: () => NavigationArrayProps;
+  getTopNavigationParent: () => Partial<NavigationObjectProps>;
   getNextByButton: (
     buttonEl: FocusableElementType,
     isSubListOpen: boolean,
@@ -68,7 +70,11 @@ export interface UseNavigationTypes {
   getPreviousByLinkTab: (
     linkEl: FocusableElementType,
   ) => FocusableElementType | undefined;
-  handleNavigationItemFocus(focusableEl: FocusableElementType): void;
+  getSubNavigation: (parentEl: HTMLButtonElement) => NavigationObjectProps[];
+  handleNavigationItemFocus: (
+    focusableEl: FocusableElementType,
+    closeOpenSiblings: UseNavigationTypes["closeOpenSiblings"],
+  ) => void;
   registerNavigationItem: (
     navigationList: FocusableElementType[],
     parentEl: ParentElementType,
