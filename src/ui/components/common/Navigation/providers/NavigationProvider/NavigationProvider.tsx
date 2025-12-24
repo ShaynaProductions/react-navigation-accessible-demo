@@ -5,6 +5,7 @@ import {
   NavigationContextReturnValueProps,
   NavigationContextStoredValueProps,
   NavigationContextValueProps,
+  NavigationProviderFunctionsProps,
 } from "./NavigationProviderTypes";
 import { EmptyObject } from "@/ui/types";
 import { arraysEqual } from "@/ui/utilities";
@@ -14,9 +15,10 @@ export const NavigationContext = createContext<
   NavigationContextValueProps | EmptyObject
 >({});
 
-const registerTopLevelParent = (parentEl, setTopLevelParent) => {
-  setTopLevelParent(parentEl);
-};
+const registerTopLevelParent: NavigationProviderFunctionsProps["registerTopLevelParent"] =
+  (parentEl, setTopLevelParent) => {
+    setTopLevelParent(parentEl);
+  };
 
 export function NavigationProvider({ children, value }): JSX.Element {
   const currentObj = { ...value };
@@ -156,10 +158,10 @@ export function NavigationProvider({ children, value }): JSX.Element {
         /* istanbul ignore else */
         if (parentIndex !== 0 && navigationArray[0].storedParentEl === null) {
           registerTopLevelParent(parentEl, setTopLevelParent);
-          navigationArray.splice(nullIndex, 1);
+          navigationArray.shift();
         }
       },
-      [getNavigationIndex, navigationArray, setTopLevelParent],
+      [getNavigationIndex, navigationArray, topLevelParent],
     );
 
   return (

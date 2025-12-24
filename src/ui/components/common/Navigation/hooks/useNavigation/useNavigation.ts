@@ -167,11 +167,11 @@ export default function useNavigation() {
           return getRecursiveTopElementByElement(
             focusableEl,
             _getNavigationObjectContainingElement,
-            _getIndexInTopRow,
+            _isInTopRow,
           );
         }
       },
-      [_getIndexInTopRow, _getNavigationObjectContainingElement, _isInTopRow],
+      [_getNavigationObjectContainingElement, _isInTopRow],
     );
 
   const _getPreviousByElement: UseNavigationInternalTypes["_getPreviousElement"] =
@@ -231,6 +231,16 @@ export default function useNavigation() {
       ],
     );
 
+  const _isLastElementInList = useCallback(
+    (focusedEl) => {
+      const navObj = _getNavigationObjectContainingElement(focusedEl);
+      /* istanbul ignore next */
+      const currentList = navObj.storedList || [];
+      return currentList.indexOf(focusedEl) === currentList.length - 1;
+    },
+    [_getNavigationObjectContainingElement],
+  );
+
   const _isFirstOrLastItem: UseNavigationInternalTypes["_isFirstOrLastItem"] =
     useCallback(
       (focusableEl) => {
@@ -253,19 +263,17 @@ export default function useNavigation() {
   // Controllers and public functions
   // -------------------------------------------------------
 
-  const closeComponentWithFocus = useCallback(
-    (focusedEl) => {
-      const { storedParentEl } = getTopNavigationParent();
-
-      _closeComponent();
-      if (storedParentEl === null) {
-        return _getTopElement(focusedEl);
-      } else {
-        return storedParentEl;
-      }
-    },
-    [_closeComponent, _getTopElement, getTopNavigationParent],
-  );
+  const closeComponentWithFocus: UseNavigationTypes["closeComponentWithFocus"] =
+    useCallback(
+      (focusedEl) => {
+        _closeComponent();
+        const { storedParentEl } = getTopNavigationParent();
+        return storedParentEl === null
+          ? _getTopElement(focusedEl)
+          : storedParentEl;
+      },
+      [_closeComponent, _getTopElement, getTopNavigationParent],
+    );
   const closeOpenSiblings: UseNavigationTypes["closeOpenSiblings"] =
     useCallback(
       (currentlyFocusedEl) => {
@@ -401,8 +409,10 @@ export default function useNavigation() {
         } else {
           // get Top Element
           const topParent = _getTopElement(linkEl);
+          const isParentLast = _isLastElementInList(storedParentEl);
+          const isLinkLast = _isLastElementInList(linkEl);
 
-          if (isLastElementInComponent(linkEl)) {
+          if (isParentLast && isLinkLast) {
             nextFocusableEl = topParent;
           } else {
             const parentNavObject = _getNavigationObjectContainingElement(
@@ -424,7 +434,7 @@ export default function useNavigation() {
       _getNextElementInRow,
       _getTopElement,
       _isInTopRow,
-      isLastElementInComponent,
+      _isLastElementInList,
     ],
   );
 

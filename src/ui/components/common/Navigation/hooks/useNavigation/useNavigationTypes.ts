@@ -40,6 +40,9 @@ export interface UseNavigationInternalTypes {
 }
 
 export interface UseNavigationTypes {
+  closeComponentWithFocus: (
+    focusedEl: FocusableElementType,
+  ) => FocusableElementType | undefined;
   closeOpenSiblings: (currentlyFocusedEl: FocusableElementType) => void;
   getLastChildInTopRow: (
     focusableEl: FocusableElementType,
@@ -88,7 +91,7 @@ export interface UseNavigationTypes {
   ) => void;
 }
 
-export interface ExternalNavHookProps {
+export interface NavigationHookFunctionsProps {
   getRecursiveLastElementByParent: (
     parentEl: ParentElementType,
     getNavObjectByParent: UseNavigationInternalTypes["_getNavigationObjectByParent"],

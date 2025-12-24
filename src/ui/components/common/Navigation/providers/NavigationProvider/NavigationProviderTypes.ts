@@ -1,5 +1,12 @@
 import { FocusableElementType, ParentElementType } from "../../NavigationTypes";
+import React from "react";
 
+export interface NavigationProviderFunctionsProps {
+  registerTopLevelParent: (
+    parentEl: ParentElementType,
+    setTopLevelParent: React.Dispatch<React.SetStateAction<ParentElementType>>,
+  ) => void;
+}
 export interface NavigationContextStoredValueProps {
   dispatchChildClose?: (parentEl: HTMLButtonElement) => void;
   storedList?: FocusableElementType[];

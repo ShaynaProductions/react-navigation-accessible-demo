@@ -1,7 +1,7 @@
 import { ParentElementType } from "@/ui/components";
 import { FocusableElementType } from "../../NavigationTypes";
 import { NavigationObjectProps } from "../../providers";
-import { ExternalNavHookProps } from "./useNavigationTypes";
+import { NavigationHookFunctionsProps } from "./useNavigationTypes";
 
 export const getRecursiveTopElementByElement = (
   focusableEl,
@@ -11,7 +11,7 @@ export const getRecursiveTopElementByElement = (
   const parentNavObject = getNavObjectContainingElement(focusableEl);
   const currentStoredParentEl =
     parentNavObject.storedParentEl as FocusableElementType;
-  if (isInTopRow(currentStoredParentEl) >= 0) {
+  if (isInTopRow(currentStoredParentEl)) {
     return currentStoredParentEl;
   } else {
     return getRecursiveTopElementByElement(
@@ -22,7 +22,7 @@ export const getRecursiveTopElementByElement = (
   }
 };
 
-export const getRecursiveLastElementByParent: ExternalNavHookProps["getRecursiveLastElementByParent"] =
+export const getRecursiveLastElementByParent: NavigationHookFunctionsProps["getRecursiveLastElementByParent"] =
   (focusableEl, getNavObjectByParent, getNavObjectContainingElement) => {
     let navObj: NavigationObjectProps;
     if (!!focusableEl && focusableEl.type === "button") {
