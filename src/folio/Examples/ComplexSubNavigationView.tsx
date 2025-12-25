@@ -16,7 +16,7 @@ export function ComplexSubNavigationView(navObject: {
 
   return (
     <>
-      <Heading headingLevel={3}>Complex SubNavigation</Heading>
+      <Heading headingLevel={2}>Complex SubNavigation</Heading>
       <Text>
         An example of multiple nested subnavigation components. Focusable Front
         and End buttons help define keyboard traps.

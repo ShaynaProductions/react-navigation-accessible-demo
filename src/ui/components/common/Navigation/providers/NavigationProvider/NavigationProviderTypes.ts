@@ -22,47 +22,42 @@ export interface NavigationObjectProps {
 }
 
 export interface NavigationContextInternalProps {
-  _getNavigationArray: () => NavigationContextStoredValueProps[];
-  getNavigationIndex: (parentEl: ParentElementType) => number;
+  _getNavigationIndex: (parentEl: ParentElementType) => number;
   _getNavigationObjectByParent: (
     parentEl: ParentElementType,
   ) => NavigationObjectProps;
 
-  _setDispatchChildClose: (
-    parentEl: HTMLButtonElement,
-    dispatchChildClose: (parentEl: HTMLButtonElement) => void,
-  ) => void;
-  setNavigationArrayObject: (
+  _setNavigationArrayObject: (
     index: number,
     updatedContent: Partial<NavigationContextStoredValueProps>,
   ) => void;
-  setParentEl: (parentEl: ParentElementType) => void;
+  _setParentEl: (parentEl: ParentElementType) => void;
 }
 
 export interface NavigationContextReturnValueProps {
-  _componentActive: boolean;
-  _getNavigationArray: () => NavigationContextStoredValueProps[];
-  _registerNavLink: (
+  componentActive: boolean;
+  getNavigationArray: () => NavigationContextStoredValueProps[];
+  registerNavLink: (
     navigationList: FocusableElementType[],
     parentEl: ParentElementType,
   ) => void;
-  _registerSubNav: (
+  registerSubNav: (
     isListOpen: boolean,
     parentEl: ParentElementType,
     dispatchChildClose: () => void,
   ) => void;
-  _resetTopNavArray: (parentEl: HTMLButtonElement) => void;
-  _setComponentActive: (componentActive: boolean) => void;
-  _setDispatchChildClose: (
+  resetTopNavArray: (parentEl: HTMLButtonElement) => void;
+  setComponentActive: (componentActive: boolean) => void;
+  setDispatchChildClose: (
     parentEl: HTMLButtonElement,
     dispatchChildClose: () => void,
   ) => void;
-  _setIsListOpen: (isListOpen: boolean, parentEl: ParentElementType) => void;
-  _setListItems: (
+  setIsListOpen: (isListOpen: boolean, parentEl: ParentElementType) => void;
+  setListItems: (
     navigationList: FocusableElementType[],
     parentEl: ParentElementType,
   ) => void;
-  _topLevelParent: HTMLButtonElement | null;
+  topLevelParent: HTMLButtonElement | null;
 }
 
 export interface NavigationContextValueProps
