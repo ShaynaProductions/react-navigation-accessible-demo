@@ -35,6 +35,7 @@ export function NavigationLink({
   const {
     closeComponentWithFocus,
     closeOpenSiblings,
+    componentActive,
     getLastChildInTopRow,
     getNextByLink,
     getNextByLinkTab,
@@ -42,6 +43,7 @@ export function NavigationLink({
     getPreviousByLinkTab,
     handleNavigationItemFocus,
     registerNavigationItem,
+    setComponentActive,
   } = useNavigation();
   const currentPath = usePathname();
 
@@ -61,6 +63,9 @@ export function NavigationLink({
   const handleFocus = useCallback(() => {
     const linkEl = linkRef.current as FocusableElementType;
     const returnEl = getLastChildInTopRow(linkEl);
+    if (!componentActive) {
+      setComponentActive(true);
+    }
 
     handleNavigationItemFocus(linkEl, closeOpenSiblings);
     /* istanbul ignore else */
@@ -69,8 +74,10 @@ export function NavigationLink({
     }
   }, [
     closeOpenSiblings,
+    componentActive,
     getLastChildInTopRow,
     handleNavigationItemFocus,
+    setComponentActive,
     setSpecificFocus,
   ]);
 

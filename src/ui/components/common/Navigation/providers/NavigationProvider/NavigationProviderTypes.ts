@@ -26,7 +26,12 @@ export interface NavigationContextInternalProps {
   getNavigationIndex: (parentEl: ParentElementType) => number;
   _getNavigationObjectByParent: (
     parentEl: ParentElementType,
-  ) => NavigationContextStoredValueProps;
+  ) => NavigationObjectProps;
+
+  _setDispatchChildClose: (
+    parentEl: HTMLButtonElement,
+    dispatchChildClose: (parentEl: HTMLButtonElement) => void,
+  ) => void;
   setNavigationArrayObject: (
     index: number,
     updatedContent: Partial<NavigationContextStoredValueProps>,

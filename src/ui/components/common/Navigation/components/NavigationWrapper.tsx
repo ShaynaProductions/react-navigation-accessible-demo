@@ -7,6 +7,10 @@ import {
   ResetArrayProps,
 } from "../NavigationTypes";
 import { useNavigation } from "../hooks";
+import {
+  ClickAwayListener,
+  returnTrueElementOrUndefined,
+} from "@/ui/utilities";
 
 const resetArray: ResetArrayProps["resetArray"] = (
   parentEl,
@@ -28,7 +32,9 @@ export function NavigationWrapper({
   ...rest
 }: NavigationWrapperProps) {
   const {
+    componentActive,
     getTopNavigationParent,
+    handleClickAwayClose,
     registerSubNavigation,
     resetTopNavigationArray,
   } = useNavigation();
@@ -52,10 +58,15 @@ export function NavigationWrapper({
   ]);
 
   return (
-    <>
+    <ClickAwayListener
+      onClickAway={returnTrueElementOrUndefined(
+        componentActive,
+        handleClickAwayClose,
+      )}
+    >
       <nav aria-label={label} className={cx} {...rest}>
         {children}
       </nav>
-    </>
+    </ClickAwayListener>
   );
 }

@@ -107,6 +107,10 @@ export function SubNavigation({
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
       const buttonEl = buttonRef.current as FocusableElementType;
+      /* istanbul ignore else */
+      if (buttonEl) {
+        handleNavigationItemFocus(buttonEl, closeOpenSiblings);
+      }
 
       switch (e.key) {
         case Keys.HOME:
@@ -166,10 +170,12 @@ export function SubNavigation({
     },
     [
       closeComponentWithFocus,
+      closeOpenSiblings,
       getNextByButton,
       getNextByButtonTab,
       getPreviousByButton,
       getPreviousByButtonTab,
+      handleNavigationItemFocus,
       isSubListOpen,
       setFirstFocus,
       setLastFocus,
@@ -181,12 +187,23 @@ export function SubNavigation({
 
   const handlePress = useCallback(() => {
     const buttonEl = buttonRef.current as HTMLButtonElement;
+
     if (isSubListOpen) {
       closeSubNavigation(buttonEl);
     } else {
       openSubNavigation(buttonEl);
     }
-  }, [closeSubNavigation, isSubListOpen, openSubNavigation]);
+    /* istanbul ignore else */
+    if (buttonEl) {
+      handleNavigationItemFocus(buttonEl, closeOpenSiblings);
+    }
+  }, [
+    closeOpenSiblings,
+    closeSubNavigation,
+    handleNavigationItemFocus,
+    isSubListOpen,
+    openSubNavigation,
+  ]);
 
   const buttonProps: ButtonProps = {
     "aria-controls": id,

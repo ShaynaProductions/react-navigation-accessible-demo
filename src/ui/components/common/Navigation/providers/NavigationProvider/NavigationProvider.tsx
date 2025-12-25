@@ -66,24 +66,25 @@ export function NavigationProvider({ children, value }): JSX.Element {
       [_getNavigationArray],
     );
 
-  const _setDispatchChildClose = useCallback(
-    (parentEl: HTMLButtonElement, dispatchChildClose) => {
-      const parentIndex: number = getNavigationIndex(parentEl);
-      /* istanbul ignore else */
-      if (parentIndex >= 0) {
-        const currentObj = _getNavigationArray()[parentIndex];
-        if (
-          currentObj.dispatchChildClose?.toString() !==
-          dispatchChildClose?.toString()
-        ) {
-          setNavigationArrayObject(parentIndex, {
-            dispatchChildClose: dispatchChildClose,
-          });
+  const _setDispatchChildClose: NavigationContextInternalProps["_setDispatchChildClose"] =
+    useCallback(
+      (parentEl: HTMLButtonElement, dispatchChildClose) => {
+        const parentIndex: number = getNavigationIndex(parentEl);
+        /* istanbul ignore else */
+        if (parentIndex >= 0) {
+          const currentObj = _getNavigationArray()[parentIndex];
+          if (
+            currentObj.dispatchChildClose?.toString() !==
+            dispatchChildClose?.toString()
+          ) {
+            setNavigationArrayObject(parentIndex, {
+              dispatchChildClose: dispatchChildClose,
+            });
+          }
         }
-      }
-    },
-    [_getNavigationArray, getNavigationIndex, setNavigationArrayObject],
-  );
+      },
+      [_getNavigationArray, getNavigationIndex, setNavigationArrayObject],
+    );
 
   const _setListItems: NavigationContextReturnValueProps["_setListItems"] =
     useCallback(
@@ -154,14 +155,13 @@ export function NavigationProvider({ children, value }): JSX.Element {
     useCallback(
       (parentEl) => {
         const parentIndex = getNavigationIndex(parentEl);
-        const nullIndex = getNavigationIndex(null);
         /* istanbul ignore else */
         if (parentIndex !== 0 && navigationArray[0].storedParentEl === null) {
           registerTopLevelParent(parentEl, setTopLevelParent);
           navigationArray.shift();
         }
       },
-      [getNavigationIndex, navigationArray, topLevelParent],
+      [getNavigationIndex, navigationArray],
     );
 
   return (

@@ -290,5 +290,22 @@ describe("<Navigation Closings />", () => {
     expect(readList).toHaveClass("srOnly");
     expect(menuButton).toHaveFocus();
   });
-  it("should close component when a pointer/click event is made outside of the component.", async () => {});
+  it("should close component when a pointer/click event is made outside of the component.", async () => {
+    const { getByTestId, getByRole } = renderNavigation(linkProps);
+    const { endButton } = getCommonTestElements(
+      getByRole,
+      frontButtonLabel,
+      endButtonLabel,
+    );
+    const { communityButton, communityList } = getComplexLinkTestElements(
+      getByRole,
+      getByTestId,
+      TEST_ID,
+    );
+    await userEvent.pointer({ target: communityButton, keys: "[MouseLeft]" });
+    expect(communityButton).toHaveFocus();
+    expect(communityList).not.toHaveClass("srOnly");
+    await userEvent.pointer({ target: endButton, keys: "[MouseLeft]" });
+    expect(communityList).toHaveClass("srOnly");
+  });
 });

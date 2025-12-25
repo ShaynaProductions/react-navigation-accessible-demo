@@ -451,7 +451,7 @@ describe("ComplexSubNav Keyboard with Links", () => {
     expect(frontButton).toHaveFocus();
   });
 
-  it("3.2.1.6.3 - if the link is on the topmost row, do nothing.", async () => {
+  it("3.2.1.6.3 - if the link is on the topmost row, do nothing if it is the first child.", async () => {
     const { getByTestId, getByRole } = renderNavigation(linkProps);
     const { homeLink, communityButton } = getComplexLinkTestElements(
       getByRole,
@@ -461,8 +461,6 @@ describe("ComplexSubNav Keyboard with Links", () => {
     await userEvent.pointer({ target: communityButton, keys: "[MouseLeft]" });
     expect(communityButton).toHaveFocus();
     await userEvent.keyboard("{ArrowUp}");
-    expect(communityButton).toHaveFocus();
-    await userEvent.keyboard("{ArrowLeft}");
     expect(homeLink).toHaveFocus();
     await userEvent.keyboard("{ArrowUp}");
     expect(homeLink).toHaveFocus();

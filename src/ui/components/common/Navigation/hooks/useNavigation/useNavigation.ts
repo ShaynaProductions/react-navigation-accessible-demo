@@ -79,6 +79,15 @@ export default function useNavigation() {
       [_getNavigationArray],
     );
 
+  const _getFirstChildInRow: UseNavigationInternalTypes["_getFirstChildInRow"] =
+    useCallback(
+      (index) => {
+        const currentList = _getNavigationArray()[index].storedList || [];
+        return currentList[0];
+      },
+      [_getNavigationArray],
+    );
+
   const _getLastChildInRow: UseNavigationInternalTypes["_getLastChildInRow"] =
     useCallback(
       (index) => {
@@ -195,11 +204,12 @@ export default function useNavigation() {
           prevFocusableEl = currentParent as FocusableElementType;
         }
 
-        if (!isInTopRow) {
+        if (!isInTopRow || focusableEl !== _getFirstChildInRow(0)) {
           return prevFocusableEl;
         }
       },
       [
+        _getFirstChildInRow,
         _getNavigationObjectContainingElement,
         _getPreviousElementInRow,
         _isInTopRow,
@@ -231,32 +241,15 @@ export default function useNavigation() {
       ],
     );
 
-  const _isLastElementInList = useCallback(
-    (focusedEl) => {
-      const navObj = _getNavigationObjectContainingElement(focusedEl);
-      /* istanbul ignore next */
-      const currentList = navObj.storedList || [];
-      return currentList.indexOf(focusedEl) === currentList.length - 1;
-    },
-    [_getNavigationObjectContainingElement],
-  );
-
-  const _isFirstOrLastItem: UseNavigationInternalTypes["_isFirstOrLastItem"] =
+  const _isLastElementInList: UseNavigationInternalTypes["_isLastElementInList"] =
     useCallback(
-      (focusableEl) => {
-        const lastTopRowChild = _getLastChildInRow(0);
-        const currentIndexInTopRow = _getIndexInTopRow(focusableEl);
-        let isFirstOrLastItem = false;
-
-        if (isLastElementInComponent(focusableEl)) {
-          isFirstOrLastItem = true;
-        }
-        if (currentIndexInTopRow === 0 || focusableEl === lastTopRowChild) {
-          isFirstOrLastItem = true;
-        }
-        return isFirstOrLastItem;
+      (focusedEl: FocusableElementType) => {
+        const navObj = _getNavigationObjectContainingElement(focusedEl);
+        /* istanbul ignore next */
+        const currentList = navObj.storedList || [];
+        return currentList.indexOf(focusedEl) === currentList.length - 1;
       },
-      [_getIndexInTopRow, _getLastChildInRow, isLastElementInComponent],
+      [_getNavigationObjectContainingElement],
     );
 
   // -------------------------------------------------------
@@ -409,7 +402,9 @@ export default function useNavigation() {
         } else {
           // get Top Element
           const topParent = _getTopElement(linkEl);
-          const isParentLast = _isLastElementInList(storedParentEl);
+          const isParentLast = _isLastElementInList(
+            storedParentEl as FocusableElementType,
+          );
           const isLinkLast = _isLastElementInList(linkEl);
 
           if (isParentLast && isLinkLast) {
@@ -573,7 +568,7 @@ export default function useNavigation() {
       ],
     );
 
-  const getSubNavigation = useCallback(
+  const getSubNavigation: UseNavigationTypes["getSubNavigation"] = useCallback(
     (parentEl: HTMLButtonElement) => {
       const subNavListItems: NavigationObjectProps[] = [];
       const currentNavObject = _getNavigationObjectByParent(parentEl);
@@ -596,21 +591,25 @@ export default function useNavigation() {
     },
     [_getNavigationObjectByParent],
   );
+  const handleClickAwayClose: UseNavigationTypes["handleClickAwayClose"] =
+    useCallback(() => {
+      _closeComponent();
+    }, [_closeComponent]);
 
   const handleNavigationItemFocus: UseNavigationTypes["handleNavigationItemFocus"] =
     useCallback(
       (focusableEl, closeOpenSiblings) => {
-        if (_getIndexInTopRow(focusableEl) !== -1) {
+        if (_componentActive && _getIndexInTopRow(focusableEl) !== -1) {
           closeOpenSiblings(focusableEl);
         }
-        if (!_componentActive && _isFirstOrLastItem(focusableEl)) {
+        if (!_componentActive /*&& _isFirstOrLastItem(focusableEl)*/) {
           _setComponentActive(true);
         }
       },
       [
         _componentActive,
         _getIndexInTopRow,
-        _isFirstOrLastItem,
+        // _isFirstOrLastItem,
         _setComponentActive,
       ],
     );
@@ -618,6 +617,7 @@ export default function useNavigation() {
   return {
     closeComponentWithFocus,
     closeOpenSiblings,
+    componentActive: _componentActive,
     getTopNavigationParent,
     getLastChildInTopRow,
     getNextByButton,
@@ -629,10 +629,12 @@ export default function useNavigation() {
     getPreviousByLink,
     getPreviousByLinkTab,
     getSubNavigation,
+    handleClickAwayClose,
     handleNavigationItemFocus,
     registerNavigationItem: _registerNavLink,
     registerSubNavigation: _registerSubNav,
     resetTopNavigationArray: _resetTopNavArray,
+    setComponentActive: _setComponentActive,
     setIsListOpen: _setIsListOpen,
     setListItems: _setListItems,
   };

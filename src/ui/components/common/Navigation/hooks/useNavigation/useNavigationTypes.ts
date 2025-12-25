@@ -1,12 +1,10 @@
 import { FocusableElementType, ParentElementType } from "../../NavigationTypes";
-import {
-  NavigationObjectProps,
-  NavigationContextStoredValueProps,
-} from "../../providers";
+import { NavigationObjectProps } from "../../providers";
 
 export interface UseNavigationInternalTypes {
   _closeParentComponent: () => void;
   _getIndexInTopRow: (focusedEl: FocusableElementType | undefined) => number;
+  _getFirstChildInRow: (index: number) => FocusableElementType;
   _getLastChildInRow: (index: number) => FocusableElementType;
   _getLastFocusableElementTypeByParent: (
     parentEl: FocusableElementType,
@@ -37,6 +35,7 @@ export interface UseNavigationInternalTypes {
   _isFirstOrLastItem: (focusableEl: FocusableElementType) => boolean;
   _isInTopRow: (focusableEl: FocusableElementType) => boolean;
   isLastElementInComponent: (focusableEl: FocusableElementType) => boolean;
+  _isLastElementInList: (focusedEl: FocusableElementType) => boolean;
 }
 
 export interface UseNavigationTypes {
@@ -74,10 +73,12 @@ export interface UseNavigationTypes {
     linkEl: FocusableElementType,
   ) => FocusableElementType | undefined;
   getSubNavigation: (parentEl: HTMLButtonElement) => NavigationObjectProps[];
+  handleClickAwayClose: () => void;
   handleNavigationItemFocus: (
     focusableEl: FocusableElementType,
     closeOpenSiblings: UseNavigationTypes["closeOpenSiblings"],
   ) => void;
+  isComponentActive: () => boolean;
   registerNavigationItem: (
     navigationList: FocusableElementType[],
     parentEl: ParentElementType,
