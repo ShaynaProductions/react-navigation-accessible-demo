@@ -17,6 +17,12 @@ export const _getPreviousElementInList: NavigationHookFunctionsProps["_getPrevio
     return currentList[newIndex];
   };
 
+export const _returnStoredList: NavigationHookFunctionsProps["_returnStoredList"] =
+  (storedList) => {
+    /* istanbul ignore next */
+    return storedList || [];
+  };
+
 export const getRecursiveLastElementByParent: NavigationHookFunctionsProps["getRecursiveLastElementByParent"] =
   (focusableEl, getNavObjectByParent, getNavObjectContainingElement) => {
     let navObj: NavigationObjectProps;
@@ -24,8 +30,7 @@ export const getRecursiveLastElementByParent: NavigationHookFunctionsProps["getR
       navObj = getNavObjectByParent(
         focusableEl as ParentElementType,
       ) as NavigationObjectProps;
-      /* istanbul ignore next */
-      const storedList = navObj.storedList || [];
+      const storedList = _returnStoredList(navObj.storedList);
 
       return getRecursiveLastElementByParent(
         storedList[storedList.length - 1] as ParentElementType,
@@ -37,8 +42,7 @@ export const getRecursiveLastElementByParent: NavigationHookFunctionsProps["getR
         focusableEl as FocusableElementType,
       ) as NavigationObjectProps;
     }
-    /* istanbul ignore next */
-    const currentList = navObj.storedList || [];
+    const currentList = _returnStoredList(navObj.storedList);
     const listLength = currentList.length;
 
     return currentList[listLength - 1];

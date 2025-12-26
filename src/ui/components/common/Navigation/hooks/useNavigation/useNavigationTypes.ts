@@ -87,6 +87,9 @@ export interface NavigationHookFunctionsProps {
     focusedEl: FocusableElementType,
     currentList: FocusableElementType[],
   ) => FocusableElementType;
+  _returnStoredList: (
+    storedList: NavigationObjectProps["storedList"] | undefined,
+  ) => NavigationObjectProps["storedList"];
   getRecursiveLastElementByParent: (
     parentEl: ParentElementType,
     getNavObjectByParent: UseNavigationInternalTypes["_getNavigationObjectByParent"],
