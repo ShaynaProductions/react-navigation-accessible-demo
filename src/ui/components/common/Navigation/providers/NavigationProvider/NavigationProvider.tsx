@@ -3,7 +3,6 @@ import { createContext, JSX, useCallback, useState } from "react";
 import {
   NavigationContextInternalProps,
   NavigationContextReturnValueProps,
-  NavigationContextStoredValueProps,
   NavigationContextValueProps,
 } from "./NavigationProviderTypes";
 import { EmptyObject } from "@/ui/types";

@@ -1,12 +1,10 @@
 "use client";
 
-import { RefObject } from "react";
 import { NavigationProvider } from "../providers";
 import {
   NavigationListProps,
   NavigationProps,
   NavigationWrapperProps,
-  ParentElementType,
 } from "./NavigationTypes";
 import NavigationList from "./NavigationList";
 import { NavigationWrapper } from "./NavigationWrapper";
