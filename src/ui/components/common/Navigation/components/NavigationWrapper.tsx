@@ -1,11 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import {
-  NavigationWrapperProps,
-  ParentElementType,
-  ResetArrayProps,
-} from "./NavigationTypes";
+import { NavigationWrapperProps, ParentElementType } from "./NavigationTypes";
 import { useNavigation } from "../hooks";
 import {
   ClickAwayListener,

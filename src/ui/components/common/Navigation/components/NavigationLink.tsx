@@ -1,12 +1,6 @@
 "use client";
 
-import React, {
-  KeyboardEvent,
-  RefObject,
-  useCallback,
-  useEffect,
-  useRef,
-} from "react";
+import React, { KeyboardEvent, RefObject, useEffect, useRef } from "react";
 import { usePathname } from "@/hooks";
 import { Link, LinkProps, ListItem, ListItemProps } from "@/ui/components";
 import { usePrevious } from "@/ui/hooks";
