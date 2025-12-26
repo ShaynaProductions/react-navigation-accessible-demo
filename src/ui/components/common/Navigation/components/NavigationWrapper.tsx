@@ -5,19 +5,13 @@ import {
   NavigationWrapperProps,
   ParentElementType,
   ResetArrayProps,
-} from "../NavigationTypes";
+} from "./NavigationTypes";
 import { useNavigation } from "../hooks";
-
-const resetArray: ResetArrayProps["resetArray"] = (
-  parentEl,
-  storedParentEl,
-  resetTopNavArray,
-) => {
-  /* istanbul ignore else */
-  if (storedParentEl === null && !!parentEl && parentEl !== storedParentEl) {
-    resetTopNavArray(parentEl);
-  }
-};
+import {
+  ClickAwayListener,
+  returnTrueElementOrUndefined,
+} from "@/ui/utilities";
+import { resetArray } from "./componentFunctions";
 
 export function NavigationWrapper({
   children,
@@ -28,35 +22,41 @@ export function NavigationWrapper({
   ...rest
 }: NavigationWrapperProps) {
   const {
-    getTopNavigationParent,
+    isComponentActive,
+    getTopParentElement,
+    handleClickAwayClose,
     registerSubNavigation,
-    resetTopNavigationArray,
+    resetTopNavigation,
   } = useNavigation();
 
   useEffect(() => {
-    const storedParentEl: ParentElementType =
-      getTopNavigationParent().storedParentEl;
+    const storedParentEl = getTopParentElement().storedParentEl;
     const parentEl = parentRef?.current as ParentElementType;
     /* istanbul ignore else */
-    if (storedParentEl !== parentEl) {
-      resetArray(parentEl, storedParentEl, resetTopNavigationArray);
+    if (!!parentEl && storedParentEl !== parentEl) {
+      resetArray(parentEl, storedParentEl, resetTopNavigation);
     }
     if (!!parentEl) {
       registerSubNavigation(isOpen, parentEl);
     }
   }, [
-    getTopNavigationParent,
+    getTopParentElement,
     parentRef,
-    resetTopNavigationArray,
+    resetTopNavigation,
     registerSubNavigation,
     isOpen,
   ]);
 
   return (
-    <>
+    <ClickAwayListener
+      onClickAway={returnTrueElementOrUndefined(
+        isComponentActive,
+        handleClickAwayClose,
+      )}
+    >
       <nav aria-label={label} className={cx} {...rest}>
         {children}
       </nav>
-    </>
+    </ClickAwayListener>
   );
 }

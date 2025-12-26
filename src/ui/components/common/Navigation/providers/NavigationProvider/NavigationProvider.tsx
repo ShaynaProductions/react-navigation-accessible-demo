@@ -8,6 +8,8 @@ import {
 } from "./NavigationProviderTypes";
 import { EmptyObject } from "@/ui/types";
 import { arraysEqual } from "@/ui/utilities";
+import { ParentElementType } from "@/ui/components";
+import { registerTopLevelParent } from "./navigationProviderFunctions";
 
 export const NavigationContext = createContext<
   NavigationContextValueProps | EmptyObject
@@ -17,9 +19,12 @@ export function NavigationProvider({ children, value }): JSX.Element {
   const currentObj = { ...value };
 
   const [navigationArray, setNavigationArray] = useState([currentObj]);
-  const [componentActive, setComponentActive] = useState<boolean>(false);
+  const [isComponentActive, setIsComponentActive] = useState<boolean>(false);
+  const [topLevelParent, setTopLevelParent] = useState<ParentElementType>(
+    currentObj.storedParentEl,
+  );
 
-  const getNavigationIndex: NavigationContextInternalProps["getNavigationIndex"] =
+  const _getNavigationIndex: NavigationContextInternalProps["_getNavigationIndex"] =
     useCallback(
       (parentEl) => {
         let foundIndex = -1,
@@ -37,110 +42,137 @@ export function NavigationProvider({ children, value }): JSX.Element {
       [navigationArray],
     );
 
-  const _getNavigationArray: NavigationContextInternalProps["_getNavigationArray"] =
+  const getNavigationArray: NavigationContextReturnValueProps["getNavigationArray"] =
     useCallback(() => {
-      return navigationArray as NavigationContextStoredValueProps[];
+      return navigationArray;
     }, [navigationArray]);
 
-  const setNavigationArrayObject: NavigationContextInternalProps["setNavigationArrayObject"] =
+  const _setNavigationArrayObject: NavigationContextInternalProps["_setNavigationArrayObject"] =
     useCallback(
       (index, updatedContent) => {
-        const currentObj = _getNavigationArray()[index];
-        const mutableArray = _getNavigationArray();
+        const currentObj = getNavigationArray()[index];
+        const mutableArray = getNavigationArray();
         mutableArray[index] = {
           ...currentObj,
           ...updatedContent,
         };
         setNavigationArray(mutableArray);
       },
-      [_getNavigationArray],
+      [getNavigationArray],
+    );
+  const _setParentEl: NavigationContextInternalProps["_setParentEl"] =
+    useCallback(
+      (parentEl) => {
+        const parentIndex = _getNavigationIndex(parentEl);
+        if (parentIndex === -1) {
+          navigationArray.push({ storedParentEl: parentEl });
+        }
+      },
+      [_getNavigationIndex, navigationArray],
     );
 
-  const _setListItems: NavigationContextReturnValueProps["_setListItems"] =
+  const setDispatchChildClose: NavigationContextReturnValueProps["setDispatchChildClose"] =
     useCallback(
-      (navigationList, parentEl) => {
-        const parentIndex = getNavigationIndex(parentEl);
+      (parentEl: HTMLButtonElement, dispatchChildClose) => {
+        const parentIndex: number = _getNavigationIndex(parentEl);
         /* istanbul ignore else */
         if (parentIndex >= 0) {
-          const currentObj = _getNavigationArray()[parentIndex];
+          const currentObj = getNavigationArray()[parentIndex];
+          if (
+            currentObj.dispatchChildClose?.toString() !==
+            dispatchChildClose?.toString()
+          ) {
+            _setNavigationArrayObject(parentIndex, {
+              dispatchChildClose: dispatchChildClose,
+            });
+          }
+        }
+      },
+      [getNavigationArray, _getNavigationIndex, _setNavigationArrayObject],
+    );
+
+  const setIsListOpen: NavigationContextReturnValueProps["setIsListOpen"] =
+    useCallback(
+      (isListOpen, parentEl) => {
+        const parentIndex: number = _getNavigationIndex(parentEl);
+        const currentObj = getNavigationArray()[parentIndex];
+        /* istanbul ignore else */
+        if (parentIndex >= 0 && currentObj.isSubListOpen !== isListOpen) {
+          _setNavigationArrayObject(parentIndex, {
+            isSubListOpen: isListOpen,
+          });
+        }
+      },
+
+      [_getNavigationIndex, getNavigationArray, _setNavigationArrayObject],
+    );
+
+  const setListItems: NavigationContextReturnValueProps["setListItems"] =
+    useCallback(
+      (navigationList, parentEl) => {
+        const parentIndex = _getNavigationIndex(parentEl);
+        /* istanbul ignore else */
+        if (parentIndex >= 0) {
+          const currentObj = getNavigationArray()[parentIndex];
           if (
             !currentObj.storedList ||
             !arraysEqual(currentObj.storedList, navigationList)
           ) {
-            setNavigationArrayObject(parentIndex, {
+            _setNavigationArrayObject(parentIndex, {
               storedList: navigationList,
             });
           }
         }
       },
-      [_getNavigationArray, getNavigationIndex, setNavigationArrayObject],
+      [getNavigationArray, _getNavigationIndex, _setNavigationArrayObject],
     );
 
-  const setParentEl: NavigationContextInternalProps["setParentEl"] =
+  const registerLink: NavigationContextReturnValueProps["registerLink"] = (
+    navigationList,
+    parentEl,
+  ) => {
+    _setParentEl(parentEl);
+    setListItems(navigationList, parentEl);
+  };
+
+  const registerSubNavigation: NavigationContextReturnValueProps["registerSubNavigation"] =
+    useCallback(
+      (isListOpen, parentEl, dispatchChildClose) => {
+        _setParentEl(parentEl);
+        setIsListOpen(isListOpen, parentEl);
+        setDispatchChildClose(
+          parentEl as HTMLButtonElement,
+          dispatchChildClose,
+        );
+      },
+      [_setParentEl, setIsListOpen, setDispatchChildClose],
+    );
+  const resetTopNavigation: NavigationContextReturnValueProps["resetTopNavigation"] =
     useCallback(
       (parentEl) => {
-        const parentIndex = getNavigationIndex(parentEl);
-        if (parentIndex === -1) {
-          navigationArray.push({ storedParentEl: parentEl });
-        }
-      },
-      [getNavigationIndex, navigationArray],
-    );
-
-  const _setIsListOpen: NavigationContextReturnValueProps["_setIsListOpen"] =
-    useCallback(
-      (isListOpen, parentEl) => {
-        const parentIndex: number = getNavigationIndex(parentEl);
-        const currentObj = _getNavigationArray()[parentIndex];
+        const parentIndex = _getNavigationIndex(parentEl);
         /* istanbul ignore else */
-        if (parentIndex >= 0 && currentObj.isSubListOpen !== isListOpen) {
-          setNavigationArrayObject(parentIndex, {
-            isSubListOpen: isListOpen,
-          });
-        }
-        // console.log(_getNavigationArray());
-      },
-
-      [getNavigationIndex, _getNavigationArray, setNavigationArrayObject],
-    );
-
-  const _registerNavLink: NavigationContextReturnValueProps["_registerNavLink"] =
-    (navigationList, parentEl) => {
-      setParentEl(parentEl);
-      _setListItems(navigationList, parentEl);
-    };
-
-  const _registerSubNav: NavigationContextReturnValueProps["_registerSubNav"] =
-    useCallback(
-      (isListOpen, parentEl) => {
-        setParentEl(parentEl);
-        _setIsListOpen(isListOpen, parentEl);
-      },
-      [setParentEl, _setIsListOpen],
-    );
-  const _resetTopNavArray: NavigationContextReturnValueProps["_resetTopNavArray"] =
-    useCallback(
-      (parentEl) => {
-        const parentIndex = getNavigationIndex(parentEl);
-        /* istanbul ignore else */
-        if (parentIndex !== 0) {
+        if (parentIndex !== 0 && navigationArray[0].storedParentEl === null) {
+          registerTopLevelParent(parentEl, setTopLevelParent);
           navigationArray.shift();
         }
       },
-      [getNavigationIndex, navigationArray],
+      [_getNavigationIndex, navigationArray],
     );
 
   return (
     <NavigationContext.Provider
       value={{
-        _componentActive: componentActive,
-        _getNavigationArray,
-        _registerNavLink,
-        _registerSubNav,
-        _resetTopNavArray,
-        _setComponentActive: setComponentActive,
-        _setIsListOpen,
-        _setListItems,
+        getNavigationArray,
+        isComponentActive,
+        registerLink,
+        registerSubNavigation,
+        resetTopNavigation,
+        setDispatchChildClose,
+        setIsComponentActive,
+        setIsListOpen,
+        setListItems,
+        topLevelParent,
       }}
     >
       {children}

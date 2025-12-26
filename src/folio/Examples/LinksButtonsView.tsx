@@ -16,7 +16,7 @@ export function LinksButtonsView(navObject: {
 
   return (
     <>
-      <Heading headingLevel={3}>Simple Link Structure</Heading>
+      <Heading headingLevel={2}>Simple Link Structure</Heading>
       <Text>
         Demonstrates a simple subnavigation consisting entirely of links with
         outside buttons to check for keyboard traps.

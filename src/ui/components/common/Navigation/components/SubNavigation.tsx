@@ -16,7 +16,7 @@ import {
   NavigationListProps,
   ParentElementType,
   SubNavigationProps,
-} from "../NavigationTypes";
+} from "./NavigationTypes";
 import { useNavigation, useNavigationList } from "../hooks";
 import { _handleKeyDown } from "../utilities";
 import NavigationList from "./NavigationList";
@@ -39,23 +39,49 @@ export function SubNavigation({
     setSpecificFocus,
   } = useNavigationList();
   const {
+    closeComponentWithFocus,
+    closeOpenSiblings,
     getNextByButton,
     getNextByButtonTab,
     getPreviousByButton,
     getPreviousByButtonTab,
+    getChildrenInTree,
     handleNavigationItemFocus,
     registerSubNavigation,
+    setIsListOpen,
     setListItems,
   } = useNavigation();
 
   const buttonRef = useRef<ParentElementType>(null);
   const [isSubListOpen, setIsSubListOpen] = useState<boolean>(false);
 
+  const closeSubNavigation = useCallback(
+    (buttonEl: HTMLButtonElement) => {
+      const dispatchArray = getChildrenInTree(buttonEl);
+      for (const dispatchObj of dispatchArray) {
+        const { dispatchChildClose, storedParentEl, isSubListOpen } =
+          dispatchObj;
+        if (isSubListOpen && dispatchChildClose && storedParentEl) {
+          dispatchChildClose(storedParentEl);
+        }
+      }
+      setIsListOpen(false, buttonEl);
+      setIsSubListOpen(false);
+    },
+    [getChildrenInTree, setIsListOpen],
+  );
+
+  const openSubNavigation = (buttonEl: HTMLButtonElement) => {
+    setIsListOpen(true, buttonEl);
+    setIsSubListOpen(true);
+  };
+
   useEffect(() => {
     const buttonEl = buttonRef.current as FocusableElementType;
     registerItemInList(buttonEl);
-    registerSubNavigation(isSubListOpen, buttonEl);
+    registerSubNavigation(isSubListOpen, buttonEl, closeSubNavigation);
   }, [
+    closeSubNavigation,
     currentListItems,
     isSubListOpen,
     parentRef,
@@ -68,87 +94,89 @@ export function SubNavigation({
     setListItems(currentListItems, parentRef.current);
   }, [currentListItems, parentRef, setListItems]);
 
-  const handleFocus = useCallback(() => {
+  const handleFocus = () => {
     /* istanbul ignore else */
     if (buttonRef.current) {
-      handleNavigationItemFocus(buttonRef.current);
+      handleNavigationItemFocus(buttonRef.current, closeOpenSiblings);
     }
-  }, [handleNavigationItemFocus]);
+  };
 
-  const handleKeyDown = useCallback(
-    (e: KeyboardEvent) => {
-      const buttonEl = buttonRef.current as FocusableElementType;
+  const handleKeyDown = (e: KeyboardEvent) => {
+    const buttonEl = buttonRef.current as FocusableElementType;
+    /* istanbul ignore else */
+    if (buttonEl) {
+      handleNavigationItemFocus(buttonEl, closeOpenSiblings);
+    }
 
-      switch (e.key) {
-        case Keys.HOME:
-        case Keys.END:
-        case Keys.LEFT:
-        case Keys.RIGHT:
-        case Keys.UP:
-        case Keys.DOWN:
-        case Keys.TAB:
-          e.preventDefault();
-          break;
-      }
+    switch (e.key) {
+      case Keys.HOME:
+      case Keys.END:
+      case Keys.LEFT:
+      case Keys.RIGHT:
+      case Keys.UP:
+      case Keys.DOWN:
+      case Keys.TAB:
+        e.preventDefault();
+        break;
+    }
 
-      // common between link and button
-      _handleKeyDown(
-        e,
-        buttonEl,
-        setFirstFocus,
-        setLastFocus,
-        setNextFocus,
-        setPreviousFocus,
-      );
-      // specific to button.
-      switch (e.key) {
-        case Keys.UP:
-          const prevFocusableEl = getPreviousByButton(buttonEl);
-          /* istanbul ignore else */
-          if (prevFocusableEl) {
-            setSpecificFocus(prevFocusableEl);
-          }
-          break;
-        case Keys.DOWN:
-          const nextFocusableEl = getNextByButton(buttonEl, isSubListOpen);
-          /* istanbul ignore else */
-          if (nextFocusableEl) {
-            setSpecificFocus(nextFocusableEl);
-          }
-          break;
-        case Keys.TAB:
-          if (e.shiftKey) {
-            const prevFocusableEl = getPreviousByButtonTab(buttonEl);
-            /*istanbul ignore else */
-            if (prevFocusableEl) {
-              setSpecificFocus(prevFocusableEl);
-            }
-          } else {
-            const nextFocusableEl = getNextByButtonTab(buttonEl, isSubListOpen);
-            /* istanbul ignore else */
-            if (nextFocusableEl) {
-              setSpecificFocus(nextFocusableEl);
-            }
-          }
-          break;
-      }
-    },
-    [
-      getNextByButton,
-      getNextByButtonTab,
-      getPreviousByButton,
-      getPreviousByButtonTab,
-      isSubListOpen,
+    // common between link and button
+    _handleKeyDown(
+      e,
+      buttonEl,
+      closeComponentWithFocus,
       setFirstFocus,
       setLastFocus,
       setNextFocus,
       setPreviousFocus,
       setSpecificFocus,
-    ],
-  );
+    );
+    // specific to button.
+    switch (e.key) {
+      case Keys.UP:
+        const prevFocusableEl = getPreviousByButton(buttonEl);
+        /* istanbul ignore else */
+        if (prevFocusableEl) {
+          setSpecificFocus(prevFocusableEl);
+        }
+        break;
+      case Keys.DOWN:
+        const nextFocusableEl = getNextByButton(buttonEl, isSubListOpen);
+        /* istanbul ignore else */
+        if (nextFocusableEl) {
+          setSpecificFocus(nextFocusableEl);
+        }
+        break;
+      case Keys.TAB:
+        if (e.shiftKey) {
+          const prevFocusableEl = getPreviousByButtonTab(buttonEl);
+          /*istanbul ignore else */
+          if (prevFocusableEl) {
+            setSpecificFocus(prevFocusableEl);
+          }
+        } else {
+          const nextFocusableEl = getNextByButtonTab(buttonEl, isSubListOpen);
+          /* istanbul ignore else */
+          if (nextFocusableEl) {
+            setSpecificFocus(nextFocusableEl);
+          }
+        }
+        break;
+    }
+  };
 
   const handlePress = () => {
-    setIsSubListOpen(!isSubListOpen);
+    const buttonEl = buttonRef.current as HTMLButtonElement;
+
+    if (isSubListOpen) {
+      closeSubNavigation(buttonEl);
+    } else {
+      openSubNavigation(buttonEl);
+    }
+    /* istanbul ignore else */
+    if (buttonEl) {
+      handleNavigationItemFocus(buttonEl, closeOpenSiblings);
+    }
   };
 
   const buttonProps: ButtonProps = {

@@ -1,48 +1,46 @@
-import { FocusableElementType, ParentElementType } from "../../NavigationTypes";
 import {
-  NavigationArrayProps,
-  NavigationContextStoredValueProps,
+  FocusableElementType,
+  ParentElementType,
+} from "../../components/NavigationTypes";
+import {
+  NavigationContextReturnValueProps,
+  NavigationObjectProps,
 } from "../../providers";
 
 export interface UseNavigationInternalTypes {
-  _getIndexInTopRow: (focusedEl: FocusableElementType) => number;
+  _getIndexInTopRow: (focusedEl: FocusableElementType | undefined) => number;
+  _getFirstChildInRow: (index: number) => FocusableElementType;
   _getLastChildInRow: (index: number) => FocusableElementType;
+  _getNavigationObjectByParent: (
+    parentEl: ParentElementType,
+  ) => Partial<NavigationObjectProps>;
+  _getNavigationObjectContainingElement: (
+    focusedEl: FocusableElementType,
+  ) => Partial<NavigationObjectProps>;
+  _closeComponent: () => void;
   _getLastFocusableElementTypeByParent: (
     parentEl: FocusableElementType,
   ) => FocusableElementType;
-  _getNavigationObjectByParent: (
-    parentEl: ParentElementType,
-  ) => Partial<NavigationArrayProps>;
-  _getNavigationObjectContainingElement: (
-    focusableEl: FocusableElementType,
-  ) => NavigationContextStoredValueProps;
-  _getNextElement: (
-    focusableEl: FocusableElementType,
-    currentItemsList: FocusableElementType[],
-  ) => FocusableElementType;
-  _getNextElementInRow: (
-    focusableEl: FocusableElementType,
-    currentList: FocusableElementType[],
-  ) => FocusableElementType;
-  _getParentByElement: (focusableEl: FocusableElementType) => ParentElementType;
-  _getPreviousElement: (
-    focusableEl: FocusableElementType,
+  _getParentByElement: (focusedEl: FocusableElementType) => ParentElementType;
+  _isInTopRow: (focusedEl: FocusableElementType) => boolean;
+  _getPreviousByElement: (
+    focusedEl: FocusableElementType,
   ) => FocusableElementType | undefined;
-  _getPreviousElementInRow: (
-    focusableEl: FocusableElementType,
-    currentList: FocusableElementType[],
-  ) => FocusableElementType;
-  _getTopElement: (focusableEl: FocusableElementType) => FocusableElementType;
-  _isFirstOrLastItem: (focusableEl: FocusableElementType) => boolean;
-  _isInTopRow: (focusableEl: FocusableElementType) => boolean;
-  isLastElementInComponent: (focusableEl: FocusableElementType) => boolean;
+  _getTopElement: (focusedEl: FocusableElementType) => FocusableElementType;
+  _isLastElementInComponent: (focusedEl: FocusableElementType) => boolean;
+  _isLastElementInList: (focusedEl: FocusableElementType) => boolean;
 }
 
-export interface UseNavigationTypes {
+export interface UseNavigationReturnTypes {
+  getTopParentElement: () => Partial<NavigationObjectProps>;
+  closeComponentWithFocus: (
+    focusedEl: FocusableElementType,
+  ) => FocusableElementType | undefined;
+  closeOpenSiblings: (focusedEl: FocusableElementType) => void;
   getLastChildInTopRow: (
-    focusableEl: FocusableElementType,
+    focusedEl: FocusableElementType,
   ) => FocusableElementType;
-  getTopNavigationParent: () => NavigationArrayProps;
+
   getNextByButton: (
     buttonEl: FocusableElementType,
     isSubListOpen: boolean,
@@ -53,9 +51,7 @@ export interface UseNavigationTypes {
   ) => FocusableElementType;
   getNextByLink: (linkEl: FocusableElementType) => FocusableElementType;
   getNextByLinkTab: (linkEl: FocusableElementType) => FocusableElementType;
-  getPreviousByElement: (
-    focusableEl: FocusableElementType,
-  ) => FocusableElementType;
+
   getPreviousByButton: (
     buttonEl: FocusableElementType,
   ) => FocusableElementType | undefined;
@@ -68,24 +64,39 @@ export interface UseNavigationTypes {
   getPreviousByLinkTab: (
     linkEl: FocusableElementType,
   ) => FocusableElementType | undefined;
-  handleNavigationItemFocus(focusableEl: FocusableElementType): void;
-  registerNavigationItem: (
-    navigationList: FocusableElementType[],
-    parentEl: ParentElementType,
+  getChildrenInTree: (parentEl: HTMLButtonElement) => NavigationObjectProps[];
+  handleClickAwayClose: () => void;
+  handleNavigationItemFocus: (
+    focusedEl: FocusableElementType,
+    closeOpenSiblings: UseNavigationReturnTypes["closeOpenSiblings"],
   ) => void;
-  resetTopNavArray: (parentEl: HTMLButtonElement) => void;
-  setIsListOpen: (isListOpen: boolean, parentEl: ParentElementType) => void;
-
-  setListItems: (
-    navigationList: FocusableElementType[],
-    parentEl: ParentElementType,
-  ) => void;
+  isComponentActive: NavigationContextReturnValueProps["isComponentActive"];
+  registerLink: NavigationContextReturnValueProps["registerLink"];
+  registerSubNavigation: NavigationContextReturnValueProps["registerSubNavigation"];
+  resetTopNavigation: NavigationContextReturnValueProps["resetTopNavigation"];
+  setIsListOpen: NavigationContextReturnValueProps["setIsListOpen"];
+  setListItems: NavigationContextReturnValueProps["setListItems"];
 }
 
-export interface ExternalNavHookProps {
+export interface NavigationHookFunctionsProps {
+  _getNextElementInList: (
+    focusedEl: FocusableElementType,
+    currentList: FocusableElementType[],
+  ) => FocusableElementType;
+  _getPreviousElementInList: (
+    focusedEl: FocusableElementType,
+    currentList: FocusableElementType[],
+  ) => FocusableElementType;
+  _returnStoredList: (
+    storedList: NavigationObjectProps["storedList"] | undefined,
+  ) => NavigationObjectProps["storedList"];
   getRecursiveLastElementByParent: (
     parentEl: ParentElementType,
     getNavObjectByParent: UseNavigationInternalTypes["_getNavigationObjectByParent"],
+    getNavObjectContainingElement: UseNavigationInternalTypes["_getNavigationObjectContainingElement"],
+  ) => FocusableElementType;
+  getRecursiveTopElementByParent: (
+    focusableEl: FocusableElementType,
     getNavObjectContainingElement: UseNavigationInternalTypes["_getNavigationObjectContainingElement"],
   ) => FocusableElementType;
 }

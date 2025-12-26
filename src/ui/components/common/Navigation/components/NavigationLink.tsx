@@ -13,7 +13,7 @@ import { usePrevious } from "@/ui/hooks";
 import { Keys, returnTrueElementOrUndefined } from "@/ui/utilities";
 import { useNavigation, useNavigationList } from "../hooks";
 import { _handleKeyDown } from "../utilities";
-import { FocusableElementType, NavigationLinkProps } from "../NavigationTypes";
+import { FocusableElementType, NavigationLinkProps } from "./NavigationTypes";
 
 export function NavigationLink({
   cx,
@@ -33,13 +33,17 @@ export function NavigationLink({
     setSpecificFocus,
   } = useNavigationList();
   const {
+    closeComponentWithFocus,
+    closeOpenSiblings,
+    isComponentActive,
     getLastChildInTopRow,
     getNextByLink,
     getNextByLinkTab,
     getPreviousByLink,
     getPreviousByLinkTab,
     handleNavigationItemFocus,
-    registerNavigationItem,
+    registerLink,
+    setIsComponentActive,
   } = useNavigation();
   const currentPath = usePathname();
 
@@ -53,91 +57,84 @@ export function NavigationLink({
   }, [linkRef, prevLinkRef, registerItemInList]);
 
   useEffect(() => {
-    registerNavigationItem(currentListItems, parentRef.current);
-  }, [currentListItems, parentRef, registerNavigationItem]);
+    registerLink(currentListItems, parentRef.current);
+  }, [currentListItems, parentRef, registerLink]);
 
-  const handleFocus = useCallback(() => {
+  const handleFocus = () => {
     const linkEl = linkRef.current as FocusableElementType;
     const returnEl = getLastChildInTopRow(linkEl);
-    handleNavigationItemFocus(linkEl);
+    if (!isComponentActive) {
+      setIsComponentActive(true);
+    }
+
+    handleNavigationItemFocus(linkEl, closeOpenSiblings);
     /* istanbul ignore else */
     if (returnEl !== linkEl && returnEl !== null) {
       setSpecificFocus(returnEl);
     }
-  }, [getLastChildInTopRow, handleNavigationItemFocus, setSpecificFocus]);
+  };
 
-  const handleKeyDown = useCallback(
-    (e: KeyboardEvent) => {
-      const linkEl = linkRef.current as FocusableElementType;
+  const handleKeyDown = (e: KeyboardEvent) => {
+    const linkEl = linkRef.current as FocusableElementType;
 
-      switch (e.key) {
-        case Keys.HOME:
-        case Keys.END:
-        case Keys.LEFT:
-        case Keys.RIGHT:
-        case Keys.UP:
-        case Keys.DOWN:
-        case Keys.TAB:
-          e.preventDefault();
-          e.stopPropagation();
-          break;
-      }
+    switch (e.key) {
+      case Keys.HOME:
+      case Keys.END:
+      case Keys.LEFT:
+      case Keys.RIGHT:
+      case Keys.UP:
+      case Keys.DOWN:
+      case Keys.TAB:
+        e.preventDefault();
+        e.stopPropagation();
+        break;
+    }
 
-      // common between link and button
-      _handleKeyDown(
-        e,
-        linkEl,
-        setFirstFocus,
-        setLastFocus,
-        setNextFocus,
-        setPreviousFocus,
-      );
-      // specific to link.
-      switch (e.key) {
-        case Keys.UP:
-          const prevFocusableEl = getPreviousByLink(linkEl);
-          /* istanbul ignore else */
-          if (prevFocusableEl) {
-            setSpecificFocus(prevFocusableEl);
-          }
-          break;
-        case Keys.DOWN:
-          const nextFocusableEl = getNextByLink(linkEl);
-          /* istanbul ignore else */
-          if (nextFocusableEl) {
-            setSpecificFocus(nextFocusableEl);
-          }
-          break;
-
-        case Keys.TAB:
-          if (e.shiftKey) {
-            const prevFocusableEl = getPreviousByLinkTab(linkEl);
-            /* istanbul ignore else */
-            if (prevFocusableEl) {
-              setSpecificFocus(prevFocusableEl);
-            }
-          } else {
-            const nextFocusableEl = getNextByLinkTab(linkEl);
-            /* istanbul ignore else */
-            if (nextFocusableEl) {
-              setSpecificFocus(nextFocusableEl);
-            }
-          }
-          break;
-      }
-    },
-    [
-      getNextByLink,
-      getNextByLinkTab,
-      getPreviousByLink,
-      getPreviousByLinkTab,
+    // common between link and button
+    _handleKeyDown(
+      e,
+      linkEl,
+      closeComponentWithFocus,
       setFirstFocus,
       setLastFocus,
       setNextFocus,
       setPreviousFocus,
       setSpecificFocus,
-    ],
-  );
+    );
+    // specific to link.
+    switch (e.key) {
+      case Keys.UP:
+        const prevFocusableEl = getPreviousByLink(linkEl);
+        /* istanbul ignore else */
+        if (prevFocusableEl) {
+          setSpecificFocus(prevFocusableEl);
+        }
+        break;
+      case Keys.DOWN:
+        const nextFocusableEl = getNextByLink(linkEl);
+        /* istanbul ignore else */
+        if (nextFocusableEl) {
+          setSpecificFocus(nextFocusableEl);
+        }
+        break;
+
+      case Keys.TAB:
+        if (e.shiftKey) {
+          const prevFocusableEl = getPreviousByLinkTab(linkEl);
+          /* istanbul ignore else */
+          if (prevFocusableEl) {
+            setSpecificFocus(prevFocusableEl);
+          }
+        } else {
+          const nextFocusableEl = getNextByLinkTab(linkEl);
+          /* istanbul ignore else */
+          if (nextFocusableEl) {
+            setSpecificFocus(nextFocusableEl);
+          }
+        }
+        break;
+    }
+  };
 
   const listItemProps: Omit<ListItemProps, "children"> = {
     cx: cx,

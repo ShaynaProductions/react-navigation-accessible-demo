@@ -1,49 +1,53 @@
 "use client";
-import React, {createContext, useCallback, useState} from "react";
-import {EmptyObject} from "@/ui/types";
+import React, { createContext, useCallback, useState } from "react";
+import { EmptyObject } from "@/ui/types";
 
-import {FocusableElementType} from "../../NavigationTypes";
+import { FocusableElementType } from "../../components/NavigationTypes";
 import {
-    NavigationListContextReturnValueProps,
-    NavigationListContextStoredValueProps,
+  NavigationListContextReturnValueProps,
+  NavigationListContextStoredValueProps,
 } from "./NavigationListProviderTypes";
 
 export const NavigationListContext = createContext<
-    Partial<NavigationListContextReturnValueProps> | EmptyObject
+  Partial<NavigationListContextReturnValueProps> | EmptyObject
 >({});
 
-export function NavigationListProvider({children, value}) {
-    const [currentListItems] = useState<FocusableElementType[]>([]);
-    const {parentRef}: NavigationListContextStoredValueProps = value;
+export function NavigationListProvider({ children, value }) {
+  const [currentListItems] = useState<FocusableElementType[]>([]);
+  const { parentRef }: NavigationListContextStoredValueProps = value;
 
-
-    const _getCurrentListItems: NavigationListContextReturnValueProps["_getCurrentListItems"] = useCallback(() => {
-        return currentListItems;
+  const getCurrentListItems: NavigationListContextReturnValueProps["getCurrentListItems"] =
+    useCallback(() => {
+      return currentListItems;
     }, [currentListItems]);
 
-    const _getParentRef = useCallback(()=> {
-        return parentRef;
-    },[parentRef])
+  const getParentRef: NavigationListContextReturnValueProps["getParentRef"] =
+    useCallback(() => {
+      return parentRef;
+    }, [parentRef]);
 
-    const _registerItemInList = useCallback((focusableEl: FocusableElementType) => {
+  const registerItemInList: NavigationListContextReturnValueProps["registerItemInList"] =
+    useCallback(
+      (focusableEl: FocusableElementType) => {
         /* istanbul ignore else */
         if (currentListItems?.indexOf(focusableEl) === -1) {
-            currentListItems.push(focusableEl);
+          currentListItems.push(focusableEl);
         }
-    }, [currentListItems])
-
-
-    return (
-        <NavigationListContext.Provider
-            value={{
-                _getCurrentListItems,
-                _getParentRef,
-                _registerItemInList,
-            }}
-        >
-            {children}
-        </NavigationListContext.Provider>
+      },
+      [currentListItems],
     );
+
+  return (
+    <NavigationListContext.Provider
+      value={{
+        getCurrentListItems,
+        getParentRef,
+        registerItemInList,
+      }}
+    >
+      {children}
+    </NavigationListContext.Provider>
+  );
 }
 
 NavigationListProvider.context = NavigationListContext;

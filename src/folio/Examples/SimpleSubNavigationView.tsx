@@ -34,7 +34,7 @@ export function SimpleSubNavigationView(
 
   return (
     <>
-      <Heading headingLevel={3}>Single SubNavigation</Heading>
+      <Heading headingLevel={2}>Single SubNavigation</Heading>
       <Text>
         An example of a single navigation component with nested subnavigation.
         Focusable buttons surround the component and help identify keyboard
