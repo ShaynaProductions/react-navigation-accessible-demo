@@ -1,4 +1,7 @@
-import { FocusableElementType, ParentElementType } from "../../NavigationTypes";
+import {
+  FocusableElementType,
+  ParentElementType,
+} from "../../components/NavigationTypes";
 import React from "react";
 
 export interface NavigationProviderFunctionsProps {
@@ -14,8 +17,7 @@ export interface NavigationContextStoredValueProps {
   isSubListOpen?: boolean;
 }
 
-export interface NavigationObjectProps {
-  dispatchChildClose?: (parentEl: HTMLButtonElement) => void;
+export interface NavigationObjectProps extends NavigationContextStoredValueProps {
   storedList: FocusableElementType[];
   storedParentEl: ParentElementType;
   isSubListOpen: boolean;
@@ -29,34 +31,35 @@ export interface NavigationContextInternalProps {
 
   _setNavigationArrayObject: (
     index: number,
-    updatedContent: Partial<NavigationContextStoredValueProps>,
+    updatedContent: Partial<NavigationObjectProps>,
   ) => void;
   _setParentEl: (parentEl: ParentElementType) => void;
 }
 
 export interface NavigationContextReturnValueProps {
-  componentActive: boolean;
-  getNavigationArray: () => NavigationContextStoredValueProps[];
-  registerNavLink: (
-    navigationList: FocusableElementType[],
-    parentEl: ParentElementType,
-  ) => void;
-  registerSubNav: (
-    isListOpen: boolean,
-    parentEl: ParentElementType,
-    dispatchChildClose: () => void,
-  ) => void;
-  resetTopNavArray: (parentEl: HTMLButtonElement) => void;
-  setComponentActive: (componentActive: boolean) => void;
+  getNavigationArray: () => NavigationObjectProps[];
+  isComponentActive: boolean;
+
   setDispatchChildClose: (
     parentEl: HTMLButtonElement,
     dispatchChildClose: () => void,
   ) => void;
+  setIsComponentActive: (isComponentActive: boolean) => void;
   setIsListOpen: (isListOpen: boolean, parentEl: ParentElementType) => void;
   setListItems: (
     navigationList: FocusableElementType[],
     parentEl: ParentElementType,
   ) => void;
+  registerLink: (
+    navigationList: FocusableElementType[],
+    parentEl: ParentElementType,
+  ) => void;
+  registerSubNavigation: (
+    isListOpen: boolean,
+    parentEl: ParentElementType,
+    dispatchChildClose: () => void,
+  ) => void;
+  resetTopNavigation: (parentEl: HTMLButtonElement) => void;
   topLevelParent: HTMLButtonElement | null;
 }
 

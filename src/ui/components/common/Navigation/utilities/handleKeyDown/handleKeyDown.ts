@@ -1,6 +1,6 @@
 import React from "react";
 import { Keys } from "@/ui/utilities";
-import { FocusableElementType } from "../../NavigationTypes";
+import { FocusableElementType } from "../../components/NavigationTypes";
 
 export const _handleKeyDown = (
   e: React.KeyboardEvent,

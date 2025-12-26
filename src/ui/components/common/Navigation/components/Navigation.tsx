@@ -1,52 +1,55 @@
 "use client";
 
-import {RefObject} from "react";
-import {NavigationProvider} from "../providers";
-import {NavigationListProps, NavigationProps, NavigationWrapperProps, ParentElementType} from "../NavigationTypes";
+import { RefObject } from "react";
+import { NavigationProvider } from "../providers";
+import {
+  NavigationListProps,
+  NavigationProps,
+  NavigationWrapperProps,
+  ParentElementType,
+} from "./NavigationTypes";
 import NavigationList from "./NavigationList";
-import {NavigationWrapper} from "./NavigationWrapper";
-
-const returnStoredParentEl = (parentRef?: RefObject<ParentElementType | null>) => {
-    return parentRef?.current || null
-}
+import { NavigationWrapper } from "./NavigationWrapper";
+import { returnStoredParentEl } from "./componentFunctions";
 
 export default function Navigation({
-    children,
-    cx,
-    isOpen = true,
-    label,
-    orientation = "vertical",
-    parentRef,
-    testId,
-    ...rest
+  children,
+  cx,
+  isOpen = true,
+  label,
+  orientation = "vertical",
+  parentRef,
+  testId,
+  ...rest
 }: NavigationProps) {
+  const storedParentEl = returnStoredParentEl(parentRef);
 
-    const storedParentEl = returnStoredParentEl(parentRef);
+  const navListProps: NavigationListProps = {
+    isOpen: isOpen,
+    orientation: orientation,
+    parentRef: parentRef,
+    testId: testId,
+    ...rest,
+  };
 
-    const navListProps: NavigationListProps = {
-        isOpen: isOpen,
-        orientation: orientation,
-        parentRef: parentRef,
-        testId: testId,
-        ...rest,
-    }
+  const navigationWrapperProps: Omit<NavigationWrapperProps, "children"> = {
+    cx,
+    isOpen,
+    label,
+    parentRef,
+  };
 
-    const navigationWrapperProps: Omit<NavigationWrapperProps, "children"> = {
-        cx,
-        isOpen,
-        label,
-        parentRef,
-    }
-
-    return (
-        <NavigationProvider value={{
-            storedList: [],
-            storedParentEl: storedParentEl,
-            isSubListOpen: isOpen,
-        }}>
-            <NavigationWrapper {...navigationWrapperProps}>
-                <NavigationList {...navListProps}>{children}</NavigationList>
-            </NavigationWrapper>
-        </NavigationProvider>
-    );
+  return (
+    <NavigationProvider
+      value={{
+        storedList: [],
+        storedParentEl: storedParentEl,
+        isSubListOpen: isOpen,
+      }}
+    >
+      <NavigationWrapper {...navigationWrapperProps}>
+        <NavigationList {...navListProps}>{children}</NavigationList>
+      </NavigationWrapper>
+    </NavigationProvider>
+  );
 }

@@ -5,23 +5,13 @@ import {
   NavigationWrapperProps,
   ParentElementType,
   ResetArrayProps,
-} from "../NavigationTypes";
+} from "./NavigationTypes";
 import { useNavigation } from "../hooks";
 import {
   ClickAwayListener,
   returnTrueElementOrUndefined,
 } from "@/ui/utilities";
-
-const resetArray: ResetArrayProps["resetArray"] = (
-  parentEl,
-  storedParentEl,
-  resetTopNavArray,
-) => {
-  /* istanbul ignore else */
-  if (storedParentEl === null && !!parentEl && parentEl !== storedParentEl) {
-    resetTopNavArray(parentEl);
-  }
-};
+import { resetArray } from "./componentFunctions";
 
 export function NavigationWrapper({
   children,
@@ -32,27 +22,27 @@ export function NavigationWrapper({
   ...rest
 }: NavigationWrapperProps) {
   const {
-    componentActive,
-    getTopNavigationParent,
+    isComponentActive,
+    getTopParentElement,
     handleClickAwayClose,
     registerSubNavigation,
-    resetTopNavigationArray,
+    resetTopNavigation,
   } = useNavigation();
 
   useEffect(() => {
-    const storedParentEl = getTopNavigationParent().storedParentEl;
+    const storedParentEl = getTopParentElement().storedParentEl;
     const parentEl = parentRef?.current as ParentElementType;
     /* istanbul ignore else */
     if (!!parentEl && storedParentEl !== parentEl) {
-      resetArray(parentEl, storedParentEl, resetTopNavigationArray);
+      resetArray(parentEl, storedParentEl, resetTopNavigation);
     }
     if (!!parentEl) {
       registerSubNavigation(isOpen, parentEl);
     }
   }, [
-    getTopNavigationParent,
+    getTopParentElement,
     parentRef,
-    resetTopNavigationArray,
+    resetTopNavigation,
     registerSubNavigation,
     isOpen,
   ]);
@@ -60,7 +50,7 @@ export function NavigationWrapper({
   return (
     <ClickAwayListener
       onClickAway={returnTrueElementOrUndefined(
-        componentActive,
+        isComponentActive,
         handleClickAwayClose,
       )}
     >

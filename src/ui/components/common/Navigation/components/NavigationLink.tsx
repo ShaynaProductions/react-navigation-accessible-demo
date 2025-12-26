@@ -13,7 +13,7 @@ import { usePrevious } from "@/ui/hooks";
 import { Keys, returnTrueElementOrUndefined } from "@/ui/utilities";
 import { useNavigation, useNavigationList } from "../hooks";
 import { _handleKeyDown } from "../utilities";
-import { FocusableElementType, NavigationLinkProps } from "../NavigationTypes";
+import { FocusableElementType, NavigationLinkProps } from "./NavigationTypes";
 
 export function NavigationLink({
   cx,
@@ -35,15 +35,15 @@ export function NavigationLink({
   const {
     closeComponentWithFocus,
     closeOpenSiblings,
-    componentActive,
+    isComponentActive,
     getLastChildInTopRow,
     getNextByLink,
     getNextByLinkTab,
     getPreviousByLink,
     getPreviousByLinkTab,
     handleNavigationItemFocus,
-    registerNavigationItem,
-    setComponentActive,
+    registerLink,
+    setIsComponentActive,
   } = useNavigation();
   const currentPath = usePathname();
 
@@ -57,14 +57,14 @@ export function NavigationLink({
   }, [linkRef, prevLinkRef, registerItemInList]);
 
   useEffect(() => {
-    registerNavigationItem(currentListItems, parentRef.current);
-  }, [currentListItems, parentRef, registerNavigationItem]);
+    registerLink(currentListItems, parentRef.current);
+  }, [currentListItems, parentRef, registerLink]);
 
   const handleFocus = () => {
     const linkEl = linkRef.current as FocusableElementType;
     const returnEl = getLastChildInTopRow(linkEl);
-    if (!componentActive) {
-      setComponentActive(true);
+    if (!isComponentActive) {
+      setIsComponentActive(true);
     }
 
     handleNavigationItemFocus(linkEl, closeOpenSiblings);

@@ -5,7 +5,10 @@ import { Box, Button, transformNavigation } from "@/ui/components";
 import { useMergedRef } from "@/ui/hooks";
 
 import Navigation from "../components/Navigation";
-import { NavigationProps, ParentElementType } from "../NavigationTypes";
+import {
+  NavigationProps,
+  ParentElementType,
+} from "../components/NavigationTypes";
 import {
   getCommonTestElements,
   getSubNavTestElements,

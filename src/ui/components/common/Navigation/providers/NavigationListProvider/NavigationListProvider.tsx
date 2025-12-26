@@ -2,7 +2,7 @@
 import React, { createContext, useCallback, useState } from "react";
 import { EmptyObject } from "@/ui/types";
 
-import { FocusableElementType } from "../../NavigationTypes";
+import { FocusableElementType } from "../../components/NavigationTypes";
 import {
   NavigationListContextReturnValueProps,
   NavigationListContextStoredValueProps,

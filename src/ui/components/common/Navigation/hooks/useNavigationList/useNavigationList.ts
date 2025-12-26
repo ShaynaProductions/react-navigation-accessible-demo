@@ -2,7 +2,10 @@
 import { RefObject, use, useCallback } from "react";
 import { returnTrueElementOrUndefined } from "@/ui/utilities";
 
-import { FocusableElementType, ParentElementType } from "../../NavigationTypes";
+import {
+  FocusableElementType,
+  ParentElementType,
+} from "../../components/NavigationTypes";
 import { NavigationListContext } from "../../providers/NavigationListProvider";
 import {
   UseNavigationListInternal,

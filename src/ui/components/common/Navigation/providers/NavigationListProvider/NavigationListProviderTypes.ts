@@ -1,5 +1,8 @@
 import React from "react";
-import { FocusableElementType, ParentElementType } from "../../NavigationTypes";
+import {
+  FocusableElementType,
+  ParentElementType,
+} from "../../components/NavigationTypes";
 
 export interface NavigationListContextStoredValueProps {
   parentRef: React.RefObject<ParentElementType>;

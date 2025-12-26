@@ -2,7 +2,7 @@ import { render, userEvent } from "@/test";
 import fs from "fs";
 import { Box, Button, Navigation, transformNavigation } from "@/ui/components";
 
-import { NavigationProps } from "../NavigationTypes";
+import { NavigationProps } from "../components/NavigationTypes";
 import {
   getCommonTestElements,
   getSubNavTestElements,

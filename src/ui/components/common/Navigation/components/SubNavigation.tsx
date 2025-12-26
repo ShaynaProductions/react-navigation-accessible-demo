@@ -16,7 +16,7 @@ import {
   NavigationListProps,
   ParentElementType,
   SubNavigationProps,
-} from "../NavigationTypes";
+} from "./NavigationTypes";
 import { useNavigation, useNavigationList } from "../hooks";
 import { _handleKeyDown } from "../utilities";
 import NavigationList from "./NavigationList";
@@ -45,7 +45,7 @@ export function SubNavigation({
     getNextByButtonTab,
     getPreviousByButton,
     getPreviousByButtonTab,
-    getSubNavigation,
+    getChildrenInTree,
     handleNavigationItemFocus,
     registerSubNavigation,
     setIsListOpen,
@@ -57,7 +57,7 @@ export function SubNavigation({
 
   const closeSubNavigation = useCallback(
     (buttonEl: HTMLButtonElement) => {
-      const dispatchArray = getSubNavigation(buttonEl);
+      const dispatchArray = getChildrenInTree(buttonEl);
       for (const dispatchObj of dispatchArray) {
         const { dispatchChildClose, storedParentEl, isSubListOpen } =
           dispatchObj;
@@ -68,7 +68,7 @@ export function SubNavigation({
       setIsListOpen(false, buttonEl);
       setIsSubListOpen(false);
     },
-    [getSubNavigation, setIsListOpen],
+    [getChildrenInTree, setIsListOpen],
   );
 
   const openSubNavigation = (buttonEl: HTMLButtonElement) => {
