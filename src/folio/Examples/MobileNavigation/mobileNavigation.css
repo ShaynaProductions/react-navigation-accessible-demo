@@ -1,0 +1,44 @@
+@layer main {
+    .mobile-navigation{
+        &:has(button[aria-expanded='true']) {
+            --active-background: var(--purple-3);
+            --inactive-background: var(--purple-1);
+            --component-link-background-hovered: var(--active-background);
+            --component-link-background-focused: var(--active-background);
+        }
+    }
+    
+            nav.mobile{
+                & > ul {
+
+                    border: var(--default-border-width) solid var(--default-border-color);
+                    border-bottom-right-radius: var(--default-border-radius);
+                    border-top-right-radius: var(--default-border-radius);
+                    box-shadow: var(--default-box-shadow);
+                    min-height: 75%;
+                    left: 0;
+                    padding: calc(var(--sp-px) * 16);
+                    position: absolute;
+                    top: 20%;
+                    width:calc(25% + (var(--sp-px) * 16));
+                    z-index: 3;
+                }
+
+                & ul {
+                    background-color: var(--inactive-background);
+
+                    & button, & a {
+                        display: inline-block;
+                        border-radius: 0;
+                        height: 100%;
+                        padding: calc(var(--sp-px) * 8) calc(var(--sp-px) * 16);
+                        text-align: left;
+                        width: 100%   ;
+                        &:focus-visible, &:hover {
+                            --button-background: var(--active-background);
+                        }
+                    }
+
+                }
+            }
+}

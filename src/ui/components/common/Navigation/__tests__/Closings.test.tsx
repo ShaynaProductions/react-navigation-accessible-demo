@@ -1,6 +1,11 @@
 import fs from "fs";
 import { render, userEvent } from "@/test";
-import { Box, Button, MobileMenu, transformNavigation } from "@/ui/components";
+import {
+  Box,
+  Button,
+  MobileNavigation,
+  transformNavigation,
+} from "@/ui/components";
 
 import Navigation from "../components/Navigation";
 import {
@@ -53,9 +58,9 @@ const renderNavigation = ({ label, children, ...rest }) => {
 
 const renderNavigationWithParent = ({ label, children, ...rest }) => {
   return render(
-    <MobileMenu label={label} {...rest}>
+    <MobileNavigation label={label} {...rest}>
       {children}
-    </MobileMenu>,
+    </MobileNavigation>,
   );
 };
 describe("<Navigation Closings />", () => {
@@ -278,7 +283,6 @@ describe("<Navigation Closings />", () => {
       getSubNavTestElements(getByRole, getByTestId, TEST_ID);
 
     await userEvent.pointer({ target: menuButton, keys: "[MouseLeft]" });
-    await userEvent.tab();
     expect(aboutLink).toHaveFocus();
     await userEvent.tab();
     expect(readButton).toHaveFocus();

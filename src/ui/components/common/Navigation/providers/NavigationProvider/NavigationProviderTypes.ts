@@ -50,17 +50,17 @@ export interface NavigationContextReturnValueProps {
     navigationList: FocusableElementType[],
     parentEl: ParentElementType,
   ) => void;
+
   registerLink: (
     navigationList: FocusableElementType[],
     parentEl: ParentElementType,
   ) => void;
-  registerSubNavigation: (
+  registerButtonInList: (
     isListOpen: boolean,
     parentEl: ParentElementType,
     dispatchChildClose: () => void,
   ) => void;
-  resetTopNavigation: (parentEl: HTMLButtonElement) => void;
-  topLevelParent: HTMLButtonElement | null;
+  updateTopParent: (parentEl: ParentElementType) => void;
 }
 
 export interface NavigationContextValueProps

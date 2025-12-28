@@ -1,6 +1,13 @@
 "use client";
 
-import { KeyboardEvent, useCallback, useEffect, useRef, useState } from "react";
+import {
+  CSSProperties,
+  KeyboardEvent,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import {
   Button,
   ButtonProps,
@@ -20,6 +27,7 @@ import {
 import { useNavigation, useNavigationList } from "../hooks";
 import { _handleKeyDown } from "../utilities";
 import NavigationList from "./NavigationList";
+import { setSubListWidth } from "@/ui/components/common/Navigation/components/componentFunctions";
 
 export function SubNavigation({
   children,
@@ -47,13 +55,15 @@ export function SubNavigation({
     getPreviousByButtonTab,
     getChildrenInTree,
     handleNavigationItemFocus,
-    registerSubNavigation,
+    registerInParentList,
+    registerButtonInList,
     setIsListOpen,
     setListItems,
   } = useNavigation();
 
   const buttonRef = useRef<ParentElementType>(null);
   const [isSubListOpen, setIsSubListOpen] = useState<boolean>(false);
+  const [listWidth, setListWidth] = useState<number | null>(null);
 
   const closeSubNavigation = useCallback(
     (buttonEl: HTMLButtonElement) => {
@@ -79,20 +89,30 @@ export function SubNavigation({
   useEffect(() => {
     const buttonEl = buttonRef.current as FocusableElementType;
     registerItemInList(buttonEl);
-    registerSubNavigation(isSubListOpen, buttonEl, closeSubNavigation);
+    registerButtonInList(isSubListOpen, buttonEl, closeSubNavigation);
   }, [
     closeSubNavigation,
     currentListItems,
     isSubListOpen,
     parentRef,
     registerItemInList,
-    registerSubNavigation,
+    registerButtonInList,
     setListItems,
   ]);
+  useEffect(() => {
+    registerInParentList(
+      buttonRef.current as FocusableElementType,
+      parentRef.current,
+    );
+  }, [buttonRef, parentRef, registerInParentList]);
 
   useEffect(() => {
     setListItems(currentListItems, parentRef.current);
   }, [currentListItems, parentRef, setListItems]);
+
+  useEffect(() => {
+    setSubListWidth(buttonRef, setListWidth);
+  }, [buttonRef]);
 
   const handleFocus = () => {
     /* istanbul ignore else */
@@ -182,7 +202,8 @@ export function SubNavigation({
   const buttonProps: ButtonProps = {
     "aria-controls": id,
     "aria-expanded": isSubListOpen,
-    "aria-label": `${label}`,
+    "aria-label": label,
+    id: label.split(/(?<=^\S+)\s/)[0],
     onFocus: handleFocus,
     onKeyDown: handleKeyDown,
     onPress: handlePress,
@@ -203,7 +224,11 @@ export function SubNavigation({
   };
 
   return (
-    <ListItem key={id} cx={cx}>
+    <ListItem
+      key={id}
+      cx={cx}
+      style={{ "--list-width": listWidth } as CSSProperties}
+    >
       <Button {...buttonProps}>
         {label}
         <Icon {...iconProps} />

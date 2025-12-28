@@ -71,9 +71,12 @@ export interface UseNavigationReturnTypes {
     closeOpenSiblings: UseNavigationReturnTypes["closeOpenSiblings"],
   ) => void;
   isComponentActive: NavigationContextReturnValueProps["isComponentActive"];
+  registerInParentList: (
+    buttonEl: FocusableElementType,
+    parentEl: ParentElementType,
+  ) => void;
   registerLink: NavigationContextReturnValueProps["registerLink"];
-  registerSubNavigation: NavigationContextReturnValueProps["registerSubNavigation"];
-  resetTopNavigation: NavigationContextReturnValueProps["resetTopNavigation"];
+  registerButtonInList: NavigationContextReturnValueProps["registerButtonInList"];
   setIsListOpen: NavigationContextReturnValueProps["setIsListOpen"];
   setListItems: NavigationContextReturnValueProps["setListItems"];
 }

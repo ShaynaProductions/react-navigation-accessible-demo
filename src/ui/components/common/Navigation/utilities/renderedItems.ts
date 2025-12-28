@@ -46,7 +46,7 @@ export const getComplexButtonTestElements = (
     blogLink: getByRole("link", { name: "Musings" }),
     forumLink: getByRole("link", { name: "Forum" }),
     storiesButton: getByRole("button", {
-      name: "Search, Stories and" + " Commentary",
+      name: "Stories and Commentary",
     }),
     storiesList: getByTestId(`${testId}-stories-menu-list`),
     searchButton: getByRole("button", { name: "Search" }),

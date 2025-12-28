@@ -8,7 +8,6 @@ import {
 import { EmptyObject } from "@/ui/types";
 import { arraysEqual } from "@/ui/utilities";
 import { ParentElementType } from "@/ui/components";
-import { registerTopLevelParent } from "./navigationProviderFunctions";
 
 export const NavigationContext = createContext<
   NavigationContextValueProps | EmptyObject
@@ -70,6 +69,19 @@ export function NavigationProvider({ children, value }): JSX.Element {
       [_getNavigationIndex, navigationArray],
     );
 
+  const updateTopParent = (parentEl) => {
+    const topIndex = _getNavigationIndex(null);
+    const topParentIndex = _getNavigationIndex(parentEl);
+    if (topParentIndex > 0 && topIndex !== topParentIndex) {
+      const topParentObj = getNavigationArray()[topParentIndex];
+      _setNavigationArrayObject(topIndex, {
+        storedParentEl: parentEl,
+        storedList: topParentObj.storedList,
+      });
+      getNavigationArray().splice(topParentIndex, 1);
+      setTopLevelParent(parentEl);
+    }
+  };
   const setDispatchChildClose: NavigationContextReturnValueProps["setDispatchChildClose"] =
     useCallback(
       (parentEl: HTMLButtonElement, dispatchChildClose) => {
@@ -109,32 +121,38 @@ export function NavigationProvider({ children, value }): JSX.Element {
   const setListItems: NavigationContextReturnValueProps["setListItems"] =
     useCallback(
       (navigationList, parentEl) => {
-        const parentIndex = _getNavigationIndex(parentEl);
+        let parentIndex = _getNavigationIndex(parentEl);
         /* istanbul ignore else */
-        if (parentIndex >= 0) {
-          const currentObj = getNavigationArray()[parentIndex];
-          if (
-            !currentObj.storedList ||
-            !arraysEqual(currentObj.storedList, navigationList)
-          ) {
-            _setNavigationArrayObject(parentIndex, {
-              storedList: navigationList,
-            });
-          }
+        if (parentIndex === -1) {
+          _setParentEl(parentEl);
+          parentIndex = _getNavigationIndex(parentEl);
+        }
+
+        const currentObj = getNavigationArray()[parentIndex];
+        if (
+          !currentObj.storedList ||
+          !arraysEqual(currentObj.storedList, navigationList)
+        ) {
+          _setNavigationArrayObject(parentIndex, {
+            storedList: navigationList,
+          });
         }
       },
-      [getNavigationArray, _getNavigationIndex, _setNavigationArrayObject],
+      [
+        _getNavigationIndex,
+        getNavigationArray,
+        _setParentEl,
+        _setNavigationArrayObject,
+      ],
     );
 
-  const registerLink: NavigationContextReturnValueProps["registerLink"] = (
-    navigationList,
-    parentEl,
-  ) => {
-    _setParentEl(parentEl);
-    setListItems(navigationList, parentEl);
-  };
+  const registerLinkInList: NavigationContextReturnValueProps["registerLink"] =
+    (navigationList, parentEl) => {
+      _setParentEl(parentEl);
+      setListItems(navigationList, parentEl);
+    };
 
-  const registerSubNavigation: NavigationContextReturnValueProps["registerSubNavigation"] =
+  const registerButtonInList: NavigationContextReturnValueProps["registerButtonInList"] =
     useCallback(
       (isListOpen, parentEl, dispatchChildClose) => {
         _setParentEl(parentEl);
@@ -146,32 +164,30 @@ export function NavigationProvider({ children, value }): JSX.Element {
       },
       [_setParentEl, setIsListOpen, setDispatchChildClose],
     );
-  const resetTopNavigation: NavigationContextReturnValueProps["resetTopNavigation"] =
-    useCallback(
-      (parentEl) => {
-        const parentIndex = _getNavigationIndex(parentEl);
-        /* istanbul ignore else */
-        if (parentIndex !== 0 && navigationArray[0].storedParentEl === null) {
-          registerTopLevelParent(parentEl, setTopLevelParent);
-          navigationArray.shift();
-        }
-      },
-      [_getNavigationIndex, navigationArray],
-    );
+  // const resetTopNavigation: NavigationContextReturnValueProps["resetTopNavigation"] =
+  //   useCallback(
+  //     (parentEl) => {
+  //       const parentIndex = _getNavigationIndex(parentEl);
+  //       /* istanbul ignore else */
+  //       if (parentIndex !== 0 && navigationArray[0].storedParentEl !== null) {
+  //         registerTopLevelParent(parentEl, setTopLevelParent);
+  //       }
+  //     },
+  //     [_getNavigationIndex, navigationArray],
+  //   );
 
   return (
     <NavigationContext.Provider
       value={{
         getNavigationArray,
         isComponentActive,
-        registerLink,
-        registerSubNavigation,
-        resetTopNavigation,
+        registerLink: registerLinkInList,
+        registerButtonInList,
         setDispatchChildClose,
         setIsComponentActive,
         setIsListOpen,
         setListItems,
-        topLevelParent,
+        updateTopParent,
       }}
     >
       {children}

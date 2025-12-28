@@ -11,7 +11,11 @@ import {
   getRecursiveLastElementByParent,
   getRecursiveTopElementByElement,
 } from "./hookFunctions";
-import { NavigationContext, NavigationObjectProps } from "../../providers";
+import {
+  NavigationContext,
+  NavigationContextReturnValueProps,
+  NavigationObjectProps,
+} from "../../providers";
 import {
   FocusableElementType,
   ParentElementType,
@@ -26,13 +30,16 @@ export default function useNavigation() {
   const {
     isComponentActive,
     getNavigationArray,
+    // getTopLevelParent,
+    registerInList,
     registerLink,
-    registerSubNavigation,
+    registerButtonInList,
     resetTopNavigation,
     setIsComponentActive,
     setIsListOpen,
     setListItems,
     topLevelParent,
+    updateTopParent,
   } = returnTrueElementOrUndefined(
     !!navigationContextObj,
     navigationContextObj,
@@ -523,6 +530,28 @@ export default function useNavigation() {
       }
     };
 
+  const registerInParentList: UseNavigationReturnTypes["registerInParentList"] =
+    (buttonEl, parentEl) => {
+      const parentObj = _getNavigationObjectByParent(parentEl);
+
+      const { storedList } = parentObj;
+      let navigationList: FocusableElementType[] = [];
+      if (storedList && storedList.length > 0) {
+        navigationList = storedList.slice();
+      }
+
+      if (navigationList.indexOf(buttonEl) === -1) {
+        navigationList.push(buttonEl);
+        setListItems(navigationList, parentEl);
+      }
+    };
+  const registerTopSubNavigation = (isListOpen, parentEl) => {
+    /* istanbul ignore else */
+    if (parentEl !== null) {
+      updateTopParent(parentEl);
+    }
+  };
+
   return {
     closeComponentWithFocus,
     closeOpenSiblings,
@@ -540,8 +569,10 @@ export default function useNavigation() {
     handleClickAwayClose,
     handleNavigationItemFocus,
     isComponentActive,
+    registerInParentList,
     registerLink,
-    registerSubNavigation,
+    registerButtonInList,
+    registerTopSubNavigation,
     resetTopNavigation,
     setIsComponentActive,
     setIsListOpen,

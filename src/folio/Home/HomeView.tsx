@@ -7,6 +7,8 @@ import {
   SimpleLinks,
   SimpleLinksButtons,
   SimpleSubNav,
+  StyledDesktop,
+  StyledMobile,
 } from "./sections";
 
 export function HomeView() {
@@ -35,12 +37,10 @@ export function HomeView() {
           release fully typed and tested.
         </Text>
         <Text>
-          {" "}
           Examples are provided which work up to the specific release
           constraints. This release begins the process of implementing keyboard
           functionality with a focus on navigations between items sharing a
-          lists. Navigation between lists will be covered in the next
-          article.{" "}
+          lists. Navigation between lists will be covered in the next article.
         </Text>
       </Box>
       <Box cx="examples">
@@ -60,6 +60,12 @@ export function HomeView() {
           </ListItem>
           <ListItem>
             <ComplexSubNav />
+          </ListItem>
+          <ListItem>
+            <StyledDesktop />
+          </ListItem>
+          <ListItem>
+            <StyledMobile />
           </ListItem>
         </List>
       </Box>

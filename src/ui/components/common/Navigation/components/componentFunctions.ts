@@ -1,17 +1,13 @@
 import { RefObject } from "react";
 import { ParentElementType } from "@/ui/components";
-import { ResetArrayProps } from "./NavigationTypes";
 
-export const resetArray: ResetArrayProps["resetArray"] = (
-  parentEl,
-  storedParentEl,
-  resetTopNavigation,
+export const setSubListWidth = (
+  refObject: RefObject<ParentElementType>,
+  setListWidth,
 ) => {
-  /* istanbul ignore else */
-  if (storedParentEl === null && !!parentEl && parentEl !== storedParentEl) {
-    resetTopNavigation(parentEl);
-  }
+  setListWidth(refObject.current?.offsetWidth);
 };
+
 
 export const returnStoredParentEl = (
   parentRef?: RefObject<ParentElementType | null>,

@@ -7,7 +7,6 @@ import {
   ClickAwayListener,
   returnTrueElementOrUndefined,
 } from "@/ui/utilities";
-import { resetArray } from "./componentFunctions";
 
 export function NavigationWrapper({
   children,
@@ -21,27 +20,29 @@ export function NavigationWrapper({
     isComponentActive,
     getTopParentElement,
     handleClickAwayClose,
-    registerSubNavigation,
-    resetTopNavigation,
+    registerButtonInList,
+    registerTopSubNavigation,
   } = useNavigation();
 
   useEffect(() => {
-    const storedParentEl = getTopParentElement().storedParentEl;
     const parentEl = parentRef?.current as ParentElementType;
     /* istanbul ignore else */
-    if (!!parentEl && storedParentEl !== parentEl) {
-      resetArray(parentEl, storedParentEl, resetTopNavigation);
-    }
     if (!!parentEl) {
-      registerSubNavigation(isOpen, parentEl);
+      registerTopSubNavigation(isOpen, parentEl);
     }
   }, [
     getTopParentElement,
     parentRef,
-    resetTopNavigation,
-    registerSubNavigation,
+    registerButtonInList,
     isOpen,
+    registerTopSubNavigation,
   ]);
+
+  // useEffect(() => {
+  //   if (!!parentRef?.current && !isOpen) {
+  //     handleClickAwayClose();
+  //   }
+  // }, [handleClickAwayClose, isOpen, parentRef]);
 
   return (
     <ClickAwayListener
