@@ -18,9 +18,9 @@ export function NavigationProvider({ children, value }): JSX.Element {
 
   const [navigationArray, setNavigationArray] = useState([currentObj]);
   const [isComponentActive, setIsComponentActive] = useState<boolean>(false);
-  const [topLevelParent, setTopLevelParent] = useState<ParentElementType>(
-    currentObj.storedParentEl,
-  );
+  const [controllingElement, _setControllingElement] =
+    useState<ParentElementType>(currentObj.storedParentEl);
+  const [shouldPassthrough, setShouldPassthrough] = useState<boolean>(false);
 
   const _getNavigationIndex: NavigationContextInternalProps["_getNavigationIndex"] =
     useCallback(
@@ -69,6 +69,10 @@ export function NavigationProvider({ children, value }): JSX.Element {
       [_getNavigationIndex, navigationArray],
     );
 
+  const getControllingElement = useCallback(() => {
+    return controllingElement;
+  }, [controllingElement]);
+
   const updateTopParent = (parentEl) => {
     const topIndex = _getNavigationIndex(null);
     const topParentIndex = _getNavigationIndex(parentEl);
@@ -79,10 +83,10 @@ export function NavigationProvider({ children, value }): JSX.Element {
         storedList: topParentObj.storedList,
       });
       getNavigationArray().splice(topParentIndex, 1);
-      setTopLevelParent(parentEl);
+      _setControllingElement(parentEl);
     }
   };
-  const setDispatchChildClose: NavigationContextReturnValueProps["setDispatchChildClose"] =
+  const _setDispatchChildClose: NavigationContextInternalProps["_setDispatchChildClose"] =
     useCallback(
       (parentEl: HTMLButtonElement, dispatchChildClose) => {
         const parentIndex: number = _getNavigationIndex(parentEl);
@@ -146,7 +150,7 @@ export function NavigationProvider({ children, value }): JSX.Element {
       ],
     );
 
-  const registerLinkInList: NavigationContextReturnValueProps["registerLink"] =
+  const registerLinkInList: NavigationContextReturnValueProps["registerLinkInList"] =
     (navigationList, parentEl) => {
       _setParentEl(parentEl);
       setListItems(navigationList, parentEl);
@@ -157,36 +161,27 @@ export function NavigationProvider({ children, value }): JSX.Element {
       (isListOpen, parentEl, dispatchChildClose) => {
         _setParentEl(parentEl);
         setIsListOpen(isListOpen, parentEl);
-        setDispatchChildClose(
+        _setDispatchChildClose(
           parentEl as HTMLButtonElement,
           dispatchChildClose,
         );
       },
-      [_setParentEl, setIsListOpen, setDispatchChildClose],
+      [_setParentEl, setIsListOpen, _setDispatchChildClose],
     );
-  // const resetTopNavigation: NavigationContextReturnValueProps["resetTopNavigation"] =
-  //   useCallback(
-  //     (parentEl) => {
-  //       const parentIndex = _getNavigationIndex(parentEl);
-  //       /* istanbul ignore else */
-  //       if (parentIndex !== 0 && navigationArray[0].storedParentEl !== null) {
-  //         registerTopLevelParent(parentEl, setTopLevelParent);
-  //       }
-  //     },
-  //     [_getNavigationIndex, navigationArray],
-  //   );
 
   return (
     <NavigationContext.Provider
       value={{
         getNavigationArray,
         isComponentActive,
-        registerLink: registerLinkInList,
+        shouldPassthrough,
+        getControllingElement,
+        registerLinkInList: registerLinkInList,
         registerButtonInList,
-        setDispatchChildClose,
         setIsComponentActive,
         setIsListOpen,
         setListItems,
+        setShouldPassthrough,
         updateTopParent,
       }}
     >

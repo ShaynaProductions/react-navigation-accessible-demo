@@ -5,9 +5,11 @@ import {
 import React from "react";
 
 export interface NavigationProviderFunctionsProps {
-  registerTopLevelParent: (
+  registercontrollingElement: (
     parentEl: ParentElementType,
-    setTopLevelParent: React.Dispatch<React.SetStateAction<ParentElementType>>,
+    _setControllingElement: React.Dispatch<
+      React.SetStateAction<ParentElementType>
+    >,
   ) => void;
 }
 export interface NavigationContextStoredValueProps {
@@ -28,7 +30,11 @@ export interface NavigationContextInternalProps {
   _getNavigationObjectByParent: (
     parentEl: ParentElementType,
   ) => NavigationObjectProps;
-
+  _setControllingElement: (parentEl: ParentElementType) => void;
+  _setDispatchChildClose: (
+    parentEl: HTMLButtonElement,
+    dispatchChildClose: () => void,
+  ) => void;
   _setNavigationArrayObject: (
     index: number,
     updatedContent: Partial<NavigationObjectProps>,
@@ -37,21 +43,10 @@ export interface NavigationContextInternalProps {
 }
 
 export interface NavigationContextReturnValueProps {
+  getControllingElement: () => ParentElementType;
   getNavigationArray: () => NavigationObjectProps[];
   isComponentActive: boolean;
-
-  setDispatchChildClose: (
-    parentEl: HTMLButtonElement,
-    dispatchChildClose: () => void,
-  ) => void;
-  setIsComponentActive: (isComponentActive: boolean) => void;
-  setIsListOpen: (isListOpen: boolean, parentEl: ParentElementType) => void;
-  setListItems: (
-    navigationList: FocusableElementType[],
-    parentEl: ParentElementType,
-  ) => void;
-
-  registerLink: (
+  registerLinkInList: (
     navigationList: FocusableElementType[],
     parentEl: ParentElementType,
   ) => void;
@@ -60,6 +55,14 @@ export interface NavigationContextReturnValueProps {
     parentEl: ParentElementType,
     dispatchChildClose: () => void,
   ) => void;
+  setIsComponentActive: (isComponentActive: boolean) => void;
+  setIsListOpen: (isListOpen: boolean, parentEl: ParentElementType) => void;
+  setListItems: (
+    navigationList: FocusableElementType[],
+    parentEl: ParentElementType,
+  ) => void;
+  setShouldPassthrough: (shouldPassthrough: boolean) => void;
+  shouldPassthrough: boolean;
   updateTopParent: (parentEl: ParentElementType) => void;
 }
 

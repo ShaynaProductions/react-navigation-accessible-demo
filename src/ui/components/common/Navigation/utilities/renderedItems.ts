@@ -62,6 +62,8 @@ export const getComplexButtonTestElements = (
     byStorytellerLink: getByRole("link", { name: "By Storyteller" }),
     byEraLink: getByRole("link", { name: "By Era" }),
     referenceButton: getByRole("button", { name: "Reference" }),
+    appendicesLink: getByRole("link", { name: "Appendices" }),
+    glossaryLink: getByRole("link", { name: "Glossary" }),
     aboutButton: getByRole("button", { name: "About" }),
     aboutList: getByTestId(`${testId}-about-menu-list`),
     aboutSiteLink: getByRole("link", { name: "About the Site" }),

@@ -12,6 +12,7 @@ export interface NavigationProps extends Omit<BaseProps, "id"> {
   isOpen?: boolean;
   orientation?: Orientation;
   parentRef?: React.RefObject<ParentElementType>;
+  shouldPassthrough?: boolean;
 }
 
 export interface NavigationLinkProps
@@ -41,6 +42,7 @@ export interface NavigationWrapperProps extends Omit<BaseProps, "testid"> {
   isOpen: boolean;
   label: string;
   parentRef?: React.RefObject<ParentElementType>;
+  shouldPassthrough: boolean;
 }
 
 export interface ResetArrayProps {

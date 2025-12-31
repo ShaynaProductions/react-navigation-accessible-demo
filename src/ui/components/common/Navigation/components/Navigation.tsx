@@ -17,6 +17,7 @@ export default function Navigation({
   label,
   orientation = "vertical",
   parentRef,
+  shouldPassthrough = false,
   testId,
   ...rest
 }: NavigationProps) {
@@ -35,6 +36,7 @@ export default function Navigation({
     isOpen,
     label,
     parentRef,
+    shouldPassthrough,
   };
 
   return (

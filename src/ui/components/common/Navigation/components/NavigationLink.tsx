@@ -28,16 +28,12 @@ export function NavigationLink({
   } = useNavigationList();
   const {
     closeComponentWithFocus,
-    closeOpenSiblings,
-    isComponentActive,
-    getLastChildInTopRow,
     getNextByLink,
     getNextByLinkTab,
     getPreviousByLink,
     getPreviousByLinkTab,
-    handleNavigationItemFocus,
-    registerLink,
-    setIsComponentActive,
+    handleLinkFocus,
+    registerLinkInList,
   } = useNavigation();
   const currentPath = usePathname();
 
@@ -51,19 +47,15 @@ export function NavigationLink({
   }, [linkRef, prevLinkRef, registerItemInList]);
 
   useEffect(() => {
-    registerLink(currentListItems, parentRef.current);
-  }, [currentListItems, parentRef, registerLink]);
+    registerLinkInList(currentListItems, parentRef.current);
+  }, [currentListItems, parentRef, registerLinkInList]);
 
   const handleFocus = () => {
-    const linkEl = linkRef.current as FocusableElementType;
-    const returnEl = getLastChildInTopRow(linkEl);
-    if (!isComponentActive) {
-      setIsComponentActive(true);
-    }
+    const linkEl = linkRef.current;
+    const returnEl = handleLinkFocus(linkEl);
 
-    handleNavigationItemFocus(linkEl, closeOpenSiblings);
     /* istanbul ignore else */
-    if (returnEl !== linkEl && returnEl !== null) {
+    if (!!returnEl && returnEl !== linkEl && returnEl !== null) {
       setSpecificFocus(returnEl);
     }
   };

@@ -11,7 +11,7 @@ export function MobileNavigation({ children, label, ...rest }): JSX.Element {
   const buttonRef = useRef<ParentElementType>(null);
 
   const closeNavigation = () => {
-    setOpen(false);
+    if (open) setOpen(false);
   };
 
   const handleFocus = () => {
@@ -43,11 +43,13 @@ export function MobileNavigation({ children, label, ...rest }): JSX.Element {
     <ClickAwayListener onClickAway={closeNavigation}>
       <Box cx="mobile-navigation">
         <Button {...buttonProps}>Menu</Button>
+
         <Navigation
           id="mobile-menu"
           cx="mobile"
           isOpen={open}
           parentRef={buttonRef}
+          shouldPassthrough={!open}
           label={label}
           {...rest}
         >

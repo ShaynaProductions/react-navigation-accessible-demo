@@ -56,7 +56,7 @@ describe("Navigation simple keyboard handling", () => {
     );
 
     expect(readList).toHaveClass("srOnly");
-    await userEvent.tab();
+    await userEvent.pointer({ target: frontButton, keys: "[MouseLeft]" });
     expect(frontButton).toHaveFocus();
     await userEvent.tab();
     expect(aboutLink).toHaveFocus();
@@ -78,7 +78,7 @@ describe("Navigation simple keyboard handling", () => {
       getSubNavTestElements(getByRole, getByTestId, TEST_ID);
 
     expect(readList).toHaveClass("srOnly");
-    await userEvent.tab();
+    await userEvent.pointer({ target: frontButton, keys: "[MouseLeft]" });
     expect(frontButton).toHaveFocus();
     await userEvent.tab();
     expect(aboutLink).toHaveFocus();
@@ -105,7 +105,7 @@ describe("Navigation simple keyboard handling", () => {
         getSubNavTestElements(getByRole, getByTestId, TEST_ID);
 
       expect(readList).toHaveClass("srOnly");
-      await userEvent.tab();
+      await userEvent.pointer({ target: frontButton, keys: "[MouseLeft]" });
       expect(frontButton).toHaveFocus();
       await userEvent.tab();
       expect(aboutLink).toHaveFocus();
@@ -142,7 +142,7 @@ describe("Navigation simple keyboard handling", () => {
     } = getSubNavTestElements(getByRole, getByTestId, TEST_ID);
 
     expect(readList).toHaveClass("srOnly");
-    await userEvent.tab();
+    await userEvent.pointer({ target: frontButton, keys: "[MouseLeft]" });
     expect(frontButton).toHaveFocus();
     await userEvent.tab();
     expect(aboutLink).toHaveFocus();

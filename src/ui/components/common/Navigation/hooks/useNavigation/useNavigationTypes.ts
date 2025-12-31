@@ -8,77 +8,39 @@ import {
 } from "../../providers";
 
 export interface UseNavigationInternalTypes {
-  _getIndexInTopRow: (focusedEl: FocusableElementType | undefined) => number;
+  _closeComponent: () => void;
+  _closeOpenSiblings: (focusedEl: FocusableElementType) => void;
+  _getChildrenInTree: (parentEl: HTMLButtonElement) => NavigationObjectProps[];
   _getFirstChildInRow: (index: number) => FocusableElementType;
+  _getIndexInTopRow: (focusedEl: FocusableElementType | undefined) => number;
   _getLastChildInRow: (index: number) => FocusableElementType;
+  _getLastChildInTopRow: (
+    focusedEl: FocusableElementType,
+  ) => FocusableElementType;
+  _getLastFocusableElementTypeByParent: (
+    parentEl: FocusableElementType,
+  ) => FocusableElementType;
   _getNavigationObjectByParent: (
     parentEl: ParentElementType,
   ) => Partial<NavigationObjectProps>;
   _getNavigationObjectContainingElement: (
     focusedEl: FocusableElementType,
   ) => Partial<NavigationObjectProps>;
-  _closeComponent: () => void;
-  _getLastFocusableElementTypeByParent: (
-    parentEl: FocusableElementType,
-  ) => FocusableElementType;
   _getParentByElement: (focusedEl: FocusableElementType) => ParentElementType;
-  _isInTopRow: (focusedEl: FocusableElementType) => boolean;
+  _getShouldPassthrough: () => boolean;
   _getPreviousByElement: (
     focusedEl: FocusableElementType,
   ) => FocusableElementType | undefined;
-  _getTopElement: (focusedEl: FocusableElementType) => FocusableElementType;
+  _handleLastChildFocus: (focusedEl: FocusableElementType) => void;
+  _handleNavigationItemFocus: (
+    focusedEl: FocusableElementType,
+    _closeOpenSiblings: UseNavigationInternalTypes["_closeOpenSiblings"],
+  ) => void;
+  _isFirstChildInComponent: (focusedEl: FocusableElementType) => boolean;
+  _isInTopRow: (focusedEl: FocusableElementType) => boolean;
+  _isLastChildInComponent: (focusedEl: FocusableElementType) => boolean;
   _isLastElementInComponent: (focusedEl: FocusableElementType) => boolean;
   _isLastElementInList: (focusedEl: FocusableElementType) => boolean;
-}
-
-export interface UseNavigationReturnTypes {
-  getTopParentElement: () => Partial<NavigationObjectProps>;
-  closeComponentWithFocus: (
-    focusedEl: FocusableElementType,
-  ) => FocusableElementType | undefined;
-  closeOpenSiblings: (focusedEl: FocusableElementType) => void;
-  getLastChildInTopRow: (
-    focusedEl: FocusableElementType,
-  ) => FocusableElementType;
-
-  getNextByButton: (
-    buttonEl: FocusableElementType,
-    isSubListOpen: boolean,
-  ) => FocusableElementType;
-  getNextByButtonTab: (
-    buttonEl: FocusableElementType,
-    isSubListOpen: boolean,
-  ) => FocusableElementType;
-  getNextByLink: (linkEl: FocusableElementType) => FocusableElementType;
-  getNextByLinkTab: (linkEl: FocusableElementType) => FocusableElementType;
-
-  getPreviousByButton: (
-    buttonEl: FocusableElementType,
-  ) => FocusableElementType | undefined;
-  getPreviousByButtonTab: (
-    buttonEl: FocusableElementType,
-  ) => FocusableElementType | undefined;
-  getPreviousByLink: (
-    linkEl: FocusableElementType,
-  ) => FocusableElementType | undefined;
-  getPreviousByLinkTab: (
-    linkEl: FocusableElementType,
-  ) => FocusableElementType | undefined;
-  getChildrenInTree: (parentEl: HTMLButtonElement) => NavigationObjectProps[];
-  handleClickAwayClose: () => void;
-  handleNavigationItemFocus: (
-    focusedEl: FocusableElementType,
-    closeOpenSiblings: UseNavigationReturnTypes["closeOpenSiblings"],
-  ) => void;
-  isComponentActive: NavigationContextReturnValueProps["isComponentActive"];
-  registerInParentList: (
-    buttonEl: FocusableElementType,
-    parentEl: ParentElementType,
-  ) => void;
-  registerLink: NavigationContextReturnValueProps["registerLink"];
-  registerButtonInList: NavigationContextReturnValueProps["registerButtonInList"];
-  setIsListOpen: NavigationContextReturnValueProps["setIsListOpen"];
-  setListItems: NavigationContextReturnValueProps["setListItems"];
 }
 
 export interface NavigationHookFunctionsProps {
@@ -102,4 +64,47 @@ export interface NavigationHookFunctionsProps {
     focusableEl: FocusableElementType,
     getNavObjectContainingElement: UseNavigationInternalTypes["_getNavigationObjectContainingElement"],
   ) => FocusableElementType;
+}
+
+export interface UseNavigationReturnTypes {
+  closeComponentWithFocus: (
+    focusedEl: FocusableElementType,
+  ) => FocusableElementType | undefined;
+  getControllingElement: NavigationContextReturnValueProps["getControllingElement"];
+  getNextByButton: (
+    buttonEl: FocusableElementType,
+    isSubListOpen: boolean,
+  ) => FocusableElementType;
+  getNextByButtonTab: (
+    buttonEl: FocusableElementType,
+    isSubListOpen: boolean,
+  ) => FocusableElementType;
+  getNextByLink: (linkEl: FocusableElementType) => FocusableElementType;
+  getNextByLinkTab: (linkEl: FocusableElementType) => FocusableElementType;
+  getPreviousByButton: (
+    buttonEl: FocusableElementType,
+  ) => FocusableElementType | undefined;
+  getPreviousByButtonTab: (
+    buttonEl: FocusableElementType,
+  ) => FocusableElementType | undefined;
+  getPreviousByLink: (
+    linkEl: FocusableElementType,
+  ) => FocusableElementType | undefined;
+  getPreviousByLinkTab: (
+    linkEl: FocusableElementType,
+  ) => FocusableElementType | undefined;
+  getTopParentElement: () => Partial<NavigationObjectProps>;
+  handleClickAwayClose: () => void;
+  handleLinkFocus;
+  handlePassthroughNavigation(focusedEl: FocusableElementType): void;
+  isComponentActive: NavigationContextReturnValueProps["isComponentActive"];
+  registerButtonInList: NavigationContextReturnValueProps["registerButtonInList"];
+  registerInParentList: (
+    buttonEl: FocusableElementType,
+    parentEl: ParentElementType,
+  ) => void;
+  registerLinkInList: NavigationContextReturnValueProps["registerLinkInList"];
+  setIsListOpen: NavigationContextReturnValueProps["setIsListOpen"];
+  setListItems: NavigationContextReturnValueProps["setListItems"];
+  setShouldPassthrough: NavigationContextReturnValueProps["setShouldPassthrough"];
 }
