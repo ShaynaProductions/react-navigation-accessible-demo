@@ -1,6 +1,9 @@
 import { Fragment, ReactNode } from "react";
-import { NavigationLink, SubNavigation } from "@/ui/components";
-import { NavigationLinkProps } from "../../components/NavigationTypes";
+import {
+  NavigationLink,
+  NavigationLinkProps,
+  SubNavigation,
+} from "@/ui/components";
 
 export function transformNavigation(
   mainMenu: NavigationLinkProps[],

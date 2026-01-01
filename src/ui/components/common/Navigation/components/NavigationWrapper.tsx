@@ -1,13 +1,14 @@
 "use client";
 
 import { useEffect } from "react";
-import { NavigationWrapperProps, ParentElementType } from "./NavigationTypes";
-import { useNavigation } from "../hooks";
 import {
   ClickAwayListener,
   returnTrueElementOrUndefined,
 } from "@/ui/utilities";
 import { usePrevious } from "@/ui/hooks";
+
+import { NavigationWrapperProps, ParentElementType } from "./NavigationTypes";
+import { returnStoredList, useNavigation } from "../hooks";
 
 export function NavigationWrapper({
   children,
@@ -21,10 +22,10 @@ export function NavigationWrapper({
   const {
     isComponentActive,
     getTopParentElement,
-    getControllingElement,
     handleClickAwayClose,
+    isComponentControlled,
     registerButtonInList,
-    registerTopSubNavigation,
+    registerControllingElement,
     setShouldPassthrough,
     setIsListOpen,
   } = useNavigation();
@@ -34,54 +35,54 @@ export function NavigationWrapper({
     const parentEl = parentRef?.current as ParentElementType;
     /* istanbul ignore else */
     if (!!parentEl) {
-      registerTopSubNavigation(parentEl);
+      registerControllingElement(parentEl);
     }
   }, [
     getTopParentElement,
     parentRef,
     registerButtonInList,
     isOpen,
-    registerTopSubNavigation,
+    registerControllingElement,
   ]);
-  useEffect(() => {
-    if (prevIsOpen !== isOpen) {
-      const { storedParentEl } = getTopParentElement();
-      setIsListOpen(isOpen, storedParentEl);
-    }
-  }, [getTopParentElement, isOpen, prevIsOpen, setIsListOpen]);
 
   useEffect(() => {
+    const { storedList, storedParentEl } = getTopParentElement();
+    if (prevIsOpen !== isOpen) {
+      setIsListOpen(isOpen, storedParentEl);
+    }
     if (isOpen && !prevIsOpen) {
-      const { storedList } = getTopParentElement();
-      const parentList = storedList || [];
+      const parentList = returnStoredList(storedList);
+      /*istanbul ignore else */
       if (parentRef?.current !== null) {
         parentList[0].focus({ preventScroll: true });
       }
     }
-  }, [getTopParentElement, isOpen, parentRef, prevIsOpen]);
+  }, [getTopParentElement, isOpen, parentRef, prevIsOpen, setIsListOpen]);
 
   useEffect(() => {
     setShouldPassthrough(shouldPassthrough);
   }, [shouldPassthrough, setShouldPassthrough]);
 
-  if (getControllingElement() === null) {
-    return (
-      <ClickAwayListener
-        onClickAway={returnTrueElementOrUndefined(
-          isComponentActive,
-          handleClickAwayClose,
-        )}
-      >
-        <nav aria-label={label} className={cx} {...rest}>
-          {children}
-        </nav>
-      </ClickAwayListener>
-    );
+  const clickAwayProps = {
+    onClickAway: returnTrueElementOrUndefined(
+      isComponentActive,
+      handleClickAwayClose,
+    ),
+  };
+
+  const navigationProps = {
+    "aria-label": label,
+    className: cx,
+    ...rest,
+  };
+
+  if (isComponentControlled()) {
+    return <nav {...navigationProps}>{children}</nav>;
   } else {
     return (
-      <nav aria-label={label} className={cx} {...rest}>
-        {children}
-      </nav>
+      <ClickAwayListener {...clickAwayProps}>
+        <nav {...navigationProps}>{children}</nav>
+      </ClickAwayListener>
     );
   }
 }

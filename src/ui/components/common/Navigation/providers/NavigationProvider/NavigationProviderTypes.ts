@@ -1,25 +1,21 @@
+"use client";
+import React from "react";
 import {
   FocusableElementType,
   ParentElementType,
 } from "../../components/NavigationTypes";
-import React from "react";
 
-export interface NavigationProviderFunctionsProps {
-  registercontrollingElement: (
-    parentEl: ParentElementType,
-    _setControllingElement: React.Dispatch<
-      React.SetStateAction<ParentElementType>
-    >,
-  ) => void;
-}
+export type ControllingElementType = HTMLButtonElement | null;
+
 export interface NavigationContextStoredValueProps {
-  dispatchChildClose?: (parentEl: HTMLButtonElement) => void;
+  controllingEl: ControllingElementType;
   storedList?: FocusableElementType[];
   storedParentEl?: ParentElementType;
   isSubListOpen?: boolean;
 }
 
 export interface NavigationObjectProps extends NavigationContextStoredValueProps {
+  dispatchChildClose?: (parentEl: HTMLButtonElement) => void;
   storedList: FocusableElementType[];
   storedParentEl: ParentElementType;
   isSubListOpen: boolean;
@@ -63,10 +59,10 @@ export interface NavigationContextReturnValueProps {
   ) => void;
   setShouldPassthrough: (shouldPassthrough: boolean) => void;
   shouldPassthrough: boolean;
-  updateTopParent: (parentEl: ParentElementType) => void;
+  updateControllingElement: (parentEl: ParentElementType) => void;
 }
 
 export interface NavigationContextValueProps
   extends
-    NavigationContextStoredValueProps,
+    Omit<NavigationContextStoredValueProps, "controllingEl">,
     NavigationContextReturnValueProps {}

@@ -44,11 +44,3 @@ export interface NavigationWrapperProps extends Omit<BaseProps, "testid"> {
   parentRef?: React.RefObject<ParentElementType>;
   shouldPassthrough: boolean;
 }
-
-export interface ResetArrayProps {
-  resetArray: (
-    parentEl: ParentElementType,
-    storedParentEl: ParentElementType | undefined,
-    _resetTopNavArray: (parentEl: ParentElementType) => void,
-  ) => void;
-}

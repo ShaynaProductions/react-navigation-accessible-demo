@@ -1,3 +1,4 @@
+"use client";
 import { JSX, useRef, useState } from "react";
 import { Box, Button, Navigation, ParentElementType } from "@/ui/components";
 import {
@@ -11,7 +12,9 @@ export function MobileNavigation({ children, label, ...rest }): JSX.Element {
   const buttonRef = useRef<ParentElementType>(null);
 
   const closeNavigation = () => {
-    if (open) setOpen(false);
+    if (open) {
+      setOpen(false);
+    }
   };
 
   const handleFocus = () => {
@@ -19,7 +22,6 @@ export function MobileNavigation({ children, label, ...rest }): JSX.Element {
   };
 
   const handlePress = () => {
-    setOpen(!open);
     /* istanbul ignore else */
     if (!open) {
       const nextEl = getFocusableElement(
@@ -28,6 +30,7 @@ export function MobileNavigation({ children, label, ...rest }): JSX.Element {
       ) as FocusableElement;
       nextEl.focus({ preventScroll: true });
     }
+    setOpen(!open);
   };
 
   const buttonProps = {
@@ -39,22 +42,22 @@ export function MobileNavigation({ children, label, ...rest }): JSX.Element {
     onPress: handlePress,
     id: "mobile",
   };
+
+  const navigationProps = {
+    ...rest,
+    id: "mobile-menu",
+    cx: "mobile",
+    isOpen: open,
+    parentRef: buttonRef,
+    passthrough: !open,
+    label: label,
+  };
   return (
     <ClickAwayListener onClickAway={closeNavigation}>
       <Box cx="mobile-navigation">
         <Button {...buttonProps}>Menu</Button>
 
-        <Navigation
-          id="mobile-menu"
-          cx="mobile"
-          isOpen={open}
-          parentRef={buttonRef}
-          shouldPassthrough={!open}
-          label={label}
-          {...rest}
-        >
-          {children}
-        </Navigation>
+        <Navigation {...navigationProps}>{children}</Navigation>
       </Box>
     </ClickAwayListener>
   );

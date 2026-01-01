@@ -1,1 +1,2 @@
-export {default as useNavigation} from './useNavigation';
+export { default as useNavigation } from "./useNavigation";
+export * from "./hookFunctions";

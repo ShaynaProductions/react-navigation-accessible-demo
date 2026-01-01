@@ -18,7 +18,7 @@ export function NavigationLink({
 }: NavigationLinkProps) {
   const {
     currentListItems,
-    parentRef,
+    parentEl,
     registerItemInList,
     setFirstFocus,
     setLastFocus,
@@ -47,15 +47,15 @@ export function NavigationLink({
   }, [linkRef, prevLinkRef, registerItemInList]);
 
   useEffect(() => {
-    registerLinkInList(currentListItems, parentRef.current);
-  }, [currentListItems, parentRef, registerLinkInList]);
+    registerLinkInList(currentListItems, parentEl);
+  }, [currentListItems, parentEl, registerLinkInList]);
 
   const handleFocus = () => {
     const linkEl = linkRef.current;
-    const returnEl = handleLinkFocus(linkEl);
+    const returnEl = handleLinkFocus(linkEl as FocusableElementType);
 
     /* istanbul ignore else */
-    if (!!returnEl && returnEl !== linkEl && returnEl !== null) {
+    if (!!returnEl && returnEl !== linkEl) {
       setSpecificFocus(returnEl);
     }
   };
@@ -88,37 +88,24 @@ export function NavigationLink({
       setSpecificFocus,
     );
     // specific to link.
+    let focusableEl: FocusableElementType | undefined;
     switch (e.key) {
       case Keys.UP:
-        const prevFocusableEl = getPreviousByLink(linkEl);
-        /* istanbul ignore else */
-        if (prevFocusableEl) {
-          setSpecificFocus(prevFocusableEl);
-        }
+        focusableEl = getPreviousByLink(linkEl);
         break;
       case Keys.DOWN:
-        const nextFocusableEl = getNextByLink(linkEl);
-        /* istanbul ignore else */
-        if (nextFocusableEl) {
-          setSpecificFocus(nextFocusableEl);
-        }
+        focusableEl = getNextByLink(linkEl);
         break;
-
       case Keys.TAB:
         if (e.shiftKey) {
-          const prevFocusableEl = getPreviousByLinkTab(linkEl);
-          /* istanbul ignore else */
-          if (prevFocusableEl) {
-            setSpecificFocus(prevFocusableEl);
-          }
+          focusableEl = getPreviousByLinkTab(linkEl);
         } else {
-          const nextFocusableEl = getNextByLinkTab(linkEl);
-          /* istanbul ignore else */
-          if (nextFocusableEl) {
-            setSpecificFocus(nextFocusableEl);
-          }
+          focusableEl = getNextByLinkTab(linkEl);
         }
         break;
+    }
+    if (focusableEl) {
+      setSpecificFocus(focusableEl);
     }
   };
 

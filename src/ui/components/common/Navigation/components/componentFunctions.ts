@@ -8,8 +8,7 @@ export const setSubListWidth = (
   setListWidth(refObject.current?.offsetWidth);
 };
 
-
-export const returnStoredParentEl = (
+export const returnControllingEl = (
   parentRef?: RefObject<ParentElementType | null>,
 ) => {
   return parentRef?.current || null;

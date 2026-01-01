@@ -5,12 +5,14 @@ import { FocusableElementType } from "../../components/NavigationTypes";
 export const _handleKeyDown = (
   e: React.KeyboardEvent,
   focusableEl: FocusableElementType,
-  closeComponentWithFocus,
+  closeComponentWithFocus: (
+    focusableEl: FocusableElementType,
+  ) => FocusableElementType,
   setFirstFocus: VoidFunction,
   setLastFocus: VoidFunction,
   setNextFocus: (focusableEl: FocusableElementType) => void,
   setPreviousFocus: (focusableEl: FocusableElementType) => void,
-  setSpecificFocus,
+  setSpecificFocus: (focusableEl: FocusableElementType) => FocusableElementType,
 ) => {
   switch (e.key) {
     case Keys.ESC:

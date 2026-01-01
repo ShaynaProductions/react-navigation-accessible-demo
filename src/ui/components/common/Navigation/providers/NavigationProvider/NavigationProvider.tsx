@@ -14,12 +14,14 @@ export const NavigationContext = createContext<
 >({});
 
 export function NavigationProvider({ children, value }): JSX.Element {
-  const currentObj = { ...value };
+  const { controllingEl, ...rest } = value;
+
+  const currentObj = { ...rest };
 
   const [navigationArray, setNavigationArray] = useState([currentObj]);
   const [isComponentActive, setIsComponentActive] = useState<boolean>(false);
   const [controllingElement, _setControllingElement] =
-    useState<ParentElementType>(currentObj.storedParentEl);
+    useState<ParentElementType>(controllingEl);
   const [shouldPassthrough, setShouldPassthrough] = useState<boolean>(false);
 
   const _getNavigationIndex: NavigationContextInternalProps["_getNavigationIndex"] =
@@ -73,18 +75,11 @@ export function NavigationProvider({ children, value }): JSX.Element {
     return controllingElement;
   }, [controllingElement]);
 
-  const updateTopParent = (parentEl) => {
-    const topIndex = _getNavigationIndex(null);
-    const topParentIndex = _getNavigationIndex(parentEl);
-    if (topParentIndex > 0 && topIndex !== topParentIndex) {
-      const topParentObj = getNavigationArray()[topParentIndex];
-      _setNavigationArrayObject(topIndex, {
-        storedParentEl: parentEl,
-        storedList: topParentObj.storedList,
-      });
-      getNavigationArray().splice(topParentIndex, 1);
+  const updateControllingElement = (parentEl) => {
+    if (getControllingElement() !== parentEl) {
       _setControllingElement(parentEl);
     }
+    // }
   };
   const _setDispatchChildClose: NavigationContextInternalProps["_setDispatchChildClose"] =
     useCallback(
@@ -182,7 +177,7 @@ export function NavigationProvider({ children, value }): JSX.Element {
         setIsListOpen,
         setListItems,
         setShouldPassthrough,
-        updateTopParent,
+        updateControllingElement,
       }}
     >
       {children}
