@@ -49,7 +49,7 @@ export function MobileNavigation({ children, label, ...rest }): JSX.Element {
     cx: "mobile",
     isOpen: open,
     parentRef: buttonRef,
-    passthrough: !open,
+    shouldPassthrough: !open,
     label: label,
   };
   return (

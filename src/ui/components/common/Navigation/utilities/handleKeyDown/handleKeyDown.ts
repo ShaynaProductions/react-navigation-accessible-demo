@@ -1,35 +1,39 @@
 import React from "react";
 import { Keys } from "@/ui/utilities";
 import { FocusableElementType } from "../../components/NavigationTypes";
+import { UseNavigationListReturnProps } from "@/ui/components/common/Navigation/hooks/useNavigationList/useNavigationListTypes";
+import { UseNavigationReturnTypes } from "@/ui/components/common/Navigation/hooks/useNavigation/useNavigationTypes";
 
 export const _handleKeyDown = (
   e: React.KeyboardEvent,
   focusableEl: FocusableElementType,
-  closeComponentWithFocus: (
-    focusableEl: FocusableElementType,
-  ) => FocusableElementType,
-  setFirstFocus: VoidFunction,
-  setLastFocus: VoidFunction,
-  setNextFocus: (focusableEl: FocusableElementType) => void,
-  setPreviousFocus: (focusableEl: FocusableElementType) => void,
-  setSpecificFocus: (focusableEl: FocusableElementType) => FocusableElementType,
+  closeComponentWithFocus: UseNavigationReturnTypes["closeComponentWithFocus"],
+  isComponentControlled: UseNavigationReturnTypes["isComponentControlled"],
+  setFirstFocus: UseNavigationListReturnProps["setFirstFocus"],
+  setLastFocus: UseNavigationListReturnProps["setLastFocus"],
+  setNextFocus: UseNavigationListReturnProps["setNextFocus"],
+  setPreviousFocus: UseNavigationListReturnProps["setPreviousFocus"],
+  setSpecificFocus: UseNavigationListReturnProps["setSpecificFocus"],
 ) => {
   switch (e.key) {
     case Keys.ESC:
       const closedFocus = closeComponentWithFocus(focusableEl);
-      setSpecificFocus(closedFocus);
+      setSpecificFocus(
+        closedFocus as FocusableElementType,
+        isComponentControlled(),
+      );
       break;
     case Keys.HOME:
-      setFirstFocus();
+      setFirstFocus(isComponentControlled());
       break;
     case Keys.END:
-      setLastFocus();
+      setLastFocus(isComponentControlled());
       break;
     case Keys.LEFT:
-      setPreviousFocus(focusableEl);
+      setPreviousFocus(focusableEl, isComponentControlled());
       break;
     case Keys.RIGHT:
-      setNextFocus(focusableEl);
+      setNextFocus(focusableEl, isComponentControlled());
       break;
   }
 };

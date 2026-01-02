@@ -20,7 +20,7 @@
                     padding: calc(var(--sp-px) * 16);
                     position: absolute;
                     top: 20%;
-                    width:calc(25% + (var(--sp-px) * 16));
+                    width:calc(50%+ (var(--sp-px) * 16));
                     z-index: 3;
                 }
 

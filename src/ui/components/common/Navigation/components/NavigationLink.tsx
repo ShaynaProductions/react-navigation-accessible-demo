@@ -33,6 +33,7 @@ export function NavigationLink({
     getPreviousByLink,
     getPreviousByLinkTab,
     handleLinkFocus,
+    isComponentControlled,
     registerLinkInList,
   } = useNavigation();
   const currentPath = usePathname();
@@ -81,6 +82,7 @@ export function NavigationLink({
       e,
       linkEl,
       closeComponentWithFocus,
+      isComponentControlled,
       setFirstFocus,
       setLastFocus,
       setNextFocus,
@@ -105,7 +107,7 @@ export function NavigationLink({
         break;
     }
     if (focusableEl) {
-      setSpecificFocus(focusableEl);
+      setSpecificFocus(focusableEl, isComponentControlled());
     }
   };
 
