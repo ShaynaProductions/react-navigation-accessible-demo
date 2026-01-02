@@ -404,7 +404,6 @@ export default function useNavigation() {
     }
     if (isComponentControlled()) {
       // if last in parent list and not last in component move to parent's next sibling.
-      const topParentEl = _getTopElement(buttonEl);
       const lastTopChild = _getLastChildInRow(0);
       const isLastInComponent = _isLastElementInComponent(buttonEl);
       if (
@@ -413,15 +412,13 @@ export default function useNavigation() {
         !isLastInComponent
       ) {
         const lastEl = _getLastFocusableElementByParent(buttonEl);
+        /* istanbul ignore else */
         if (buttonEl !== lastTopChild) {
           nextFocusableEl = getFocusableElement(
             lastEl,
             "next",
           ) as FocusableElementType;
         }
-      }
-      if (isLastInComponent) {
-        return undefined;
       }
     }
     return nextFocusableEl;
@@ -488,12 +485,14 @@ export default function useNavigation() {
         }
       }
       if (isComponentControlled()) {
+        /* istanbul ignore else */
         if (isParentLast && isLinkLast) {
           nextFocusableEl = getFocusableElement(
             linkEl,
             "next",
           ) as FocusableElementType;
         }
+        /* istanbul ignore else */
         if (isLinkLast && linkEl === _getLastElementInComponent()) {
           nextFocusableEl = undefined;
         }

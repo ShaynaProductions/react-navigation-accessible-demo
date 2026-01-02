@@ -94,4 +94,81 @@ describe("MobileNavigation", () => {
       expect(menuButton).toHaveFocus();
     },
   );
+
+  it("should move to parent's next sibling when button is closed and its the last in the list.", async () => {
+    const { getByRole, getByTestId } = renderMobileNavigation();
+    const {
+      communityButton,
+      storiesButton,
+      searchButton,
+      allStoriesLink,
+      findNextStoryButton,
+      referenceButton,
+    } = getComplexButtonTestElements(getByRole, getByTestId, TEST_ID);
+    const menuButton = getByRole("button", { name: "Menu" });
+    await userEvent.pointer({ target: menuButton, keys: "[MouseLeft]" });
+    expect(communityButton).toHaveFocus();
+    await userEvent.keyboard("{arrowDown}");
+    expect(storiesButton).toHaveFocus();
+    await userEvent.keyboard("{Enter}");
+    await userEvent.keyboard("{arrowDown}");
+    expect(searchButton).toHaveFocus();
+    await userEvent.keyboard("{arrowDown}");
+    expect(allStoriesLink).toHaveFocus();
+    await userEvent.keyboard("{arrowDown}");
+    await userEvent.keyboard("{arrowDown}");
+    expect(findNextStoryButton).toHaveFocus();
+    await userEvent.keyboard("{arrowDown}");
+    expect(referenceButton).toHaveFocus();
+  });
+
+  it("should not move when button is closed and its last child is last in the component", async () => {
+    const { getByRole, getByTestId } = renderMobileNavigation();
+    const { communityButton, storiesButton, referenceButton, aboutButton } =
+      getComplexButtonTestElements(getByRole, getByTestId, TEST_ID);
+    const menuButton = getByRole("button", { name: "Menu" });
+    await userEvent.pointer({ target: menuButton, keys: "[MouseLeft]" });
+    expect(communityButton).toHaveFocus();
+    await userEvent.keyboard("{arrowDown}");
+    expect(storiesButton).toHaveFocus();
+    await userEvent.keyboard("{arrowDown}");
+    expect(referenceButton).toHaveFocus();
+    await userEvent.keyboard("{arrowDown}");
+    expect(aboutButton).toHaveFocus();
+    await userEvent.keyboard("{arrowDown}");
+    expect(aboutButton).toHaveFocus();
+  });
+
+  it("should move to parent's next sibling when link is the last in it's list.", async () => {
+    const { getByRole, getByTestId } = renderMobileNavigation();
+    const {
+      communityButton,
+      storiesButton,
+      referenceButton,
+      aboutButton,
+      aboutSiteLink,
+      donateLink,
+    } = getComplexButtonTestElements(getByRole, getByTestId, TEST_ID);
+    const menuButton = getByRole("button", { name: "Menu" });
+    await userEvent.pointer({ target: menuButton, keys: "[MouseLeft]" });
+    expect(communityButton).toHaveFocus();
+    await userEvent.keyboard("{arrowDown}");
+    expect(storiesButton).toHaveFocus();
+    await userEvent.keyboard("{arrowDown}");
+    expect(referenceButton).toHaveFocus();
+    await userEvent.keyboard("{arrowDown}");
+    expect(aboutButton).toHaveFocus();
+    await userEvent.keyboard("{arrowDown}");
+    expect(aboutButton).toHaveFocus();
+    await userEvent.keyboard("{Enter}");
+    await userEvent.keyboard("{arrowDown}");
+    expect(aboutSiteLink).toHaveFocus();
+    await userEvent.keyboard("{arrowDown}");
+    await userEvent.keyboard("{arrowDown}");
+    await userEvent.keyboard("{arrowDown}");
+    await userEvent.keyboard("{arrowDown}");
+    expect(donateLink).toHaveFocus();
+    await userEvent.keyboard("{arrowDown}");
+    expect(donateLink).toHaveFocus();
+  });
 });

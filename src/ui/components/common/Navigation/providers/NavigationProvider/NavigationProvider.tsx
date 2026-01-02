@@ -120,12 +120,7 @@ export function NavigationProvider({ children, value }): JSX.Element {
   const setListItems: NavigationContextReturnValueProps["setListItems"] =
     useCallback(
       (navigationList, parentEl) => {
-        let parentIndex = _getNavigationIndex(parentEl);
-        /* istanbul ignore else */
-        if (parentIndex === -1) {
-          _setParentEl(parentEl);
-          parentIndex = _getNavigationIndex(parentEl);
-        }
+        const parentIndex = _getNavigationIndex(parentEl);
 
         const currentObj = getNavigationArray()[parentIndex];
         if (
