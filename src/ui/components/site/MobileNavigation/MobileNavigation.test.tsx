@@ -50,7 +50,7 @@ describe("MobileNavigation", () => {
 
     expect(menuButton).toBeInTheDocument();
     expect(navElement).toBeInTheDocument();
-    expect(topList).toHaveAttribute("id", "test-menu");
+    expect(topList).toHaveAttribute("id", "mobile-menu");
     expect(topList).toHaveClass("srOnly");
     await userEvent.pointer({ target: menuButton, keys: "[MouseLeft]" });
     expect(topList).not.toHaveClass("srOnly");

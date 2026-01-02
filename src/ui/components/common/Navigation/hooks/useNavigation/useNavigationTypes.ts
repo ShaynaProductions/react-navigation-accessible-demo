@@ -74,13 +74,17 @@ export interface UseNavigationReturnTypes {
   getNextByButton: (
     buttonEl: FocusableElementType,
     isSubListOpen: boolean,
-  ) => FocusableElementType;
+  ) => FocusableElementType | undefined;
   getNextByButtonTab: (
     buttonEl: FocusableElementType,
     isSubListOpen: boolean,
-  ) => FocusableElementType;
-  getNextByLink: (linkEl: FocusableElementType) => FocusableElementType;
-  getNextByLinkTab: (linkEl: FocusableElementType) => FocusableElementType;
+  ) => FocusableElementType | undefined;
+  getNextByLink: (
+    linkEl: FocusableElementType,
+  ) => FocusableElementType | undefined;
+  getNextByLinkTab: (
+    linkEl: FocusableElementType,
+  ) => FocusableElementType | undefined;
   getPreviousByButton: (
     buttonEl: FocusableElementType,
   ) => FocusableElementType | undefined;

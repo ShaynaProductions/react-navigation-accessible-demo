@@ -395,13 +395,35 @@ export default function useNavigation() {
     }
 
     // last focusable element and sub list is collapsed. Set to topmost parent.
+
     if (
       !isSubListOpen &&
       currentItemsList.indexOf(buttonEl) === currentItemsList.length - 1
     ) {
       nextFocusableEl = _getParentByElement(buttonEl) as FocusableElementType;
     }
-
+    if (isComponentControlled()) {
+      // if last in parent list and not last in component move to parent's next sibling.
+      const topParentEl = _getTopElement(buttonEl);
+      const lastTopChild = _getLastChildInRow(0);
+      const isLastInComponent = _isLastElementInComponent(buttonEl);
+      if (
+        !isSubListOpen &&
+        currentItemsList.indexOf(buttonEl) === currentItemsList.length - 1 &&
+        !isLastInComponent
+      ) {
+        const lastEl = _getLastFocusableElementByParent(buttonEl);
+        if (buttonEl !== lastTopChild) {
+          nextFocusableEl = getFocusableElement(
+            lastEl,
+            "next",
+          ) as FocusableElementType;
+        }
+      }
+      if (isLastInComponent) {
+        return undefined;
+      }
+    }
     return nextFocusableEl;
   };
 
@@ -438,23 +460,20 @@ export default function useNavigation() {
     const currentItemsList = returnStoredList(linkNavObject.storedList);
 
     // default to next item in List
-    let nextFocusableEl: FocusableElementType = _getNextElementInList(
-      linkEl,
-      currentItemsList,
-    );
+    let nextFocusableEl: FocusableElementType | undefined =
+      _getNextElementInList(linkEl, currentItemsList);
 
     if (currentItemsList.indexOf(linkEl) === currentItemsList.length - 1) {
       const { storedParentEl } = linkNavObject;
+      const topParent = _getTopElement(linkEl);
+      const isParentLast = _isLastElementInList(
+        storedParentEl as FocusableElementType,
+      );
+      const isLinkLast = _isLastElementInList(linkEl);
       const isInTopRow = storedParentEl && _isInTopRow(storedParentEl);
       if (isInTopRow) {
         nextFocusableEl = storedParentEl;
       } else {
-        const topParent = _getTopElement(linkEl);
-        const isParentLast = _isLastElementInList(
-          storedParentEl as FocusableElementType,
-        );
-        const isLinkLast = _isLastElementInList(linkEl);
-
         if (isParentLast && isLinkLast) {
           nextFocusableEl = topParent;
         } else {
@@ -466,6 +485,17 @@ export default function useNavigation() {
             storedParentEl as FocusableElementType,
             parentList,
           );
+        }
+      }
+      if (isComponentControlled()) {
+        if (isParentLast && isLinkLast) {
+          nextFocusableEl = getFocusableElement(
+            linkEl,
+            "next",
+          ) as FocusableElementType;
+        }
+        if (isLinkLast && linkEl === _getLastElementInComponent()) {
+          nextFocusableEl = undefined;
         }
       }
     }
