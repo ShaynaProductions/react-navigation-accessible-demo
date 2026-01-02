@@ -466,6 +466,9 @@ export default function useNavigation() {
       const isParentLast = _isLastElementInList(
         storedParentEl as FocusableElementType,
       );
+      const parentNavObject = _getNavigationObjectContainingElement(
+        storedParentEl as FocusableElementType,
+      );
       const isLinkLast = _isLastElementInList(linkEl);
       const isInTopRow = storedParentEl && _isInTopRow(storedParentEl);
       if (isInTopRow) {
@@ -474,9 +477,6 @@ export default function useNavigation() {
         if (isParentLast && isLinkLast) {
           nextFocusableEl = topParent;
         } else {
-          const parentNavObject = _getNavigationObjectContainingElement(
-            storedParentEl as FocusableElementType,
-          );
           const parentList = returnStoredList(parentNavObject.storedList);
           nextFocusableEl = _getNextElementInList(
             storedParentEl as FocusableElementType,
@@ -486,11 +486,11 @@ export default function useNavigation() {
       }
       if (isComponentControlled()) {
         /* istanbul ignore else */
-        if (isParentLast && isLinkLast) {
-          nextFocusableEl = getFocusableElement(
-            linkEl,
-            "next",
-          ) as FocusableElementType;
+        if (isLinkLast && linkEl !== _getLastElementInComponent()) {
+          nextFocusableEl = _getNextElementInList(
+            storedParentEl as FocusableElementType,
+            returnStoredList(parentNavObject.storedList),
+          );
         }
         /* istanbul ignore else */
         if (isLinkLast && linkEl === _getLastElementInComponent()) {

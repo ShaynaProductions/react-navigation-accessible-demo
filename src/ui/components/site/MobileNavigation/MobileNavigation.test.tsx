@@ -139,7 +139,7 @@ describe("MobileNavigation", () => {
     expect(aboutButton).toHaveFocus();
   });
 
-  it("should move to parent's next sibling when link is the last in it's list.", async () => {
+  it("should move to parent's next sibling except when link is last in component.", async () => {
     const { getByRole, getByTestId } = renderMobileNavigation();
     const {
       communityButton,
@@ -170,5 +170,21 @@ describe("MobileNavigation", () => {
     expect(donateLink).toHaveFocus();
     await userEvent.keyboard("{arrowDown}");
     expect(donateLink).toHaveFocus();
+  });
+
+  it("should move to parent's next sibling when link is the last in it's list.", async () => {
+    const { getByRole, getByTestId } = renderMobileNavigation();
+    const { communityButton, forumLink, blogLink, storiesButton } =
+      getComplexButtonTestElements(getByRole, getByTestId, TEST_ID);
+    const menuButton = getByRole("button", { name: "Menu" });
+    await userEvent.pointer({ target: menuButton, keys: "[MouseLeft]" });
+    expect(communityButton).toHaveFocus();
+    await userEvent.keyboard("{Enter}");
+    await userEvent.keyboard("{arrowDown}");
+    expect(blogLink).toHaveFocus();
+    await userEvent.keyboard("{arrowDown}");
+    expect(forumLink).toHaveFocus();
+    await userEvent.keyboard("{arrowDown}");
+    expect(storiesButton).toHaveFocus();
   });
 });
