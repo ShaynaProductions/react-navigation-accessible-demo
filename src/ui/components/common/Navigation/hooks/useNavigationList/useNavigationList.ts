@@ -90,7 +90,6 @@ export function useNavigationList(): UseNavigationListReturnProps {
   return {
     currentListItems,
     parentEl,
-    parentRef,
     registerItemInList,
     setFirstFocus,
     setLastFocus,
