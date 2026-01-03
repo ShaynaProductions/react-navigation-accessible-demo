@@ -20,6 +20,7 @@ export function NavigationWrapper({
   ...rest
 }: NavigationWrapperProps) {
   const {
+    closeComponent,
     isComponentActive,
     getTopParentElement,
     handleClickAwayClose,
@@ -49,6 +50,9 @@ export function NavigationWrapper({
     const { storedList, storedParentEl } = getTopParentElement();
     if (prevIsOpen !== isOpen) {
       setIsListOpen(isOpen, storedParentEl);
+      if (!isOpen) {
+        closeComponent();
+      }
     }
     if (isOpen && !prevIsOpen) {
       const parentList = returnStoredList(storedList);
@@ -57,7 +61,14 @@ export function NavigationWrapper({
         parentList[0].focus({ preventScroll: true });
       }
     }
-  }, [getTopParentElement, isOpen, parentRef, prevIsOpen, setIsListOpen]);
+  }, [
+    closeComponent,
+    getTopParentElement,
+    isOpen,
+    parentRef,
+    prevIsOpen,
+    setIsListOpen,
+  ]);
 
   useEffect(() => {
     setShouldPassthrough(shouldPassthrough);

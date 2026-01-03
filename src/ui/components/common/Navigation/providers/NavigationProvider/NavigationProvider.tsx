@@ -132,12 +132,7 @@ export function NavigationProvider({ children, value }): JSX.Element {
           });
         }
       },
-      [
-        _getNavigationIndex,
-        getNavigationArray,
-        _setParentEl,
-        _setNavigationArrayObject,
-      ],
+      [_getNavigationIndex, getNavigationArray, _setNavigationArrayObject],
     );
 
   const registerLinkInList: NavigationContextReturnValueProps["registerLinkInList"] =

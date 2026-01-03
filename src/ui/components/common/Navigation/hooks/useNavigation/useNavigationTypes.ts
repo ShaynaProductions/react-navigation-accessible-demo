@@ -8,7 +8,6 @@ import {
 } from "../../providers";
 
 export interface UseNavigationInternalTypes {
-  _closeComponent: () => void;
   _closeOpenSiblings: (focusedEl: FocusableElementType) => void;
   _getChildrenInList: (parentEl: HTMLButtonElement) => NavigationObjectProps[];
   _getFirstChildInRow: (index: number) => FocusableElementType;
@@ -67,6 +66,7 @@ export interface NavigationHookFunctionsProps {
 }
 
 export interface UseNavigationReturnTypes {
+  closeComponent: () => void;
   closeComponentWithFocus: (
     focusedEl: FocusableElementType,
   ) => FocusableElementType | undefined;

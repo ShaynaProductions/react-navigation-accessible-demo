@@ -187,4 +187,111 @@ describe("MobileNavigation", () => {
     await userEvent.keyboard("{arrowDown}");
     expect(storiesButton).toHaveFocus();
   });
+  it("should move up the list when all are closed", async () => {
+    const { getByRole, getByTestId } = renderMobileNavigation();
+    const { communityButton, storiesButton, referenceButton, aboutButton } =
+      getComplexButtonTestElements(getByRole, getByTestId, TEST_ID);
+    const menuButton = getByRole("button", { name: "Menu" });
+    await userEvent.pointer({ target: menuButton, keys: "[MouseLeft]" });
+    expect(communityButton).toHaveFocus();
+    await userEvent.keyboard("{arrowDown}");
+    expect(storiesButton).toHaveFocus();
+    await userEvent.keyboard("{arrowDown}");
+    expect(referenceButton).toHaveFocus();
+    await userEvent.keyboard("{arrowDown}");
+    expect(aboutButton).toHaveFocus();
+    await userEvent.keyboard("{arrowUp}");
+    expect(referenceButton).toHaveFocus();
+    await userEvent.keyboard("{arrowUp}");
+    expect(storiesButton).toHaveFocus();
+    await userEvent.keyboard("{arrowUp}");
+    expect(communityButton).toHaveFocus();
+  });
+
+  it(
+    "should move up the list and into the last element when prev sibling sublist is open and" +
+      " last visual element is a button",
+    async () => {
+      const { getByRole, getByTestId } = renderMobileNavigation();
+      const {
+        communityButton,
+        storiesButton,
+        searchButton,
+        allCommentaryLink,
+        findNextStoryButton,
+        referenceButton,
+      } = getComplexButtonTestElements(getByRole, getByTestId, TEST_ID);
+      const menuButton = getByRole("button", { name: "Menu" });
+      await userEvent.pointer({ target: menuButton, keys: "[MouseLeft]" });
+      expect(communityButton).toHaveFocus();
+      await userEvent.keyboard("{arrowDown}");
+      expect(storiesButton).toHaveFocus();
+      await userEvent.keyboard("{Enter}");
+      await userEvent.keyboard("{arrowDown}");
+      expect(searchButton).toHaveFocus();
+      await userEvent.keyboard("{arrowDown}");
+      await userEvent.keyboard("{arrowDown}");
+      expect(allCommentaryLink).toHaveFocus();
+      await userEvent.keyboard("{arrowDown}");
+      expect(findNextStoryButton).toHaveFocus();
+      await userEvent.keyboard("{arrowDown}");
+      expect(referenceButton).toHaveFocus();
+      await userEvent.keyboard("{arrowUp}");
+      expect(findNextStoryButton).toHaveFocus();
+    },
+  );
+
+  it("should move up the list and into the last element when prev sibling sublist is open", async () => {
+    const { getByRole, getByTestId } = renderMobileNavigation();
+    const {
+      communityButton,
+      storiesButton,
+      searchButton,
+      basicSearchLink,
+      advancedSearchLink,
+      allStoriesLink,
+      allCommentaryLink,
+      findNextStoryButton,
+      byEraLink,
+      referenceButton,
+    } = getComplexButtonTestElements(getByRole, getByTestId, TEST_ID);
+    const menuButton = getByRole("button", { name: "Menu" });
+    await userEvent.pointer({ target: menuButton, keys: "[MouseLeft]" });
+    expect(communityButton).toHaveFocus();
+    await userEvent.keyboard("{arrowDown}");
+    expect(storiesButton).toHaveFocus();
+    await userEvent.keyboard("{Enter}");
+    await userEvent.keyboard("{arrowDown}");
+    expect(searchButton).toHaveFocus();
+    await userEvent.keyboard("{arrowDown}");
+    await userEvent.keyboard("{arrowDown}");
+    expect(allCommentaryLink).toHaveFocus();
+    await userEvent.keyboard("{arrowDown}");
+    expect(findNextStoryButton).toHaveFocus();
+    await userEvent.keyboard("{Enter}");
+    await userEvent.keyboard("{arrowDown}");
+    await userEvent.keyboard("{arrowDown}");
+    expect(byEraLink).toHaveFocus();
+    await userEvent.keyboard("{arrowDown}");
+    expect(referenceButton).toHaveFocus();
+    await userEvent.keyboard("{arrowUp}");
+    expect(byEraLink).toHaveFocus();
+    await userEvent.keyboard("{arrowUp}");
+    await userEvent.keyboard("{arrowUp}");
+    expect(findNextStoryButton).toHaveFocus();
+    await userEvent.keyboard("{arrowUp}");
+    await userEvent.keyboard("{arrowUp}");
+    expect(allStoriesLink).toHaveFocus();
+    await userEvent.keyboard("{arrowUp}");
+    expect(searchButton).toHaveFocus();
+    await userEvent.keyboard("{Enter}");
+    await userEvent.keyboard("{arrowDown}");
+    expect(basicSearchLink).toHaveFocus();
+    await userEvent.keyboard("{arrowDown}");
+    expect(advancedSearchLink).toHaveFocus();
+    await userEvent.keyboard("{arrowDown}");
+    expect(allStoriesLink).toHaveFocus();
+    await userEvent.keyboard("{arrowUp}");
+    expect(advancedSearchLink).toHaveFocus();
+  });
 });

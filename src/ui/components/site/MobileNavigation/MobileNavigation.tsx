@@ -12,13 +12,13 @@ export function MobileNavigation({ children, label, ...rest }): JSX.Element {
   const buttonRef = useRef<ParentElementType>(null);
 
   const closeNavigation = () => {
-    if (open) {
-      setOpen(false);
-    }
+    setOpen(false);
   };
 
   const handleFocus = () => {
-    closeNavigation();
+    if (open) {
+      closeNavigation();
+    }
   };
 
   const handlePress = () => {
