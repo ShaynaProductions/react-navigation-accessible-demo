@@ -56,7 +56,7 @@ export function SubNavigation({
     getPreviousByButtonTab,
     handleButtonFocus,
     handleCloseSubNavigation,
-    isComponentControlled,
+    isLayoutVertical,
     registerInParentList,
     registerButtonInList,
     setIsListOpen,
@@ -141,7 +141,7 @@ export function SubNavigation({
       e,
       buttonEl,
       closeComponentWithFocus,
-      isComponentControlled,
+      isLayoutVertical,
       setFirstFocus,
       setLastFocus,
       setNextFocus,
@@ -167,7 +167,7 @@ export function SubNavigation({
         break;
     }
     if (focusableEl) {
-      setSpecificFocus(focusableEl, isComponentControlled());
+      setSpecificFocus(focusableEl, isLayoutVertical());
     }
   };
 

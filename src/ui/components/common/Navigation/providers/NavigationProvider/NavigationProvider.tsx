@@ -3,18 +3,17 @@ import { createContext, JSX, useCallback, useState } from "react";
 import {
   NavigationContextInternalProps,
   NavigationContextReturnValueProps,
-  NavigationContextValueProps,
 } from "./NavigationProviderTypes";
 import { EmptyObject } from "@/ui/types";
 import { arraysEqual } from "@/ui/utilities";
 import { ParentElementType } from "@/ui/components";
 
 export const NavigationContext = createContext<
-  NavigationContextValueProps | EmptyObject
+  NavigationContextReturnValueProps | EmptyObject
 >({});
 
 export function NavigationProvider({ children, value }): JSX.Element {
-  const { controllingEl, ...rest } = value;
+  const { controllingEl, orientation, ...rest } = value;
 
   const currentObj = { ...rest };
 
@@ -46,6 +45,11 @@ export function NavigationProvider({ children, value }): JSX.Element {
     useCallback(() => {
       return navigationArray;
     }, [navigationArray]);
+
+  const getOrientation: NavigationContextReturnValueProps["getOrientation"] =
+    () => {
+      return orientation;
+    };
 
   const _setNavigationArrayObject: NavigationContextInternalProps["_setNavigationArrayObject"] =
     useCallback(
@@ -158,6 +162,7 @@ export function NavigationProvider({ children, value }): JSX.Element {
     <NavigationContext.Provider
       value={{
         getNavigationArray,
+        getOrientation,
         isComponentActive,
         shouldPassthrough,
         getControllingElement,

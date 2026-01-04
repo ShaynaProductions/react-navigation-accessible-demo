@@ -7,6 +7,7 @@ import {
   getCommonTestElements,
   getSubNavTestElements,
 } from "../utilities/renderedItems";
+import { Orientation } from "@/ui/types";
 
 const singleSubNavJsonObj = fs.readFileSync(
   "public/__static__/simpleStructureWithSubNav.json",
@@ -214,4 +215,34 @@ describe("Navigation simple keyboard handling", () => {
       expect(aboutLink).toHaveFocus();
     },
   );
+
+  it("should move up on arrow key from last link to last link in open parent list", async () => {
+    const optProps = {
+      ...reqProps,
+      orientation: "vertical" as Orientation,
+    };
+    const { getByTestId, getByRole } = renderNavigation(optProps);
+    const { readButton, readList, referenceButton, appendicesLink, blogLink } =
+      getSubNavTestElements(getByRole, getByTestId, TEST_ID);
+    await userEvent.click(readButton);
+    expect(readList).not.toHaveClass("srOnly");
+    await userEvent.click(referenceButton);
+    await userEvent.keyboard("{ArrowDown}");
+    await userEvent.keyboard("{ArrowDown}");
+    await userEvent.keyboard("{ArrowDown}");
+    expect(appendicesLink).toHaveFocus();
+    await userEvent.keyboard("{ArrowDown}");
+    expect(blogLink).toHaveFocus();
+    await userEvent.keyboard("{ArrowUp}");
+    expect(appendicesLink).toHaveFocus();
+    await userEvent.keyboard("{ArrowUp}");
+    await userEvent.keyboard("{ArrowUp}");
+    await userEvent.keyboard("{ArrowUp}");
+    expect(referenceButton).toHaveFocus();
+    await userEvent.keyboard("{Enter}");
+    await userEvent.keyboard("{ArrowDown}");
+    expect(blogLink).toHaveFocus();
+    await userEvent.keyboard("{ArrowUp}");
+    expect(referenceButton).toHaveFocus();
+  });
 });

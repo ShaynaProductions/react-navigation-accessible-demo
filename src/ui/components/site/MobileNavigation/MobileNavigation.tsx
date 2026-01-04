@@ -1,6 +1,7 @@
 "use client";
 import { JSX, useRef, useState } from "react";
 import { Box, Button, Navigation, ParentElementType } from "@/ui/components";
+import { Orientation } from "@/ui/types";
 import {
   ClickAwayListener,
   FocusableElement,
@@ -8,7 +9,7 @@ import {
 } from "@/ui/utilities";
 
 export function MobileNavigation({ children, label, ...rest }): JSX.Element {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
   const buttonRef = useRef<ParentElementType>(null);
 
   const closeNavigation = () => {
@@ -48,6 +49,7 @@ export function MobileNavigation({ children, label, ...rest }): JSX.Element {
     id: "mobile-menu",
     cx: "mobile",
     isOpen: open,
+    orientation: "vertical" as Orientation,
     parentRef: buttonRef,
     shouldPassthrough: !open,
     label: label,

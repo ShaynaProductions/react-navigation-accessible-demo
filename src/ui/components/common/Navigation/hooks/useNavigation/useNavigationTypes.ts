@@ -6,6 +6,7 @@ import {
   NavigationContextReturnValueProps,
   NavigationObjectProps,
 } from "../../providers";
+import { FocusableElement } from "@/ui/utilities";
 
 export interface UseNavigationInternalTypes {
   _closeOpenSiblings: (focusedEl: FocusableElementType) => void;
@@ -69,7 +70,7 @@ export interface UseNavigationReturnTypes {
   closeComponent: () => void;
   closeComponentWithFocus: (
     focusedEl: FocusableElementType,
-  ) => FocusableElementType | undefined;
+  ) => FocusableElementType;
   getControllingElement: NavigationContextReturnValueProps["getControllingElement"];
   getNextByButton: (
     buttonEl: FocusableElementType,
@@ -97,7 +98,7 @@ export interface UseNavigationReturnTypes {
   getPreviousByLinkTab: (
     linkEl: FocusableElementType,
   ) => FocusableElementType | undefined;
-  getTopParentElement: () => Partial<NavigationObjectProps>;
+  getTopParentElement: () => NavigationObjectProps;
   handleButtonFocus: (
     buttonEl: HTMLButtonElement,
     isSubListOpen: boolean,
@@ -108,9 +109,12 @@ export interface UseNavigationReturnTypes {
     buttonEl: HTMLButtonElement,
   ) => FocusableElementType;
   handleLinkFocus: (linkEl: FocusableElementType) => FocusableElementType;
-  handlePassthroughNavigation(focusedEl: FocusableElementType): void;
+  handlePassthroughNavigation(
+    focusedEl: FocusableElementType,
+  ): FocusableElement | undefined;
   isComponentActive: NavigationContextReturnValueProps["isComponentActive"];
   isComponentControlled: () => boolean;
+  isLayoutVertical: () => boolean;
   registerButtonInList: NavigationContextReturnValueProps["registerButtonInList"];
   registerControllingElement: (parentEl: ParentElementType) => void;
   registerInParentList: (

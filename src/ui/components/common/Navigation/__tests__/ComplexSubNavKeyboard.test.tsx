@@ -32,7 +32,13 @@ const renderNavigation = ({ label, children, ...rest }) => {
       <Button id="front" testId={TEST_ID && `${TEST_ID}-front`}>
         {frontButtonLabel}
       </Button>
-      <Navigation id="test-menu" label={label} testId={TEST_ID} {...rest}>
+      <Navigation
+        id="test-menu"
+        label={label}
+        orientation="horizontal"
+        testId={TEST_ID}
+        {...rest}
+      >
         {children}
       </Navigation>
       <Button id="button-end" testId={TEST_ID && `${TEST_ID}-end`}>

@@ -15,7 +15,7 @@ export default function Navigation({
   cx,
   isOpen = true,
   label,
-  orientation = "vertical",
+  orientation = "horizontal",
   parentRef,
   shouldPassthrough = false,
   testId,
@@ -43,7 +43,7 @@ export default function Navigation({
       value={{
         controllingEl: controllingEl,
         isSubListOpen: isOpen,
-        storedList: [],
+        orientation: orientation,
         storedParentEl: null,
       }}
     >

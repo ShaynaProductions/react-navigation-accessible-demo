@@ -3,14 +3,15 @@ import {
   FocusableElementType,
   ParentElementType,
 } from "../../components/NavigationTypes";
+import { Orientation } from "@/ui/types";
 
 export type ControllingElementType = HTMLButtonElement | null;
 
 export interface NavigationContextStoredValueProps {
   controllingEl: ControllingElementType;
-  storedList?: FocusableElementType[];
-  storedParentEl?: ParentElementType;
-  isSubListOpen?: boolean;
+  storedParentEl: ParentElementType;
+  orientation: Orientation;
+  isSubListOpen: boolean;
 }
 
 export interface NavigationObjectProps extends NavigationContextStoredValueProps {
@@ -40,6 +41,7 @@ export interface NavigationContextInternalProps {
 export interface NavigationContextReturnValueProps {
   getControllingElement: () => ParentElementType;
   getNavigationArray: () => NavigationObjectProps[];
+  getOrientation: () => Orientation;
   isComponentActive: boolean;
   registerLinkInList: (
     navigationList: FocusableElementType[],
@@ -60,8 +62,3 @@ export interface NavigationContextReturnValueProps {
   shouldPassthrough: boolean;
   updateControllingElement: (parentEl: ParentElementType) => void;
 }
-
-export interface NavigationContextValueProps
-  extends
-    Omit<NavigationContextStoredValueProps, "controllingEl">,
-    NavigationContextReturnValueProps {}

@@ -43,45 +43,45 @@ export function useNavigationList(): UseNavigationListReturnProps {
 
   const setSpecificFocus: UseNavigationListReturnProps["setSpecificFocus"] = (
     item,
-    isComponentControlled = false,
+    isLayoutVertical = false,
   ) => {
-    item.focus({ preventScroll: !isComponentControlled });
+    item.focus({ preventScroll: !isLayoutVertical });
   };
 
   const setFirstFocus: UseNavigationListReturnProps["setFirstFocus"] = (
-    isComponentControlled,
+    isLayoutVertical,
   ) => {
-    setSpecificFocus(currentListItems[0], isComponentControlled);
+    setSpecificFocus(currentListItems[0], isLayoutVertical);
   };
 
   const setLastFocus: UseNavigationListReturnProps["setLastFocus"] = (
-    isComponentControlled,
+    isLayoutVertical,
   ) => {
     setSpecificFocus(
       currentListItems[currentListItems.length - 1],
-      isComponentControlled,
+      isLayoutVertical,
     );
   };
 
   const setNextFocus: UseNavigationListReturnProps["setNextFocus"] = (
     item,
-    isComponentControlled,
+    isLayoutVertical,
   ) => {
     const newIndex = getCurrentIndex(item) + 1;
     if (newIndex >= currentListItems.length) {
-      setFirstFocus(isComponentControlled);
+      setFirstFocus(isLayoutVertical);
     } else {
-      setSpecificFocus(currentListItems[newIndex], isComponentControlled);
+      setSpecificFocus(currentListItems[newIndex], isLayoutVertical);
     }
   };
 
   const setPreviousFocus: UseNavigationListReturnProps["setPreviousFocus"] = (
     item,
-    isComponentControlled,
+    isLayoutVertical,
   ) => {
     const newIndex = getCurrentIndex(item) - 1;
     if (newIndex < 0) {
-      setLastFocus(isComponentControlled);
+      setLastFocus(isLayoutVertical);
     } else {
       setSpecificFocus(currentListItems[newIndex]);
     }

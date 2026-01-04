@@ -11,18 +11,18 @@ export interface UseNavigationListReturnProps {
   currentListItems: FocusableElementType[];
   parentEl: ParentElementType | null;
   registerItemInList: (focusableEl: FocusableElementType) => void;
-  setFirstFocus: (isComponentControlled: boolean) => void;
-  setLastFocus: (isComponentcontrolled: boolean) => void;
+  setFirstFocus: (isLayoutVertical: boolean) => void;
+  setLastFocus: (isLayoutVertical: boolean) => void;
   setNextFocus: (
     focusableEl: FocusableElementType,
-    isComponentControlled: boolean,
+    isLayoutVertical: boolean,
   ) => void;
   setPreviousFocus: (
     lastFocusableEl: FocusableElementType,
-    isComponentControlled: boolean,
+    isLayoutVertical: boolean,
   ) => void;
   setSpecificFocus: (
     focusableEl: FocusableElementType,
-    isComponentControlled?: boolean,
+    isLayoutVertical?: boolean,
   ) => void;
 }

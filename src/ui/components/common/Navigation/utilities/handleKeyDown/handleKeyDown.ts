@@ -8,7 +8,7 @@ export const _handleKeyDown = (
   e: React.KeyboardEvent,
   focusableEl: FocusableElementType,
   closeComponentWithFocus: UseNavigationReturnTypes["closeComponentWithFocus"],
-  isComponentControlled: UseNavigationReturnTypes["isComponentControlled"],
+  isLayoutVertical: UseNavigationReturnTypes["isLayoutVertical"],
   setFirstFocus: UseNavigationListReturnProps["setFirstFocus"],
   setLastFocus: UseNavigationListReturnProps["setLastFocus"],
   setNextFocus: UseNavigationListReturnProps["setNextFocus"],
@@ -18,22 +18,19 @@ export const _handleKeyDown = (
   switch (e.key) {
     case Keys.ESC:
       const closedFocus = closeComponentWithFocus(focusableEl);
-      setSpecificFocus(
-        closedFocus as FocusableElementType,
-        isComponentControlled(),
-      );
+      setSpecificFocus(closedFocus as FocusableElementType, isLayoutVertical());
       break;
     case Keys.HOME:
-      setFirstFocus(isComponentControlled());
+      setFirstFocus(isLayoutVertical());
       break;
     case Keys.END:
-      setLastFocus(isComponentControlled());
+      setLastFocus(isLayoutVertical());
       break;
     case Keys.LEFT:
-      setPreviousFocus(focusableEl, isComponentControlled());
+      setPreviousFocus(focusableEl, isLayoutVertical());
       break;
     case Keys.RIGHT:
-      setNextFocus(focusableEl, isComponentControlled());
+      setNextFocus(focusableEl, isLayoutVertical());
       break;
   }
 };

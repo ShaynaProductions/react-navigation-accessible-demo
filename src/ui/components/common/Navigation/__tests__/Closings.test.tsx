@@ -137,11 +137,7 @@ describe("<Navigation Closings />", () => {
 
   it("top level list should close any open navigation on siblings when it receives focus", async () => {
     const { getByRole, getByTestId } = renderNavigation(linkProps);
-    const { frontButton } = getCommonTestElements(
-      getByRole,
-      frontButtonLabel,
-      endButtonLabel,
-    );
+
     const {
       homeLink,
       communityButton,
@@ -157,7 +153,7 @@ describe("<Navigation Closings />", () => {
     expect(communityButton).toHaveFocus();
     expect(communityList).not.toHaveClass("srOnly");
     await userEvent.tab({ shift: true });
-    expect(frontButton);
+    expect(homeLink).toHaveFocus();
     await userEvent.pointer({ target: storiesButton, keys: "[MouseLeft]" });
     expect(communityList).toHaveClass("srOnly");
     expect(storiesList).not.toHaveClass("srOnly");
