@@ -8,24 +8,24 @@ import {
 } from "./NavigationTypes";
 import NavigationList from "./NavigationList";
 import { NavigationWrapper } from "./NavigationWrapper";
-import { returnStoredParentEl } from "./componentFunctions";
+import { returnControllingEl } from "./componentFunctions";
 
 export default function Navigation({
   children,
   cx,
   isOpen = true,
   label,
-  orientation = "vertical",
+  orientation = "horizontal",
   parentRef,
+  shouldPassthrough = false,
   testId,
   ...rest
 }: NavigationProps) {
-  const storedParentEl = returnStoredParentEl(parentRef);
+  const controllingEl = returnControllingEl(parentRef);
 
-  const navListProps: NavigationListProps = {
+  const navigationListProps: NavigationListProps = {
     isOpen: isOpen,
     orientation: orientation,
-    parentRef: parentRef,
     testId: testId,
     ...rest,
   };
@@ -35,18 +35,20 @@ export default function Navigation({
     isOpen,
     label,
     parentRef,
+    shouldPassthrough,
   };
 
   return (
     <NavigationProvider
       value={{
-        storedList: [],
-        storedParentEl: storedParentEl,
+        controllingEl: controllingEl,
         isSubListOpen: isOpen,
+        orientation: orientation,
+        storedParentEl: null,
       }}
     >
       <NavigationWrapper {...navigationWrapperProps}>
-        <NavigationList {...navListProps}>{children}</NavigationList>
+        <NavigationList {...navigationListProps}>{children}</NavigationList>
       </NavigationWrapper>
     </NavigationProvider>
   );

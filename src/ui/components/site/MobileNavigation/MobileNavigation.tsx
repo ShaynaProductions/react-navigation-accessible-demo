@@ -1,0 +1,66 @@
+"use client";
+import { JSX, useRef, useState } from "react";
+import { Box, Button, Navigation, ParentElementType } from "@/ui/components";
+import { Orientation } from "@/ui/types";
+import {
+  ClickAwayListener,
+  FocusableElement,
+  getFocusableElement,
+} from "@/ui/utilities";
+
+export function MobileNavigation({ children, label, ...rest }): JSX.Element {
+  const [open, setOpen] = useState(true);
+  const buttonRef = useRef<ParentElementType>(null);
+
+  const closeNavigation = () => {
+    setOpen(false);
+  };
+
+  const handleFocus = () => {
+    if (open) {
+      closeNavigation();
+    }
+  };
+
+  const handlePress = () => {
+    /* istanbul ignore else */
+    if (!open) {
+      const nextEl = getFocusableElement(
+        buttonRef.current,
+        "next",
+      ) as FocusableElement;
+      nextEl.focus({ preventScroll: true });
+    }
+    setOpen(!open);
+  };
+
+  const buttonProps = {
+    ref: buttonRef,
+    "aria-expanded": open,
+    "aria-controls": "mobile-menu",
+    isOpen: open,
+    onFocus: handleFocus,
+    onPress: handlePress,
+    id: "mobile",
+  };
+
+  const navigationProps = {
+    ...rest,
+    id: "mobile-menu",
+    cx: "mobile",
+    isOpen: open,
+    orientation: "vertical" as Orientation,
+    parentRef: buttonRef,
+    shouldPassthrough: !open,
+    label: label,
+  };
+  return (
+    <ClickAwayListener onClickAway={closeNavigation}>
+      <Box cx="mobile-navigation">
+        <Button {...buttonProps}>Menu</Button>
+
+        <Navigation {...navigationProps}>{children}</Navigation>
+      </Box>
+    </ClickAwayListener>
+  );
+}

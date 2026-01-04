@@ -1,23 +1,21 @@
+"use client";
 import {
   FocusableElementType,
   ParentElementType,
 } from "../../components/NavigationTypes";
-import React from "react";
+import { Orientation } from "@/ui/types";
 
-export interface NavigationProviderFunctionsProps {
-  registerTopLevelParent: (
-    parentEl: ParentElementType,
-    setTopLevelParent: React.Dispatch<React.SetStateAction<ParentElementType>>,
-  ) => void;
-}
+export type ControllingElementType = HTMLButtonElement | null;
+
 export interface NavigationContextStoredValueProps {
-  dispatchChildClose?: (parentEl: HTMLButtonElement) => void;
-  storedList?: FocusableElementType[];
-  storedParentEl?: ParentElementType;
-  isSubListOpen?: boolean;
+  controllingEl: ControllingElementType;
+  storedParentEl: ParentElementType;
+  orientation: Orientation;
+  isSubListOpen: boolean;
 }
 
 export interface NavigationObjectProps extends NavigationContextStoredValueProps {
+  dispatchChildClose?: (parentEl: HTMLButtonElement) => void;
   storedList: FocusableElementType[];
   storedParentEl: ParentElementType;
   isSubListOpen: boolean;
@@ -28,7 +26,11 @@ export interface NavigationContextInternalProps {
   _getNavigationObjectByParent: (
     parentEl: ParentElementType,
   ) => NavigationObjectProps;
-
+  _setControllingElement: (parentEl: ParentElementType) => void;
+  _setDispatchChildClose: (
+    parentEl: HTMLButtonElement,
+    dispatchChildClose: () => void,
+  ) => void;
   _setNavigationArrayObject: (
     index: number,
     updatedContent: Partial<NavigationObjectProps>,
@@ -37,11 +39,17 @@ export interface NavigationContextInternalProps {
 }
 
 export interface NavigationContextReturnValueProps {
+  getControllingElement: () => ParentElementType;
   getNavigationArray: () => NavigationObjectProps[];
+  getOrientation: () => Orientation;
   isComponentActive: boolean;
-
-  setDispatchChildClose: (
-    parentEl: HTMLButtonElement,
+  registerLinkInList: (
+    navigationList: FocusableElementType[],
+    parentEl: ParentElementType,
+  ) => void;
+  registerButtonInList: (
+    isListOpen: boolean,
+    parentEl: ParentElementType,
     dispatchChildClose: () => void,
   ) => void;
   setIsComponentActive: (isComponentActive: boolean) => void;
@@ -50,20 +58,7 @@ export interface NavigationContextReturnValueProps {
     navigationList: FocusableElementType[],
     parentEl: ParentElementType,
   ) => void;
-  registerLink: (
-    navigationList: FocusableElementType[],
-    parentEl: ParentElementType,
-  ) => void;
-  registerSubNavigation: (
-    isListOpen: boolean,
-    parentEl: ParentElementType,
-    dispatchChildClose: () => void,
-  ) => void;
-  resetTopNavigation: (parentEl: HTMLButtonElement) => void;
-  topLevelParent: HTMLButtonElement | null;
+  setShouldPassthrough: (shouldPassthrough: boolean) => void;
+  shouldPassthrough: boolean;
+  updateControllingElement: (parentEl: ParentElementType) => void;
 }
-
-export interface NavigationContextValueProps
-  extends
-    NavigationContextStoredValueProps,
-    NavigationContextReturnValueProps {}

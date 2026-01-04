@@ -22,7 +22,7 @@
     ]
   },
   {
-    "label": "Search, Stories and Commentary",
+    "label": "Stories and Commentary",
     "id": "stories-menu",
     "href": "#",
     "menu": [
@@ -31,7 +31,6 @@
         "id": "search-menu",
         "href": "#",
         "menu": [
-
           {
             "label": "Basic Search",
             "id": "basic-search",

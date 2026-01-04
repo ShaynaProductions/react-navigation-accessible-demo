@@ -43,33 +43,45 @@ export function useNavigationList(): UseNavigationListReturnProps {
 
   const setSpecificFocus: UseNavigationListReturnProps["setSpecificFocus"] = (
     item,
+    isLayoutVertical = false,
   ) => {
-    item.focus({ preventScroll: true });
+    item.focus({ preventScroll: !isLayoutVertical });
   };
 
-  const setFirstFocus: UseNavigationListReturnProps["setFirstFocus"] = () => {
-    setSpecificFocus(currentListItems[0]);
+  const setFirstFocus: UseNavigationListReturnProps["setFirstFocus"] = (
+    isLayoutVertical,
+  ) => {
+    setSpecificFocus(currentListItems[0], isLayoutVertical);
   };
 
-  const setLastFocus: UseNavigationListReturnProps["setLastFocus"] = () => {
-    setSpecificFocus(currentListItems[currentListItems.length - 1]);
+  const setLastFocus: UseNavigationListReturnProps["setLastFocus"] = (
+    isLayoutVertical,
+  ) => {
+    setSpecificFocus(
+      currentListItems[currentListItems.length - 1],
+      isLayoutVertical,
+    );
   };
 
-  const setNextFocus: UseNavigationListReturnProps["setNextFocus"] = (item) => {
+  const setNextFocus: UseNavigationListReturnProps["setNextFocus"] = (
+    item,
+    isLayoutVertical,
+  ) => {
     const newIndex = getCurrentIndex(item) + 1;
     if (newIndex >= currentListItems.length) {
-      setFirstFocus();
+      setFirstFocus(isLayoutVertical);
     } else {
-      setSpecificFocus(currentListItems[newIndex]);
+      setSpecificFocus(currentListItems[newIndex], isLayoutVertical);
     }
   };
 
   const setPreviousFocus: UseNavigationListReturnProps["setPreviousFocus"] = (
     item,
+    isLayoutVertical,
   ) => {
     const newIndex = getCurrentIndex(item) - 1;
     if (newIndex < 0) {
-      setLastFocus();
+      setLastFocus(isLayoutVertical);
     } else {
       setSpecificFocus(currentListItems[newIndex]);
     }
@@ -78,7 +90,6 @@ export function useNavigationList(): UseNavigationListReturnProps {
   return {
     currentListItems,
     parentEl,
-    parentRef,
     registerItemInList,
     setFirstFocus,
     setLastFocus,

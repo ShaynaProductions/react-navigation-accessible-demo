@@ -7,7 +7,7 @@ import {
 import {
   _getNextElementInList,
   _getPreviousElementInList,
-  _returnStoredList,
+  returnStoredList,
   getRecursiveLastElementByParent,
   getRecursiveTopElementByElement,
 } from "./hookFunctions";
@@ -26,19 +26,35 @@ export default function useNavigation() {
   const {
     isComponentActive,
     getNavigationArray,
-    registerLink,
-    registerSubNavigation,
-    resetTopNavigation,
+    getOrientation,
+    shouldPassthrough,
+    getControllingElement,
+    registerLinkInList,
+    registerButtonInList,
     setIsComponentActive,
     setIsListOpen,
     setListItems,
-    topLevelParent,
+    setShouldPassthrough,
+    updateControllingElement,
   } = returnTrueElementOrUndefined(
     !!navigationContextObj,
     navigationContextObj,
   );
   const [_lastComponentEl, _setLastComponentEl] =
     useState<FocusableElementType | null>(null);
+
+  const getTopParentElement: UseNavigationReturnTypes["getTopParentElement"] =
+    useCallback(() => {
+      return getNavigationArray()[0];
+    }, [getNavigationArray]);
+
+  const isComponentControlled = useCallback(() => {
+    return getControllingElement() !== null;
+  }, [getControllingElement]);
+
+  const isLayoutVertical = useCallback(() => {
+    return getOrientation() === "vertical";
+  }, [getOrientation]);
 
   const _getIndexInTopRow: UseNavigationInternalTypes["_getIndexInTopRow"] =
     useCallback(
@@ -52,11 +68,7 @@ export default function useNavigation() {
   const _getFirstChildInRow: UseNavigationInternalTypes["_getFirstChildInRow"] =
     useCallback(
       (index) => {
-        /*istanbul ignore next */
-        const currentList = _returnStoredList(
-          getNavigationArray()[index].storedList,
-        );
-        return currentList[0];
+        return getNavigationArray()[index].storedList[0];
       },
       [getNavigationArray],
     );
@@ -64,38 +76,23 @@ export default function useNavigation() {
   const _getLastChildInRow: UseNavigationInternalTypes["_getLastChildInRow"] =
     useCallback(
       (index) => {
-        const currentList = _returnStoredList(
-          getNavigationArray()[index].storedList,
-        );
+        const currentList = getNavigationArray()[index].storedList;
         return currentList[currentList.length - 1];
       },
       [getNavigationArray],
     );
 
-  const _getNavigationObjectByParent: UseNavigationInternalTypes["_getNavigationObjectByParent"] =
-    useCallback(
-      (parentEl) => {
-        let returnObj = {};
-        const navArray = getNavigationArray();
-        for (const navObject of navArray) {
-          const { storedParentEl } = navObject;
-          /* istanbul ignore else */
-          if (storedParentEl === parentEl) {
-            returnObj = navObject;
-            break;
-          }
-        }
-        return returnObj;
-      },
-      [getNavigationArray],
-    );
+  const _getShouldPassthrough: UseNavigationInternalTypes["_getShouldPassthrough"] =
+    useCallback(() => {
+      return shouldPassthrough;
+    }, [shouldPassthrough]);
 
   const _getNavigationObjectContainingElement: UseNavigationInternalTypes["_getNavigationObjectContainingElement"] =
     useCallback(
       (focusedEl) => {
         let returnObj = {};
         for (const navObject of getNavigationArray()) {
-          const storedList = _returnStoredList(navObject.storedList);
+          const storedList = returnStoredList(navObject.storedList);
           /* istanbul ignore else */
           if (storedList.length > 0 && storedList.indexOf(focusedEl) > -1) {
             returnObj = navObject;
@@ -107,36 +104,67 @@ export default function useNavigation() {
       [getNavigationArray],
     );
 
-  const getTopParentElement: UseNavigationReturnTypes["getTopParentElement"] =
-    useCallback(() => {
-      return getNavigationArray()[0];
-    }, [getNavigationArray]);
+  const _isInTopRow: UseNavigationInternalTypes["_isInTopRow"] = useCallback(
+    (focusedEl) => {
+      const topIndex = _getIndexInTopRow(focusedEl);
+      return topIndex >= 0;
+    },
+    [_getIndexInTopRow],
+  );
+  const _isFirstChildInComponent: UseNavigationInternalTypes["_isFirstChildInComponent"] =
+    useCallback(
+      (focusedEl) => {
+        const firstComponentChild = _getFirstChildInRow(0);
+        return firstComponentChild === focusedEl;
+      },
+      [_getFirstChildInRow],
+    );
 
-  const _closeComponent: UseNavigationInternalTypes["_closeComponent"] =
-    useCallback(() => {
-      const { storedList } = getTopParentElement();
-      setIsComponentActive(false);
-      storedList?.map((currentEl) => {
-        if (currentEl.type === "button") {
-          const { isSubListOpen, dispatchChildClose } =
-            _getNavigationObjectByParent(currentEl as ParentElementType);
-
-          if (isSubListOpen && dispatchChildClose) {
-            dispatchChildClose(currentEl as HTMLButtonElement);
+  const _getNavigationObjectByParent: UseNavigationInternalTypes["_getNavigationObjectByParent"] =
+    useCallback(
+      (parentEl) => {
+        let returnObj = {};
+        const navArray = getNavigationArray();
+        for (const navObject of navArray) {
+          const { storedParentEl } = navObject;
+          /* istanbul ignore else */
+          if (parentEl === storedParentEl) {
+            returnObj = navObject;
+            break;
           }
         }
-      });
-    }, [
-      _getNavigationObjectByParent,
-      getTopParentElement,
-      setIsComponentActive,
-    ]);
+        return returnObj;
+      },
+      [getNavigationArray],
+    );
 
-  const _getLastFocusableElementTypeByParent: UseNavigationInternalTypes["_getLastFocusableElementTypeByParent"] =
+  const _closeOpenSiblings: UseNavigationInternalTypes["_closeOpenSiblings"] =
+    useCallback(
+      (focusedEl) => {
+        if (!isComponentControlled()) {
+          const siblingList: FocusableElementType[] = returnStoredList(
+            getNavigationArray()[0].storedList,
+          );
+
+          for (const siblingEl of siblingList) {
+            if (siblingEl !== focusedEl && siblingEl.type === "button") {
+              const { isSubListOpen, dispatchChildClose } =
+                _getNavigationObjectByParent(siblingEl as ParentElementType);
+              if (isSubListOpen && dispatchChildClose) {
+                dispatchChildClose(siblingEl as HTMLButtonElement);
+              }
+            }
+          }
+        }
+      },
+      [isComponentControlled, getNavigationArray, _getNavigationObjectByParent],
+    );
+
+  const _getLastFocusableElementByParent: UseNavigationInternalTypes["_getLastFocusableElementByParent"] =
     useCallback(
       (parentEl) => {
         return getRecursiveLastElementByParent(
-          parentEl as ParentElementType,
+          parentEl,
           _getNavigationObjectByParent,
           _getNavigationObjectContainingElement,
         );
@@ -153,20 +181,49 @@ export default function useNavigation() {
       },
       [_getNavigationObjectContainingElement],
     );
-  const _isInTopRow: UseNavigationInternalTypes["_isInTopRow"] = useCallback(
-    (focusedEl) => {
-      const topIndex = _getIndexInTopRow(focusedEl);
-      return topIndex >= 0;
-    },
-    [_getIndexInTopRow],
-  );
+
+  const _getLastChildInTopRow: UseNavigationInternalTypes["_getLastChildInTopRow"] =
+    useCallback(
+      (focusedEl) => {
+        const lastTopEl = _getLastChildInRow(0);
+        const lastEl = _getLastFocusableElementByParent(lastTopEl);
+        if (!isComponentActive && focusedEl === lastEl) {
+          return lastTopEl;
+        } else {
+          return focusedEl;
+        }
+      },
+      [_getLastChildInRow, _getLastFocusableElementByParent, isComponentActive],
+    );
+
+  const _handleLastChildFocus: UseNavigationInternalTypes["_handleLastChildFocus"] =
+    useCallback(
+      (focusedEl) => {
+        const { isSubListOpen } =
+          _getNavigationObjectContainingElement(focusedEl);
+        if (!isSubListOpen) {
+          if (isComponentControlled() && _getShouldPassthrough()) {
+            return getControllingElement();
+          } else {
+            return _getLastChildInTopRow(focusedEl);
+          }
+        }
+      },
+      [
+        _getLastChildInTopRow,
+        _getNavigationObjectContainingElement,
+        _getShouldPassthrough,
+        getControllingElement,
+        isComponentControlled,
+      ],
+    );
 
   const _getPreviousByElement: UseNavigationInternalTypes["_getPreviousByElement"] =
     useCallback(
       (focusedEl) => {
-        const currentObject = _getNavigationObjectContainingElement(focusedEl);
-        const currentItemsList = _returnStoredList(currentObject.storedList);
-        const currentParent = currentObject.storedParentEl;
+        const { storedList, storedParentEl } =
+          _getNavigationObjectContainingElement(focusedEl);
+        const currentItemsList = returnStoredList(storedList);
         const isInTopRow = _isInTopRow(focusedEl);
 
         // default to previous item in List
@@ -177,7 +234,7 @@ export default function useNavigation() {
 
         // Not in top row, and is first child
         if (!isInTopRow && currentItemsList.indexOf(focusedEl) === 0) {
-          prevFocusableEl = currentParent as FocusableElementType;
+          prevFocusableEl = storedParentEl as FocusableElementType;
         }
 
         if (!isInTopRow || focusedEl !== _getFirstChildInRow(0)) {
@@ -203,289 +260,32 @@ export default function useNavigation() {
       [_getNavigationObjectContainingElement, _isInTopRow],
     );
 
-  const _isLastElementInComponent: UseNavigationInternalTypes["_isLastElementInComponent"] =
+  const _getLastElementInComponent: UseNavigationInternalTypes["_getLastElementInComponent"] =
+    useCallback(() => {
+      let lastEl = _lastComponentEl;
+      /* istanbul ignore else */
+      if (lastEl === null) {
+        const lastParent = _getLastChildInRow(0);
+        lastEl = _getLastFocusableElementByParent(lastParent);
+        _setLastComponentEl(lastEl);
+      }
+      return lastEl;
+    }, [
+      _getLastChildInRow,
+      _getLastFocusableElementByParent,
+      _lastComponentEl,
+    ]);
+
+  const _isLastChildInComponent: UseNavigationInternalTypes["_isLastChildInComponent"] =
     useCallback(
       (focusedEl) => {
-        let topParentEl = topLevelParent;
-        /* istanbul ignore else */
-        if (!topParentEl) {
-          topParentEl = _getTopElement(focusedEl);
-        }
-        let lastEl = _lastComponentEl;
-        /* istanbul ignore else */
-        if (lastEl === null) {
-          lastEl = _getLastFocusableElementTypeByParent(topParentEl);
-          _setLastComponentEl(lastEl);
-        }
-
-        return focusedEl === lastEl;
+        const lastComponentChild = _getLastElementInComponent();
+        return lastComponentChild === focusedEl;
       },
-      [
-        _getLastFocusableElementTypeByParent,
-        _getTopElement,
-        topLevelParent,
-        _lastComponentEl,
-      ],
+      [_getLastElementInComponent],
     );
 
-  const _isLastElementInList: UseNavigationInternalTypes["_isLastElementInList"] =
-    useCallback(
-      (focusedEl: FocusableElementType) => {
-        const navObj = _getNavigationObjectContainingElement(focusedEl);
-        const currentList = _returnStoredList(navObj.storedList);
-        return currentList.indexOf(focusedEl) === currentList.length - 1;
-      },
-      [_getNavigationObjectContainingElement],
-    );
-
-  // -------------------------------------------------------
-  // Controllers and public functions
-  // -------------------------------------------------------
-
-  const closeComponentWithFocus: UseNavigationReturnTypes["closeComponentWithFocus"] =
-    useCallback(
-      (focusedEl) => {
-        _closeComponent();
-        const { storedParentEl } = getTopParentElement();
-        return storedParentEl === null
-          ? _getTopElement(focusedEl)
-          : storedParentEl;
-      },
-      [_closeComponent, _getTopElement, getTopParentElement],
-    );
-  const closeOpenSiblings: UseNavigationReturnTypes["closeOpenSiblings"] =
-    useCallback(
-      (focusedEl) => {
-        const childList: FocusableElementType[] = _returnStoredList(
-          getNavigationArray()[0].storedList,
-        );
-
-        for (const childEl of childList) {
-          if (childEl !== focusedEl && childEl.type === "button") {
-            const { isSubListOpen, dispatchChildClose } =
-              _getNavigationObjectByParent(childEl as HTMLButtonElement);
-            if (isSubListOpen && dispatchChildClose) {
-              dispatchChildClose(childEl as HTMLButtonElement);
-            }
-          }
-        }
-      },
-      [getNavigationArray, _getNavigationObjectByParent],
-    );
-
-  const getLastChildInTopRow: UseNavigationReturnTypes["getLastChildInTopRow"] =
-    (focusedEl) => {
-      const lastTopEl = _getLastChildInRow(0);
-      const lastEl = _getLastFocusableElementTypeByParent(lastTopEl);
-      if (!isComponentActive && focusedEl === lastEl) {
-        return lastTopEl;
-      } else {
-        return focusedEl;
-      }
-    };
-
-  const getNextByButton: UseNavigationReturnTypes["getNextByButton"] = (
-    buttonEl,
-    isSubListOpen,
-  ) => {
-    const buttonNavObject = _getNavigationObjectContainingElement(buttonEl);
-    const currentItemsList = _returnStoredList(buttonNavObject.storedList);
-
-    let nextFocusableEl: FocusableElementType = _getNextElementInList(
-      buttonEl,
-      currentItemsList,
-    );
-    // default to next item in List
-    const currentNavObject = _getNavigationObjectByParent(
-      buttonEl as HTMLButtonElement,
-    );
-    const { storedList } = currentNavObject;
-    const subNavigation = _returnStoredList(storedList);
-
-    // controlled list open, move into the first child.
-    if (isSubListOpen && subNavigation.length > 0) {
-      nextFocusableEl = subNavigation[0];
-    }
-
-    //last focusable element and sub list is collapsed. Set to topmost parent.
-    if (
-      !isSubListOpen &&
-      currentItemsList.indexOf(buttonEl) === currentItemsList.length - 1
-    ) {
-      nextFocusableEl = _getParentByElement(buttonEl) as FocusableElementType;
-    }
-
-    return nextFocusableEl;
-  };
-
-  const getNextByButtonTab: UseNavigationReturnTypes["getNextByButtonTab"] = (
-    buttonEl,
-    isSubListOpen,
-  ) => {
-    let nextFocusableEl = getNextByButton(buttonEl, isSubListOpen);
-
-    const buttonNavObject = _getNavigationObjectContainingElement(buttonEl);
-    const currentItemsList = _returnStoredList(buttonNavObject.storedList);
-    // When button is the last item in a list and it is not expanded, go to last child's
-    // next DOM.
-    if (
-      !isSubListOpen &&
-      currentItemsList.indexOf(buttonEl) === currentItemsList.length - 1
-    ) {
-      const lastEl = _getLastFocusableElementTypeByParent(buttonEl);
-      const lastTopChild = _getLastChildInRow(0);
-      nextFocusableEl = getFocusableElement(
-        lastEl,
-        "next",
-      ) as FocusableElementType;
-      if (buttonEl === lastTopChild) {
-        _closeComponent();
-      }
-    }
-
-    return nextFocusableEl;
-  };
-
-  const getNextByLink: UseNavigationReturnTypes["getNextByLink"] = (linkEl) => {
-    const linkNavObject = _getNavigationObjectContainingElement(linkEl);
-    const currentItemsList = _returnStoredList(linkNavObject.storedList);
-
-    // default to next item in List
-    let nextFocusableEl: FocusableElementType = _getNextElementInList(
-      linkEl,
-      currentItemsList,
-    );
-
-    if (currentItemsList.indexOf(linkEl) === currentItemsList.length - 1) {
-      const { storedParentEl } = linkNavObject;
-      const isInTopRow = storedParentEl && _isInTopRow(storedParentEl);
-      if (isInTopRow) {
-        nextFocusableEl = storedParentEl;
-      } else {
-        // get Top Element
-        const topParent = _getTopElement(linkEl);
-        const isParentLast = _isLastElementInList(
-          storedParentEl as FocusableElementType,
-        );
-        const isLinkLast = _isLastElementInList(linkEl);
-
-        if (isParentLast && isLinkLast) {
-          nextFocusableEl = topParent;
-        } else {
-          const parentNavObject = _getNavigationObjectContainingElement(
-            storedParentEl as FocusableElementType,
-          );
-          const parentList = _returnStoredList(parentNavObject.storedList);
-          nextFocusableEl = _getNextElementInList(
-            storedParentEl as FocusableElementType,
-            parentList,
-          );
-        }
-      }
-    }
-    return nextFocusableEl;
-  };
-
-  const getNextByLinkTab: UseNavigationReturnTypes["getNextByLinkTab"] = (
-    linkEl,
-  ) => {
-    let nextFocusableEl = getNextByLink(linkEl);
-    const isInTopRow = _isInTopRow(linkEl);
-    const navObject = _getNavigationObjectContainingElement(linkEl);
-    const storedList = _returnStoredList(navObject.storedList);
-
-    if (
-      (!isInTopRow && _isLastElementInComponent(linkEl)) ||
-      (isInTopRow && storedList.indexOf(linkEl) === storedList.length - 1)
-    ) {
-      nextFocusableEl = getFocusableElement(
-        linkEl,
-        "next",
-      ) as FocusableElementType;
-      _closeComponent();
-    }
-    return nextFocusableEl;
-  };
-
-  const getPreviousByButton: UseNavigationReturnTypes["getPreviousByButton"] = (
-    buttonEl,
-  ) => {
-    return _getPreviousByElement(buttonEl);
-  };
-
-  const getPreviousByButtonTab: UseNavigationReturnTypes["getPreviousByButton"] =
-    (buttonEl) => {
-      let prevFocusableEl = getPreviousByButton(buttonEl);
-      if (_isInTopRow(buttonEl)) {
-        const navObject = _getNavigationObjectContainingElement(buttonEl);
-        const storedList = _returnStoredList(navObject.storedList);
-        if (isComponentActive && storedList.indexOf(buttonEl) === 0) {
-          prevFocusableEl = getFocusableElement(
-            buttonEl,
-            "prev",
-          ) as FocusableElementType;
-          _closeComponent();
-        } else {
-          prevFocusableEl = _getPreviousElementInList(buttonEl, storedList);
-        }
-      }
-
-      return prevFocusableEl;
-    };
-
-  const getPreviousByLink: UseNavigationReturnTypes["getPreviousByLink"] = (
-    linkEl: FocusableElementType,
-  ) => {
-    let prevFocusableEl = _getPreviousByElement(linkEl);
-    const navObj = _getNavigationObjectByParent(
-      prevFocusableEl as ParentElementType,
-    );
-    const currentList = _returnStoredList(navObj.storedList);
-
-    const hasButtonType = () => {
-      let isButtonType = false;
-      if (prevFocusableEl && !!prevFocusableEl.type) {
-        isButtonType = prevFocusableEl.type === "button";
-      }
-      return isButtonType;
-    };
-
-    if (hasButtonType()) {
-      if (currentList.indexOf(linkEl) < 0) {
-        const storedList = _returnStoredList(navObj.storedList);
-        const isSubListOpen = navObj.isSubListOpen;
-        /* istanbul ignore else */
-        if (isSubListOpen) {
-          prevFocusableEl = storedList[storedList.length - 1];
-        }
-      }
-    }
-    return prevFocusableEl;
-  };
-
-  const getPreviousByLinkTab: UseNavigationReturnTypes["getPreviousByLinkTab"] =
-    (linkEl) => {
-      let prevFocusableEl = getPreviousByLink(linkEl);
-
-      if (_isInTopRow(linkEl)) {
-        const navObject = _getNavigationObjectContainingElement(linkEl);
-        const storedList = _returnStoredList(navObject.storedList);
-
-        if (storedList.indexOf(linkEl) === 0) {
-          prevFocusableEl = getFocusableElement(
-            linkEl,
-            "prev",
-          ) as FocusableElementType;
-          setIsComponentActive(false);
-          _closeComponent();
-        } else {
-          prevFocusableEl = _getPreviousElementInList(linkEl, storedList);
-        }
-      }
-      return prevFocusableEl;
-    };
-
-  const getChildrenInTree: UseNavigationReturnTypes["getChildrenInTree"] = (
+  const _getChildrenInList: UseNavigationInternalTypes["_getChildrenInList"] = (
     parentEl: HTMLButtonElement,
   ) => {
     const subNavListItems: NavigationObjectProps[] = [];
@@ -508,43 +308,515 @@ export default function useNavigation() {
     return subNavListItems;
   };
 
-  const handleClickAwayClose: UseNavigationReturnTypes["handleClickAwayClose"] =
-    () => {
-      _closeComponent();
+  const _isLastElementInComponent: UseNavigationInternalTypes["_isLastElementInComponent"] =
+    useCallback(
+      (focusedEl) => {
+        const lastEl = _getLastElementInComponent();
+        return focusedEl === lastEl;
+      },
+      [_getLastElementInComponent],
+    );
+
+  const _isLastElementInList: UseNavigationInternalTypes["_isLastElementInList"] =
+    useCallback(
+      (focusedEl: FocusableElementType) => {
+        const { storedList } = _getNavigationObjectContainingElement(focusedEl);
+        const currentList = returnStoredList(storedList);
+        return currentList.indexOf(focusedEl) === currentList.length - 1;
+      },
+      [_getNavigationObjectContainingElement],
+    );
+
+  // -------------------------------------------------------
+  // Controllers and public functions
+  // -------------------------------------------------------
+  const closeComponent: UseNavigationReturnTypes["closeComponent"] =
+    useCallback(() => {
+      const { storedList } = getTopParentElement();
+      setIsComponentActive(false);
+      storedList?.map((currentEl) => {
+        if (currentEl.type === "button") {
+          const { isSubListOpen, dispatchChildClose } =
+            _getNavigationObjectByParent(currentEl as ParentElementType);
+
+          if (isSubListOpen && dispatchChildClose) {
+            dispatchChildClose(currentEl as HTMLButtonElement);
+          }
+        }
+      });
+    }, [
+      _getNavigationObjectByParent,
+      getTopParentElement,
+      setIsComponentActive,
+    ]);
+  const closeComponentWithFocus: UseNavigationReturnTypes["closeComponentWithFocus"] =
+    useCallback(
+      (focusedEl) => {
+        closeComponent();
+        const controllingEl = getControllingElement();
+        if (!isComponentControlled()) {
+          return _getTopElement(focusedEl);
+        } else {
+          return controllingEl;
+        }
+      },
+      [
+        closeComponent,
+        _getTopElement,
+        getControllingElement,
+        isComponentControlled,
+      ],
+    );
+
+  const getNextByButton: UseNavigationReturnTypes["getNextByButton"] = (
+    buttonEl,
+    isSubListOpen,
+  ) => {
+    const buttonNavObject = _getNavigationObjectContainingElement(buttonEl);
+    const currentItemsList = returnStoredList(buttonNavObject.storedList);
+
+    let nextFocusableEl: FocusableElementType = _getNextElementInList(
+      buttonEl,
+      currentItemsList,
+    );
+    // default to next item in List
+    const currentNavObject = _getNavigationObjectByParent(
+      buttonEl as HTMLButtonElement,
+    );
+    const { storedList } = currentNavObject;
+    const subNavigation = returnStoredList(storedList);
+
+    // list open, move into the first child.
+    if (isSubListOpen && subNavigation.length > 0) {
+      nextFocusableEl = subNavigation[0];
+    }
+
+    // last focusable element and sub list is collapsed. Set to topmost parent.
+
+    if (
+      !isSubListOpen &&
+      currentItemsList.indexOf(buttonEl) === currentItemsList.length - 1
+    ) {
+      nextFocusableEl = _getParentByElement(buttonEl) as FocusableElementType;
+    }
+    if (isLayoutVertical()) {
+      // if last in parent list and not last in component move to parent's next sibling.
+      const lastTopChild = _getLastChildInRow(0);
+      const isLastInComponent = _isLastElementInComponent(buttonEl);
+      if (
+        !isSubListOpen &&
+        currentItemsList.indexOf(buttonEl) === currentItemsList.length - 1 &&
+        !isLastInComponent
+      ) {
+        const lastEl = _getLastFocusableElementByParent(buttonEl);
+        /* istanbul ignore else */
+        if (buttonEl !== lastTopChild) {
+          nextFocusableEl = getFocusableElement(
+            lastEl,
+            "next",
+          ) as FocusableElementType;
+        }
+      }
+    }
+    return nextFocusableEl;
+  };
+
+  const getNextByButtonTab: UseNavigationReturnTypes["getNextByButtonTab"] = (
+    buttonEl,
+    isSubListOpen,
+  ) => {
+    let nextFocusableEl = getNextByButton(buttonEl, isSubListOpen);
+    const buttonNavObject = _getNavigationObjectContainingElement(buttonEl);
+    const currentItemsList = returnStoredList(buttonNavObject.storedList);
+
+    // When button is the last item in a list and it is not expanded, go to last child's
+    // next DOM.
+    if (
+      !isSubListOpen &&
+      currentItemsList.indexOf(buttonEl) === currentItemsList.length - 1
+    ) {
+      const lastEl = _getLastFocusableElementByParent(buttonEl);
+      const lastTopChild = _getLastChildInRow(0);
+      nextFocusableEl = getFocusableElement(
+        lastEl,
+        "next",
+      ) as FocusableElementType;
+      if (buttonEl === lastTopChild) {
+        closeComponent();
+      }
+    }
+
+    return nextFocusableEl;
+  };
+
+  const getNextByLink: UseNavigationReturnTypes["getNextByLink"] = (linkEl) => {
+    const linkNavObject = _getNavigationObjectContainingElement(linkEl);
+    const currentItemsList = returnStoredList(linkNavObject.storedList);
+
+    // default to next item in List
+    let nextFocusableEl: FocusableElementType | undefined =
+      _getNextElementInList(linkEl, currentItemsList);
+
+    if (currentItemsList.indexOf(linkEl) === currentItemsList.length - 1) {
+      const { storedParentEl } = linkNavObject;
+      const topParent = _getTopElement(linkEl);
+      const isParentLast = _isLastElementInList(
+        storedParentEl as FocusableElementType,
+      );
+      const parentNavObject = _getNavigationObjectContainingElement(
+        storedParentEl as FocusableElementType,
+      );
+      const isLinkLast = _isLastElementInList(linkEl);
+      const isInTopRow = storedParentEl && _isInTopRow(storedParentEl);
+      if (isInTopRow) {
+        nextFocusableEl = storedParentEl;
+      } else {
+        if (isParentLast && isLinkLast) {
+          nextFocusableEl = topParent;
+        } else {
+          const parentList = returnStoredList(parentNavObject.storedList);
+          nextFocusableEl = _getNextElementInList(
+            storedParentEl as FocusableElementType,
+            parentList,
+          );
+        }
+      }
+      if (isLayoutVertical()) {
+        /* istanbul ignore else */
+        if (isLinkLast && linkEl !== _getLastElementInComponent()) {
+          nextFocusableEl = getFocusableElement(
+            linkEl,
+            "next",
+          ) as FocusableElementType;
+        }
+        /* istanbul ignore else */
+        if (isLinkLast && linkEl === _getLastElementInComponent()) {
+          nextFocusableEl = undefined;
+        }
+      }
+    }
+    return nextFocusableEl;
+  };
+
+  const getNextByLinkTab: UseNavigationReturnTypes["getNextByLinkTab"] = (
+    linkEl,
+  ) => {
+    let nextFocusableEl = getNextByLink(linkEl);
+    const isInTopRow = _isInTopRow(linkEl);
+    const navObject = _getNavigationObjectContainingElement(linkEl);
+    const currentList = returnStoredList(navObject.storedList);
+
+    if (
+      (!isInTopRow && _isLastElementInComponent(linkEl)) ||
+      (!isInTopRow && _isLastElementInList(linkEl)) ||
+      (isInTopRow && currentList.indexOf(linkEl) === currentList.length - 1)
+    ) {
+      nextFocusableEl = getFocusableElement(
+        linkEl,
+        "next",
+      ) as FocusableElementType;
+      if (
+        (!isInTopRow && _isLastElementInComponent(linkEl)) ||
+        (isInTopRow && currentList.indexOf(linkEl) === currentList.length - 1)
+      ) {
+        closeComponent();
+      }
+    }
+    return nextFocusableEl;
+  };
+
+  const getPreviousByButton: UseNavigationReturnTypes["getPreviousByButton"] = (
+    buttonEl,
+  ) => {
+    let prevFocusableEl = _getPreviousByElement(
+      buttonEl,
+    ) as FocusableElementType;
+
+    if (isLayoutVertical()) {
+      const { storedList } = _getNavigationObjectContainingElement(buttonEl);
+      const parentList = returnStoredList(storedList);
+      /* istanbul ignore else */
+      if (_isInTopRow(buttonEl)) {
+        const prevParentEl = _getPreviousElementInList(buttonEl, parentList);
+
+        /* istanbul ignore else */
+        if (prevParentEl?.type === "button") {
+          const lastElement = _getLastFocusableElementByParent(prevParentEl);
+          const lastNavObject =
+            _getNavigationObjectContainingElement(lastElement);
+          if (lastNavObject.isSubListOpen) {
+            prevFocusableEl = lastElement;
+          } else {
+            const prevParentObj = _getNavigationObjectByParent(
+              prevParentEl as ParentElementType,
+            );
+            if (prevParentObj.isSubListOpen) {
+              const lastElement =
+                _getLastFocusableElementByParent(prevParentEl);
+              const lastNavObject =
+                _getNavigationObjectContainingElement(lastElement);
+
+              /* istanbul ignore else */
+              if (!lastNavObject.isSubListOpen) {
+                prevFocusableEl =
+                  lastNavObject.storedParentEl as FocusableElementType;
+              }
+            }
+          }
+        }
+      }
+    }
+    return prevFocusableEl;
+  };
+
+  const getPreviousByButtonTab: UseNavigationReturnTypes["getPreviousByButton"] =
+    (buttonEl) => {
+      let prevFocusableEl = getPreviousByButton(buttonEl);
+      if (_isInTopRow(buttonEl) && !isLayoutVertical()) {
+        const navObject = _getNavigationObjectContainingElement(buttonEl);
+        const storedList = returnStoredList(navObject.storedList);
+        if (isComponentActive && storedList.indexOf(buttonEl) === 0) {
+          prevFocusableEl = getFocusableElement(
+            buttonEl,
+            "prev",
+          ) as FocusableElementType;
+          closeComponent();
+        } else {
+          prevFocusableEl = _getPreviousElementInList(buttonEl, storedList);
+        }
+      }
+
+      return prevFocusableEl;
     };
 
-  const handleNavigationItemFocus: UseNavigationReturnTypes["handleNavigationItemFocus"] =
-    (focusedEl, closeOpenSiblings) => {
-      if (isComponentActive && _getIndexInTopRow(focusedEl) !== -1) {
-        closeOpenSiblings(focusedEl);
+  const getPreviousByLink: UseNavigationReturnTypes["getPreviousByLink"] = (
+    linkEl: FocusableElementType,
+  ) => {
+    let prevFocusableEl = _getPreviousByElement(linkEl);
+    const navObj = _getNavigationObjectByParent(
+      prevFocusableEl as ParentElementType,
+    );
+    const currentList = returnStoredList(navObj.storedList);
+
+    const hasButtonType = () => {
+      let isButtonType = false;
+      if (prevFocusableEl && !!prevFocusableEl.type) {
+        isButtonType = prevFocusableEl.type === "button";
       }
-      if (!isComponentActive) {
+      return isButtonType;
+    };
+
+    if (!isLayoutVertical()) {
+      if (hasButtonType()) {
+        if (currentList.indexOf(linkEl) < 0) {
+          const storedList = returnStoredList(navObj.storedList);
+          const isSubListOpen = navObj.isSubListOpen;
+          /* istanbul ignore else */
+          if (isSubListOpen) {
+            prevFocusableEl = storedList[storedList.length - 1];
+          }
+        }
+      }
+    } else {
+      if (hasButtonType()) {
+        const isSubListOpen = navObj.isSubListOpen;
+        if (isSubListOpen) {
+          const lastListChild = _getLastFocusableElementByParent(
+            prevFocusableEl as FocusableElementType,
+          );
+          const lastNavObject =
+            _getNavigationObjectContainingElement(lastListChild);
+          if (lastNavObject.isSubListOpen) {
+            prevFocusableEl = lastListChild;
+          } else {
+            prevFocusableEl =
+              lastNavObject.storedParentEl as FocusableElementType;
+          }
+        }
+      }
+    }
+
+    if (
+      isLayoutVertical() &&
+      linkEl !== _getFirstChildInRow(0) &&
+      !hasButtonType()
+    ) {
+      prevFocusableEl = getFocusableElement(
+        linkEl,
+        "prev",
+      ) as FocusableElementType;
+    }
+
+    return prevFocusableEl;
+  };
+
+  const getPreviousByLinkTab: UseNavigationReturnTypes["getPreviousByLinkTab"] =
+    (linkEl) => {
+      let prevFocusableEl = getPreviousByLink(linkEl);
+
+      if (_isInTopRow(linkEl)) {
+        const navObject = _getNavigationObjectContainingElement(linkEl);
+        const storedList = returnStoredList(navObject.storedList);
+
+        if (storedList.indexOf(linkEl) === 0) {
+          prevFocusableEl = getFocusableElement(
+            linkEl,
+            "prev",
+          ) as FocusableElementType;
+          setIsComponentActive(false);
+          closeComponent();
+        } else {
+          prevFocusableEl = _getPreviousElementInList(linkEl, storedList);
+        }
+      }
+      return prevFocusableEl;
+    };
+
+  const handleClickAwayClose: UseNavigationReturnTypes["handleClickAwayClose"] =
+    () => {
+      closeComponent();
+    };
+
+  const _handleNavigationItemFocus: UseNavigationInternalTypes["_handleNavigationItemFocus"] =
+    (focusedEl, _closeOpenSiblings) => {
+      const { isSubListOpen } =
+        _getNavigationObjectContainingElement(focusedEl);
+      if (isComponentActive && _getIndexInTopRow(focusedEl) !== -1) {
+        _closeOpenSiblings(focusedEl);
+      }
+
+      if (isSubListOpen && !isComponentActive) {
         setIsComponentActive(true);
       }
     };
 
+  const handlePassthroughNavigation: UseNavigationReturnTypes["handlePassthroughNavigation"] =
+    (focusedEl) => {
+      let returnEl;
+      const firstElement = _getFirstChildInRow(0);
+      const lastElement = _getLastElementInComponent();
+      const { isSubListOpen } =
+        _getNavigationObjectContainingElement(firstElement);
+
+      if (isComponentControlled() && !isSubListOpen && shouldPassthrough) {
+        /* istanbul ignore else */
+        if (focusedEl === firstElement) {
+          returnEl = getFocusableElement(lastElement, "next");
+        }
+        return returnEl;
+      }
+    };
+
+  const handleButtonFocus: UseNavigationReturnTypes["handleButtonFocus"] = (
+    buttonEl,
+    isSubListOpen,
+    prevIsSubListOpen,
+  ) => {
+    let returnEl;
+    if (isComponentControlled() && !isSubListOpen && _getShouldPassthrough()) {
+      returnEl = handlePassthroughNavigation(buttonEl);
+    }
+    /* istanbul ignore if */
+    if (
+      _isFirstChildInComponent(buttonEl) &&
+      isSubListOpen &&
+      isLayoutVertical()
+    ) {
+      /* istanbul ignore next */
+      if (isSubListOpen !== prevIsSubListOpen) {
+        returnEl = buttonEl;
+      }
+    } else {
+      _handleNavigationItemFocus(buttonEl, _closeOpenSiblings);
+    }
+
+    return returnEl;
+  };
+
+  const handleLinkFocus: UseNavigationReturnTypes["handleLinkFocus"] = (
+    linkEl,
+  ) => {
+    let nextEl;
+    if (!isComponentActive) {
+      setIsComponentActive(true);
+    }
+    if (_isLastChildInComponent(linkEl)) {
+      nextEl = _handleLastChildFocus(linkEl);
+    } else {
+      nextEl = _getLastChildInTopRow(linkEl);
+      _handleNavigationItemFocus(linkEl, _closeOpenSiblings);
+      return nextEl;
+    }
+
+    return nextEl;
+  };
+
+  const handleCloseSubNavigation = (buttonEl) => {
+    const dispatchArray = _getChildrenInList(buttonEl);
+    for (const dispatchObj of dispatchArray) {
+      const { dispatchChildClose, storedParentEl, isSubListOpen } = dispatchObj;
+      if (isSubListOpen && dispatchChildClose && storedParentEl) {
+        dispatchChildClose(storedParentEl);
+      }
+    }
+    setIsListOpen(false, buttonEl);
+  };
+
+  const registerInParentList: UseNavigationReturnTypes["registerInParentList"] =
+    (buttonEl, parentEl) => {
+      const parentObj = _getNavigationObjectByParent(parentEl);
+
+      const { storedList } = parentObj;
+      let navigationList: FocusableElementType[] = [];
+      if (storedList && storedList.length > 0) {
+        navigationList = storedList.slice();
+      }
+
+      if (navigationList.indexOf(buttonEl) === -1) {
+        navigationList.push(buttonEl);
+        setListItems(navigationList, parentEl);
+      }
+    };
+  const registerControllingElement: UseNavigationReturnTypes["registerControllingElement"] =
+    (parentEl) => {
+      /* istanbul ignore else */
+      if (parentEl !== null) {
+        updateControllingElement(parentEl);
+      }
+    };
+
   return {
+    closeComponent,
     closeComponentWithFocus,
-    closeOpenSiblings,
-    getTopParentElement,
-    getLastChildInTopRow,
+    _closeOpenSiblings,
+    _getChildrenInList,
+    getControllingElement,
     getNextByButton,
     getNextByButtonTab,
     getNextByLink,
     getNextByLinkTab,
+    _getShouldPassthrough,
     getPreviousByButton,
     getPreviousByButtonTab,
     getPreviousByLink,
     getPreviousByLinkTab,
-    getChildrenInTree,
+    getTopParentElement,
     handleClickAwayClose,
-    handleNavigationItemFocus,
+    handleCloseSubNavigation,
+    handleButtonFocus,
+    handleLinkFocus,
+    handlePassthroughNavigation,
     isComponentActive,
-    registerLink,
-    registerSubNavigation,
-    resetTopNavigation,
+    isComponentControlled,
+    isLayoutVertical,
+    registerButtonInList,
+    registerInParentList,
+    registerLinkInList,
+    registerControllingElement,
+    returnStoredList,
     setIsComponentActive,
     setIsListOpen,
+    setShouldPassthrough,
     setListItems,
   };
 }

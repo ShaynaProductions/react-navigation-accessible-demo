@@ -1,13 +1,22 @@
 "use client";
 
-import { KeyboardEvent, useCallback, useEffect, useRef, useState } from "react";
+import {
+  CSSProperties,
+  KeyboardEvent,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import {
   Button,
   ButtonProps,
   Icon,
   IconProps,
   ListItem,
+  ListItemProps,
 } from "@/ui/components";
+import { usePrevious } from "@/ui/hooks";
 import { ChevronRightIcon } from "@/ui/svg";
 import { Keys } from "@/ui/utilities";
 
@@ -18,6 +27,7 @@ import {
   SubNavigationProps,
 } from "./NavigationTypes";
 import { useNavigation, useNavigationList } from "../hooks";
+import { setSubListWidth } from "./componentFunctions";
 import { _handleKeyDown } from "../utilities";
 import NavigationList from "./NavigationList";
 
@@ -30,7 +40,7 @@ export function SubNavigation({
 }: SubNavigationProps) {
   const {
     currentListItems,
-    parentRef,
+    parentEl,
     registerItemInList,
     setFirstFocus,
     setLastFocus,
@@ -40,35 +50,30 @@ export function SubNavigation({
   } = useNavigationList();
   const {
     closeComponentWithFocus,
-    closeOpenSiblings,
     getNextByButton,
     getNextByButtonTab,
     getPreviousByButton,
     getPreviousByButtonTab,
-    getChildrenInTree,
-    handleNavigationItemFocus,
-    registerSubNavigation,
+    handleButtonFocus,
+    handleCloseSubNavigation,
+    isLayoutVertical,
+    registerInParentList,
+    registerButtonInList,
     setIsListOpen,
     setListItems,
   } = useNavigation();
 
   const buttonRef = useRef<ParentElementType>(null);
   const [isSubListOpen, setIsSubListOpen] = useState<boolean>(false);
+  const prevIsSublistOpen = usePrevious(isSubListOpen);
+  const [listWidth, setListWidth] = useState<number | null>(null);
 
   const closeSubNavigation = useCallback(
     (buttonEl: HTMLButtonElement) => {
-      const dispatchArray = getChildrenInTree(buttonEl);
-      for (const dispatchObj of dispatchArray) {
-        const { dispatchChildClose, storedParentEl, isSubListOpen } =
-          dispatchObj;
-        if (isSubListOpen && dispatchChildClose && storedParentEl) {
-          dispatchChildClose(storedParentEl);
-        }
-      }
-      setIsListOpen(false, buttonEl);
+      handleCloseSubNavigation(buttonEl);
       setIsSubListOpen(false);
     },
-    [getChildrenInTree, setIsListOpen],
+    [handleCloseSubNavigation],
   );
 
   const openSubNavigation = (buttonEl: HTMLButtonElement) => {
@@ -76,37 +81,48 @@ export function SubNavigation({
     setIsSubListOpen(true);
   };
 
+  /* Register element into provider  */
   useEffect(() => {
     const buttonEl = buttonRef.current as FocusableElementType;
     registerItemInList(buttonEl);
-    registerSubNavigation(isSubListOpen, buttonEl, closeSubNavigation);
+    registerButtonInList(isSubListOpen, buttonEl, closeSubNavigation);
   }, [
     closeSubNavigation,
-    currentListItems,
     isSubListOpen,
-    parentRef,
     registerItemInList,
-    registerSubNavigation,
-    setListItems,
+    registerButtonInList,
   ]);
 
+  /* Register Button into parent's list */
   useEffect(() => {
-    setListItems(currentListItems, parentRef.current);
-  }, [currentListItems, parentRef, setListItems]);
+    registerInParentList(buttonRef.current as FocusableElementType, parentEl);
+  }, [buttonRef, parentEl, registerInParentList]);
+
+  useEffect(() => {
+    setListItems(currentListItems, parentEl);
+  }, [currentListItems, parentEl, setListItems]);
+
+  useEffect(() => {
+    setSubListWidth(buttonRef, setListWidth);
+  }, [buttonRef]);
+
+  useEffect(() => {}, [isSubListOpen]);
 
   const handleFocus = () => {
-    /* istanbul ignore else */
-    if (buttonRef.current) {
-      handleNavigationItemFocus(buttonRef.current, closeOpenSiblings);
+    const buttonEl = buttonRef.current as HTMLButtonElement;
+    const returnEl = handleButtonFocus(
+      buttonEl,
+      isSubListOpen,
+      prevIsSublistOpen || false,
+    );
+
+    if (returnEl && returnEl !== buttonEl) {
+      setSpecificFocus(returnEl);
     }
   };
 
   const handleKeyDown = (e: KeyboardEvent) => {
     const buttonEl = buttonRef.current as FocusableElementType;
-    /* istanbul ignore else */
-    if (buttonEl) {
-      handleNavigationItemFocus(buttonEl, closeOpenSiblings);
-    }
 
     switch (e.key) {
       case Keys.HOME:
@@ -125,64 +141,50 @@ export function SubNavigation({
       e,
       buttonEl,
       closeComponentWithFocus,
+      isLayoutVertical,
       setFirstFocus,
       setLastFocus,
       setNextFocus,
       setPreviousFocus,
       setSpecificFocus,
     );
+
     // specific to button.
+    let focusableEl;
     switch (e.key) {
       case Keys.UP:
-        const prevFocusableEl = getPreviousByButton(buttonEl);
-        /* istanbul ignore else */
-        if (prevFocusableEl) {
-          setSpecificFocus(prevFocusableEl);
-        }
+        focusableEl = getPreviousByButton(buttonEl);
         break;
       case Keys.DOWN:
-        const nextFocusableEl = getNextByButton(buttonEl, isSubListOpen);
-        /* istanbul ignore else */
-        if (nextFocusableEl) {
-          setSpecificFocus(nextFocusableEl);
-        }
+        focusableEl = getNextByButton(buttonEl, isSubListOpen);
         break;
       case Keys.TAB:
         if (e.shiftKey) {
-          const prevFocusableEl = getPreviousByButtonTab(buttonEl);
-          /*istanbul ignore else */
-          if (prevFocusableEl) {
-            setSpecificFocus(prevFocusableEl);
-          }
+          focusableEl = getPreviousByButtonTab(buttonEl);
         } else {
-          const nextFocusableEl = getNextByButtonTab(buttonEl, isSubListOpen);
-          /* istanbul ignore else */
-          if (nextFocusableEl) {
-            setSpecificFocus(nextFocusableEl);
-          }
+          focusableEl = getNextByButtonTab(buttonEl, isSubListOpen);
         }
         break;
+    }
+    if (focusableEl) {
+      setSpecificFocus(focusableEl, isLayoutVertical());
     }
   };
 
   const handlePress = () => {
     const buttonEl = buttonRef.current as HTMLButtonElement;
-
     if (isSubListOpen) {
       closeSubNavigation(buttonEl);
     } else {
       openSubNavigation(buttonEl);
-    }
-    /* istanbul ignore else */
-    if (buttonEl) {
-      handleNavigationItemFocus(buttonEl, closeOpenSiblings);
     }
   };
 
   const buttonProps: ButtonProps = {
     "aria-controls": id,
     "aria-expanded": isSubListOpen,
-    "aria-label": `${label}`,
+    "aria-label": label,
+    id: label.split(/(?<=^\S+)\s/)[0],
     onFocus: handleFocus,
     onKeyDown: handleKeyDown,
     onPress: handlePress,
@@ -195,6 +197,11 @@ export function SubNavigation({
     isSilent: true,
   };
 
+  const listItemProps: Omit<ListItemProps, "children"> = {
+    cx: cx,
+    style: { "--list-width": listWidth } as CSSProperties,
+  };
+
   const navigationListProps: NavigationListProps = {
     id: id,
     isOpen: isSubListOpen,
@@ -203,7 +210,7 @@ export function SubNavigation({
   };
 
   return (
-    <ListItem key={id} cx={cx}>
+    <ListItem key={id} {...listItemProps}>
       <Button {...buttonProps}>
         {label}
         <Icon {...iconProps} />

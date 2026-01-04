@@ -18,7 +18,7 @@ export function NavigationLink({
 }: NavigationLinkProps) {
   const {
     currentListItems,
-    parentRef,
+    parentEl,
     registerItemInList,
     setFirstFocus,
     setLastFocus,
@@ -28,16 +28,13 @@ export function NavigationLink({
   } = useNavigationList();
   const {
     closeComponentWithFocus,
-    closeOpenSiblings,
-    isComponentActive,
-    getLastChildInTopRow,
     getNextByLink,
     getNextByLinkTab,
     getPreviousByLink,
     getPreviousByLinkTab,
-    handleNavigationItemFocus,
-    registerLink,
-    setIsComponentActive,
+    handleLinkFocus,
+    isLayoutVertical,
+    registerLinkInList,
   } = useNavigation();
   const currentPath = usePathname();
 
@@ -51,19 +48,15 @@ export function NavigationLink({
   }, [linkRef, prevLinkRef, registerItemInList]);
 
   useEffect(() => {
-    registerLink(currentListItems, parentRef.current);
-  }, [currentListItems, parentRef, registerLink]);
+    registerLinkInList(currentListItems, parentEl);
+  }, [currentListItems, parentEl, registerLinkInList]);
 
   const handleFocus = () => {
-    const linkEl = linkRef.current as FocusableElementType;
-    const returnEl = getLastChildInTopRow(linkEl);
-    if (!isComponentActive) {
-      setIsComponentActive(true);
-    }
+    const linkEl = linkRef.current;
+    const returnEl = handleLinkFocus(linkEl as FocusableElementType);
 
-    handleNavigationItemFocus(linkEl, closeOpenSiblings);
     /* istanbul ignore else */
-    if (returnEl !== linkEl && returnEl !== null) {
+    if (!!returnEl && returnEl !== linkEl) {
       setSpecificFocus(returnEl);
     }
   };
@@ -89,6 +82,7 @@ export function NavigationLink({
       e,
       linkEl,
       closeComponentWithFocus,
+      isLayoutVertical,
       setFirstFocus,
       setLastFocus,
       setNextFocus,
@@ -96,37 +90,24 @@ export function NavigationLink({
       setSpecificFocus,
     );
     // specific to link.
+    let focusableEl: FocusableElementType | undefined;
     switch (e.key) {
       case Keys.UP:
-        const prevFocusableEl = getPreviousByLink(linkEl);
-        /* istanbul ignore else */
-        if (prevFocusableEl) {
-          setSpecificFocus(prevFocusableEl);
-        }
+        focusableEl = getPreviousByLink(linkEl);
         break;
       case Keys.DOWN:
-        const nextFocusableEl = getNextByLink(linkEl);
-        /* istanbul ignore else */
-        if (nextFocusableEl) {
-          setSpecificFocus(nextFocusableEl);
-        }
+        focusableEl = getNextByLink(linkEl);
         break;
-
       case Keys.TAB:
         if (e.shiftKey) {
-          const prevFocusableEl = getPreviousByLinkTab(linkEl);
-          /* istanbul ignore else */
-          if (prevFocusableEl) {
-            setSpecificFocus(prevFocusableEl);
-          }
+          focusableEl = getPreviousByLinkTab(linkEl);
         } else {
-          const nextFocusableEl = getNextByLinkTab(linkEl);
-          /* istanbul ignore else */
-          if (nextFocusableEl) {
-            setSpecificFocus(nextFocusableEl);
-          }
+          focusableEl = getNextByLinkTab(linkEl);
         }
         break;
+    }
+    if (focusableEl) {
+      setSpecificFocus(focusableEl, isLayoutVertical());
     }
   };
 

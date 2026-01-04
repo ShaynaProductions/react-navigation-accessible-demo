@@ -62,7 +62,7 @@ describe("Navigation simple keyboard handling", () => {
       getSimpleLinkTestElements(getByRole);
 
     expect(simpleLink).toBeInTheDocument();
-    await userEvent.tab();
+    await userEvent.pointer({ target: frontButton, keys: "[MouseLeft]" });
     expect(frontButton).toHaveFocus();
     await userEvent.tab();
     expect(frontButton).not.toHaveFocus();
@@ -102,7 +102,7 @@ describe("Navigation simple keyboard handling", () => {
       TEST_ID,
     );
 
-    await userEvent.tab();
+    await userEvent.pointer({ target: frontButton, keys: "[MouseLeft]" });
     expect(frontButton).toHaveFocus();
     await userEvent.tab();
     expect(frontButton).not.toHaveFocus();

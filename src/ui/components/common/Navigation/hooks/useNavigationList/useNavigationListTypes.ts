@@ -1,4 +1,3 @@
-import React from "react";
 import {
   FocusableElementType,
   ParentElementType,
@@ -11,11 +10,19 @@ export interface UseNavigationListInternal {
 export interface UseNavigationListReturnProps {
   currentListItems: FocusableElementType[];
   parentEl: ParentElementType | null;
-  parentRef: React.RefObject<ParentElementType>;
   registerItemInList: (focusableEl: FocusableElementType) => void;
-  setFirstFocus: () => void;
-  setLastFocus: () => void;
-  setNextFocus: (focusableEl: FocusableElementType) => void;
-  setPreviousFocus: (lastFocusableEl: FocusableElementType) => void;
-  setSpecificFocus: (focusableEl: FocusableElementType) => void;
+  setFirstFocus: (isLayoutVertical: boolean) => void;
+  setLastFocus: (isLayoutVertical: boolean) => void;
+  setNextFocus: (
+    focusableEl: FocusableElementType,
+    isLayoutVertical: boolean,
+  ) => void;
+  setPreviousFocus: (
+    lastFocusableEl: FocusableElementType,
+    isLayoutVertical: boolean,
+  ) => void;
+  setSpecificFocus: (
+    focusableEl: FocusableElementType,
+    isLayoutVertical?: boolean,
+  ) => void;
 }

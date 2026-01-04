@@ -93,6 +93,7 @@ export const ClickAwayListener = ({
         return;
       }
 
+      /* istanbul ignore else */
       if (onClickAway) {
         onClickAway(event);
       }

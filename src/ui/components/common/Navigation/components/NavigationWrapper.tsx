@@ -1,13 +1,14 @@
 "use client";
 
 import { useEffect } from "react";
-import { NavigationWrapperProps, ParentElementType } from "./NavigationTypes";
-import { useNavigation } from "../hooks";
 import {
   ClickAwayListener,
   returnTrueElementOrUndefined,
 } from "@/ui/utilities";
-import { resetArray } from "./componentFunctions";
+import { usePrevious } from "@/ui/hooks";
+
+import { NavigationWrapperProps, ParentElementType } from "./NavigationTypes";
+import { returnStoredList, useNavigation } from "../hooks";
 
 export function NavigationWrapper({
   children,
@@ -15,44 +16,84 @@ export function NavigationWrapper({
   isOpen,
   label,
   parentRef,
+  shouldPassthrough,
   ...rest
 }: NavigationWrapperProps) {
   const {
+    closeComponent,
     isComponentActive,
     getTopParentElement,
     handleClickAwayClose,
-    registerSubNavigation,
-    resetTopNavigation,
+    isComponentControlled,
+    registerButtonInList,
+    registerControllingElement,
+    setShouldPassthrough,
+    setIsListOpen,
   } = useNavigation();
+  const prevIsOpen = usePrevious(isOpen);
 
   useEffect(() => {
-    const storedParentEl = getTopParentElement().storedParentEl;
     const parentEl = parentRef?.current as ParentElementType;
     /* istanbul ignore else */
-    if (!!parentEl && storedParentEl !== parentEl) {
-      resetArray(parentEl, storedParentEl, resetTopNavigation);
-    }
     if (!!parentEl) {
-      registerSubNavigation(isOpen, parentEl);
+      registerControllingElement(parentEl);
     }
   }, [
     getTopParentElement,
     parentRef,
-    resetTopNavigation,
-    registerSubNavigation,
+    registerButtonInList,
     isOpen,
+    registerControllingElement,
   ]);
 
-  return (
-    <ClickAwayListener
-      onClickAway={returnTrueElementOrUndefined(
-        isComponentActive,
-        handleClickAwayClose,
-      )}
-    >
-      <nav aria-label={label} className={cx} {...rest}>
-        {children}
-      </nav>
-    </ClickAwayListener>
-  );
+  useEffect(() => {
+    const { storedList, storedParentEl } = getTopParentElement();
+    if (prevIsOpen !== isOpen) {
+      setIsListOpen(isOpen, storedParentEl);
+      if (!isOpen) {
+        closeComponent();
+      }
+    }
+    if (isOpen && !prevIsOpen) {
+      const parentList = returnStoredList(storedList);
+      /*istanbul ignore else */
+      if (parentRef?.current !== null) {
+        parentList[0].focus({ preventScroll: true });
+      }
+    }
+  }, [
+    closeComponent,
+    getTopParentElement,
+    isOpen,
+    parentRef,
+    prevIsOpen,
+    setIsListOpen,
+  ]);
+
+  useEffect(() => {
+    setShouldPassthrough(shouldPassthrough);
+  }, [shouldPassthrough, setShouldPassthrough]);
+
+  const clickAwayProps = {
+    onClickAway: returnTrueElementOrUndefined(
+      isComponentActive,
+      handleClickAwayClose,
+    ),
+  };
+
+  const navigationProps = {
+    "aria-label": label,
+    className: cx,
+    ...rest,
+  };
+
+  if (isComponentControlled()) {
+    return <nav {...navigationProps}>{children}</nav>;
+  } else {
+    return (
+      <ClickAwayListener {...clickAwayProps}>
+        <nav {...navigationProps}>{children}</nav>
+      </ClickAwayListener>
+    );
+  }
 }

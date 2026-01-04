@@ -46,7 +46,7 @@ export const getComplexButtonTestElements = (
     blogLink: getByRole("link", { name: "Musings" }),
     forumLink: getByRole("link", { name: "Forum" }),
     storiesButton: getByRole("button", {
-      name: "Search, Stories and" + " Commentary",
+      name: "Stories and Commentary",
     }),
     storiesList: getByTestId(`${testId}-stories-menu-list`),
     searchButton: getByRole("button", { name: "Search" }),
@@ -62,6 +62,8 @@ export const getComplexButtonTestElements = (
     byStorytellerLink: getByRole("link", { name: "By Storyteller" }),
     byEraLink: getByRole("link", { name: "By Era" }),
     referenceButton: getByRole("button", { name: "Reference" }),
+    appendicesLink: getByRole("link", { name: "Appendices" }),
+    glossaryLink: getByRole("link", { name: "Glossary" }),
     aboutButton: getByRole("button", { name: "About" }),
     aboutList: getByTestId(`${testId}-about-menu-list`),
     aboutSiteLink: getByRole("link", { name: "About the Site" }),

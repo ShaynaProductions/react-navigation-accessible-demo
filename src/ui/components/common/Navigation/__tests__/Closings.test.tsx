@@ -1,6 +1,11 @@
 import fs from "fs";
 import { render, userEvent } from "@/test";
-import { Box, Button, MobileMenu, transformNavigation } from "@/ui/components";
+import {
+  Box,
+  Button,
+  MobileNavigation,
+  transformNavigation,
+} from "@/ui/components";
 
 import Navigation from "../components/Navigation";
 import {
@@ -53,9 +58,9 @@ const renderNavigation = ({ label, children, ...rest }) => {
 
 const renderNavigationWithParent = ({ label, children, ...rest }) => {
   return render(
-    <MobileMenu label={label} {...rest}>
+    <MobileNavigation label={label} {...rest}>
       {children}
-    </MobileMenu>,
+    </MobileNavigation>,
   );
 };
 describe("<Navigation Closings />", () => {
@@ -132,11 +137,7 @@ describe("<Navigation Closings />", () => {
 
   it("top level list should close any open navigation on siblings when it receives focus", async () => {
     const { getByRole, getByTestId } = renderNavigation(linkProps);
-    const { frontButton } = getCommonTestElements(
-      getByRole,
-      frontButtonLabel,
-      endButtonLabel,
-    );
+
     const {
       homeLink,
       communityButton,
@@ -152,7 +153,7 @@ describe("<Navigation Closings />", () => {
     expect(communityButton).toHaveFocus();
     expect(communityList).not.toHaveClass("srOnly");
     await userEvent.tab({ shift: true });
-    expect(frontButton);
+    expect(homeLink).toHaveFocus();
     await userEvent.pointer({ target: storiesButton, keys: "[MouseLeft]" });
     expect(communityList).toHaveClass("srOnly");
     expect(storiesList).not.toHaveClass("srOnly");
@@ -278,7 +279,6 @@ describe("<Navigation Closings />", () => {
       getSubNavTestElements(getByRole, getByTestId, TEST_ID);
 
     await userEvent.pointer({ target: menuButton, keys: "[MouseLeft]" });
-    await userEvent.tab();
     expect(aboutLink).toHaveFocus();
     await userEvent.tab();
     expect(readButton).toHaveFocus();

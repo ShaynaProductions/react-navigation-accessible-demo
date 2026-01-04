@@ -1,6 +1,15 @@
 type DirectionType = "next" | "prev";
 
-export function getFocusableElement(lastEl, direction: DirectionType): Element {
+export type FocusableElement =
+  | HTMLButtonElement
+  | HTMLAnchorElement
+  | HTMLInputElement
+  | HTMLSelectElement;
+
+export function getFocusableElement(
+  lastEl,
+  direction: DirectionType,
+): FocusableElement {
   //add all elements we want to include in our selection
   const focusable: string =
     'a:not([disabled]), button:not([disabled]), input[type=text]:not([disabled]), [tabindex]:not([disabled]):not([tabindex="-1"])';
@@ -21,5 +30,5 @@ export function getFocusableElement(lastEl, direction: DirectionType): Element {
     nextIndex = index - 1;
   }
 
-  return focusableElements[nextIndex];
+  return focusableElements[nextIndex] as FocusableElement;
 }

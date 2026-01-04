@@ -1,7 +1,10 @@
 import { ParentElementType } from "@/ui/components";
 import { FocusableElementType } from "../../components/NavigationTypes";
 import { NavigationObjectProps } from "../../providers";
-import { NavigationHookFunctionsProps } from "./useNavigationTypes";
+import {
+  NavigationHookFunctionsProps,
+  UseNavigationReturnTypes,
+} from "./useNavigationTypes";
 
 export const _getNextElementInList: NavigationHookFunctionsProps["_getNextElementInList"] =
   (focusedEl, currentList) => {
@@ -17,11 +20,12 @@ export const _getPreviousElementInList: NavigationHookFunctionsProps["_getPrevio
     return currentList[newIndex];
   };
 
-export const _returnStoredList: NavigationHookFunctionsProps["_returnStoredList"] =
-  (storedList) => {
-    /* istanbul ignore next */
-    return storedList || [];
-  };
+export const returnStoredList: UseNavigationReturnTypes["returnStoredList"] = (
+  storedList,
+) => {
+  /* istanbul ignore next */
+  return storedList || [];
+};
 
 export const getRecursiveLastElementByParent: NavigationHookFunctionsProps["getRecursiveLastElementByParent"] =
   (focusableEl, getNavObjectByParent, getNavObjectContainingElement) => {
@@ -30,19 +34,19 @@ export const getRecursiveLastElementByParent: NavigationHookFunctionsProps["getR
       navObj = getNavObjectByParent(
         focusableEl as ParentElementType,
       ) as NavigationObjectProps;
-      const storedList = _returnStoredList(navObj.storedList);
+      const storedList = returnStoredList(navObj.storedList);
 
       return getRecursiveLastElementByParent(
-        storedList[storedList.length - 1] as ParentElementType,
+        storedList[storedList.length - 1],
         getNavObjectByParent,
         getNavObjectContainingElement,
       );
     } else {
       navObj = getNavObjectContainingElement(
-        focusableEl as FocusableElementType,
+        focusableEl,
       ) as NavigationObjectProps;
     }
-    const currentList = _returnStoredList(navObj.storedList);
+    const currentList = returnStoredList(navObj.storedList);
     const listLength = currentList.length;
 
     return currentList[listLength - 1];

@@ -56,6 +56,7 @@ export function SimpleSubNavigationView(
           id="simple-sub-navigation"
           isOpen={open}
           label="Simple Sub Navigation Demo"
+          orientation="vertical"
           parentRef={buttonRef}
           testId={testId}
         >

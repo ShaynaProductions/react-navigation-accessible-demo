@@ -1,0 +1,140 @@
+@layer main {
+    nav.desktop{
+        --list-width: 100%; /* fallback, passed in through style*/
+        --subnav-shift: calc((var(--sp-px) * 16));
+        --active-background: var(--purple-3);
+        --inactive-background: var(--gray-1);
+        --component-link-background-hovered: var(--active-background);
+        --component-link-background-focused: var(--active-background);
+        --button-background-focused: var(--active-background);
+        --button-background-hover: var(--active-background);
+        --button-background-pressed: var(--active-background);
+
+
+        border: none;
+        border-bottom: solid var(--component-border-width);
+        padding-bottom: 0;
+
+        /* Positioning and State Changes */
+
+        & button, & a {
+            display: inline-block;
+            border-radius: 0;
+            width: 100%;
+            height: 100%;
+        }
+        & button {
+            --button-background: var(--button-ghost-background);
+            --button-border-color: var(--button-ghost-border);
+            --button-padding: calc(var(--sp-px) * 4);
+            --button-color: var(--button-ghost-color);
+
+            &:hover, &[data-hovered] {
+                --button-ghost-background: var(--button-background-hovered);
+                --button-ghost-border: var(--button-border-color-hovered);
+            }
+        }
+
+        & > ul[data-orientation="horizontal"] {
+            position: relative;
+            width: fit-content;
+
+            & > li {
+                /*Top level navigation*/
+                --width:      calc(var(--list-width) * var(--sp-px) + var(--sp-px) * 6);
+                min-width: calc(var(--sp-px) * 125);
+                width: var(--width);
+                white-space: nowrap;
+
+                & button, & a {
+                    width: 100%;
+                    border-style: none;
+                    outline-style: none;
+                    --button-ghost-background: transparent;
+                    text-align: left;
+
+                    &:focus-visible, &:hover {
+                        --button-ghost-background: var(--active-background);
+                    }
+                    &[aria-expanded="true"] {
+                        --button-ghost-background: var(--vibrant-blue-1);
+                        &:focus-visible, &:hover {
+                            --button-ghost-background: var(--active-background);
+                        }
+                    }
+                }
+                & svg {
+                   left: calc(var(--sp-px) * 4);
+                }
+
+                /* Sub navigation*/
+
+                > ul {
+                    margin: 0;
+                    & li {
+                        --subnav-shift: calc((var(--sp-px) * 32));
+                    }
+                }
+
+                & ul {
+                    background-color: var(--inactive-background);
+                    position: absolute;
+                    z-index: 3;
+                    border: solid var(--component-border-width);
+                    border-bottom-left-radius: calc(var(--sp-px) * 3);
+                    border-bottom-right-radius: calc(var(--sp-px) * 3);
+                    width: fit-content;
+
+                    & li {
+                        padding: 0;
+                        white-space: nowrap;
+                        min-width:var(--width);
+                        width: 100%;
+
+
+                        &:last-child {
+                            & button, & a {
+                                padding-bottom: calc(var(--sp-px) * 12);
+                            }
+                        }
+
+                        & button, & a {
+                            padding: calc(var(--sp-px) * 8);
+                            height: 100%;
+                            width: 100%;
+                            text-align: left;
+                        }
+
+
+                        & button {
+                            padding-right: calc(var(--sp-px) * 16);
+
+                            &:focus-visible {
+                                --button-background: var(--active-background);
+                            }
+
+                            &:hover {
+                                --button-background: var(--active-background);
+                            }
+
+                            & + ul[data-orientation="vertical"] {
+                                border: none;
+                                margin-left: 0;
+                                padding-right: calc(var(--sp-px) * 4);
+                                position: relative;
+                                width: calc(100% + (var(--sp-px) + 4));
+
+                                & > li > button, & > li > a {
+
+                                    padding-left: var(--subnav-shift);
+                                    width: calc(100% + (var(--subnav-shift) / 4));
+
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

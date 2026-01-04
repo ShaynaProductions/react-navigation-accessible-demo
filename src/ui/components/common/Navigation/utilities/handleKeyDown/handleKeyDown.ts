@@ -1,33 +1,36 @@
 import React from "react";
 import { Keys } from "@/ui/utilities";
 import { FocusableElementType } from "../../components/NavigationTypes";
+import { UseNavigationListReturnProps } from "@/ui/components/common/Navigation/hooks/useNavigationList/useNavigationListTypes";
+import { UseNavigationReturnTypes } from "@/ui/components/common/Navigation/hooks/useNavigation/useNavigationTypes";
 
 export const _handleKeyDown = (
   e: React.KeyboardEvent,
   focusableEl: FocusableElementType,
-  closeComponentWithFocus,
-  setFirstFocus: VoidFunction,
-  setLastFocus: VoidFunction,
-  setNextFocus: (focusableEl: FocusableElementType) => void,
-  setPreviousFocus: (focusableEl: FocusableElementType) => void,
-  setSpecificFocus,
+  closeComponentWithFocus: UseNavigationReturnTypes["closeComponentWithFocus"],
+  isLayoutVertical: UseNavigationReturnTypes["isLayoutVertical"],
+  setFirstFocus: UseNavigationListReturnProps["setFirstFocus"],
+  setLastFocus: UseNavigationListReturnProps["setLastFocus"],
+  setNextFocus: UseNavigationListReturnProps["setNextFocus"],
+  setPreviousFocus: UseNavigationListReturnProps["setPreviousFocus"],
+  setSpecificFocus: UseNavigationListReturnProps["setSpecificFocus"],
 ) => {
   switch (e.key) {
     case Keys.ESC:
       const closedFocus = closeComponentWithFocus(focusableEl);
-      setSpecificFocus(closedFocus);
+      setSpecificFocus(closedFocus as FocusableElementType, isLayoutVertical());
       break;
     case Keys.HOME:
-      setFirstFocus();
+      setFirstFocus(isLayoutVertical());
       break;
     case Keys.END:
-      setLastFocus();
+      setLastFocus(isLayoutVertical());
       break;
     case Keys.LEFT:
-      setPreviousFocus(focusableEl);
+      setPreviousFocus(focusableEl, isLayoutVertical());
       break;
     case Keys.RIGHT:
-      setNextFocus(focusableEl);
+      setNextFocus(focusableEl, isLayoutVertical());
       break;
   }
 };

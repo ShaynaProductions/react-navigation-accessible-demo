@@ -1,1 +1,1 @@
-export { getFocusableElement } from "./getFocusableElement";
+export * from "./getFocusableElement";
