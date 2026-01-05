@@ -9,7 +9,7 @@ import {
 } from "@/ui/utilities";
 
 export function MobileNavigation({ children, label, ...rest }): JSX.Element {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
   const buttonRef = useRef<ParentElementType>(null);
 
   const closeNavigation = () => {
